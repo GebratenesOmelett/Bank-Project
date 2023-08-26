@@ -1,4 +1,4 @@
-package com.example.bankbackend.transfer;
+package com.example.bankbackend.transfer.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;

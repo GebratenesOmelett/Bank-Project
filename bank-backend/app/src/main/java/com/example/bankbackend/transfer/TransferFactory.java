@@ -1,10 +1,8 @@
 package com.example.bankbackend.transfer;
 
 import com.example.bankbackend.customer.CustomerFacade;
+import com.example.bankbackend.transfer.dto.TransferDto;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Service
 class TransferFactory {

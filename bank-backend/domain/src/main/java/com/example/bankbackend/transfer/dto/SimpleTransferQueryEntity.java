@@ -1,4 +1,4 @@
-package com.example.bankbackend.transfer.query;
+package com.example.bankbackend.transfer.dto;
 
 import jakarta.persistence.*;
 
