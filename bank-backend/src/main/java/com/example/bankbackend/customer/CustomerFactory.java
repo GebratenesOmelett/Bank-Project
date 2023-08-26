@@ -1,17 +1,30 @@
 package com.example.bankbackend.customer;
 
+import com.example.bankbackend.customer.dto.CustomerDto;
+import com.example.bankbackend.role.RoleFacade;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
+
 @Service
 class CustomerFactory {
+    RoleFacade roleFacade;
+
+    public CustomerFactory(RoleFacade roleFacade) {
+        this.roleFacade = roleFacade;
+    }
+
     Customer from(CustomerDto customerDto){
-        Customer customer = new Customer(customerDto.getFirstName(),
+        return attachDefaultRole(new Customer(customerDto.getFirstName(),
                 customerDto.getLastName(),
                 new BigDecimal(1000),
                 customerDto.getPassword(),
-                customerDto.getEmail());
+                customerDto.getEmail()));
+
+    }
+
+    public Customer attachDefaultRole(Customer customer){
+        customer.addRole(roleFacade.findRole("ROLE_USER"));
         return customer;
     }
 }

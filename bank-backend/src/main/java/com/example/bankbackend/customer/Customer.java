@@ -1,16 +1,15 @@
 package com.example.bankbackend.customer;
 
 
-import com.example.bankbackend.role.query.SimpleRoleQueryDto;
-import com.example.bankbackend.transfer.Transfer;
+import com.example.bankbackend.customer.dto.CustomerDto;
+import com.example.bankbackend.role.Role;
+import com.example.bankbackend.role.dto.RoleDto;
+import com.example.bankbackend.transfer.query.SimpleTransferQueryEntity;
 import jakarta.persistence.*;
 import lombok.ToString;
-import org.springframework.data.annotation.PersistenceConstructor;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 @ToString
 @Entity
@@ -25,17 +24,15 @@ class Customer {
     private BigDecimal funds;
     private String password;
     private String email;
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-                    CascadeType.DETACH, CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "customer_roles",
             joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<SimpleRoleQueryDto> roleSet;
+    private Set<Role> roleSet;
 
     @OneToMany(mappedBy = "customerIdFrom", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Transfer> transferSet;
+    private Set<SimpleTransferQueryEntity> transferSet;
     private boolean enabled;
 
     protected Customer() {
@@ -61,5 +58,8 @@ class Customer {
                 .withPasswordRepeat(password)
                 .build();
 
+    }
+    void addRole(Role role){
+        roleSet.add(role);
     }
 }

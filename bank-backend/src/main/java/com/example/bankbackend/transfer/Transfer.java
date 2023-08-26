@@ -1,5 +1,5 @@
 package com.example.bankbackend.transfer;
-import com.example.bankbackend.customer.query.SimpleCustomerQueryDto;
+import com.example.bankbackend.customer.dto.SimpleCustomerQueryEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -9,7 +9,7 @@ import java.sql.Time;
 
 @Entity
 @Table(name = "transfers")
-public class Transfer {
+class Transfer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,12 +17,12 @@ public class Transfer {
 
     private String title;
 
-    private BigDecimal amountOfMoney;
+    private BigDecimal funds;
 
-    private int customerIdTo;
+    private int receiverId;
     @ManyToOne
     @JoinColumn(name = "customer_id")
-    private SimpleCustomerQueryDto customerIdFrom;
+    private SimpleCustomerQueryEntity customerIdFrom;
 
     @CreationTimestamp
     private Date transferDate;
@@ -33,13 +33,18 @@ public class Transfer {
     protected Transfer() {
     }
 
-    public Transfer(int id, String title, BigDecimal amountOfMoney, int customerIdTo, SimpleCustomerQueryDto customerIdFrom, Date transferDate, Time transferTime) {
-        this.id = id;
+    Transfer(String title, BigDecimal funds, int receiverId, SimpleCustomerQueryEntity customerIdFrom) {
         this.title = title;
-        this.amountOfMoney = amountOfMoney;
-        this.customerIdTo = customerIdTo;
+        this.funds = funds;
+        this.receiverId = receiverId;
         this.customerIdFrom = customerIdFrom;
-        this.transferDate = transferDate;
-        this.transferTime = transferTime;
+    }
+    TransferDto toDto(){
+        return TransferDto.builder()
+                .withTitle(title)
+                .withFunds(funds)
+                .withLoggedCustomerId(customerIdFrom.getId())
+                .withReceiverId(receiverId)
+                .build();
     }
 }

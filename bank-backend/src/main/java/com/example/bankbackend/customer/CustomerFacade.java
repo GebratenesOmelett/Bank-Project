@@ -1,6 +1,7 @@
 package com.example.bankbackend.customer;
 
-import org.springframework.http.ResponseEntity;
+import com.example.bankbackend.customer.dto.CustomerDto;
+import com.example.bankbackend.role.RoleFacade;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -8,18 +9,22 @@ import java.util.Optional;
 @Service
 public class CustomerFacade {
     CustomerRepository customerRepository;
+    CustomerQueryRepository customerQueryRepository;
+    RoleFacade roleFacade;
     CustomerFactory customerFactory;
 
-    public CustomerFacade(final CustomerRepository customerRepository, final CustomerFactory customerFactory) {
+    public CustomerFacade(CustomerRepository customerRepository, CustomerQueryRepository customerQueryRepository, RoleFacade roleFacade, CustomerFactory customerFactory) {
         this.customerRepository = customerRepository;
+        this.customerQueryRepository = customerQueryRepository;
+        this.roleFacade = roleFacade;
         this.customerFactory = customerFactory;
     }
 
-    Optional<CustomerDto> get(int customerId){
-        return customerRepository.findCustomerById(customerId)
-                .map(Customer::toDto);
+    public Optional<CustomerDto> get(int customerId){
+        return customerQueryRepository.findCustomerById(customerId);
     }
-    void create(CustomerDto customerDto){
+    public void create(CustomerDto customerDto){
         customerRepository.save(customerFactory.from(customerDto));
     }
+
 }

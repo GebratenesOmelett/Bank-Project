@@ -1,5 +1,6 @@
 package com.example.bankbackend.customer;
 
+import com.example.bankbackend.customer.dto.CustomerDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

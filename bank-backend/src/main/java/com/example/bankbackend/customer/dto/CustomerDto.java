@@ -1,4 +1,4 @@
-package com.example.bankbackend.customer;
+package com.example.bankbackend.customer.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
@@ -6,7 +6,8 @@ import lombok.ToString;
 
 @ToString
 @JsonDeserialize(builder = CustomerDto.Builder.class)
-class CustomerDto {
+public class CustomerDto {
+    @JsonIg
     private String firstName;
     private String lastName;
     private String password;
@@ -20,6 +21,10 @@ class CustomerDto {
         passwordRepeat = builder.passwordRepeat;
         email = builder.email;
     }
+    SimpleCustomerQueryEntity toQueryEntity(){
+        return new SimpleCustomerQueryEntity(id);
+    }
+
     static public Builder builder() {
         return new Builder();
     }
@@ -34,10 +39,6 @@ class CustomerDto {
 
     public String getPassword() {
         return password;
-    }
-
-    public String getPasswordRepeat() {
-        return passwordRepeat;
     }
 
     public String getEmail() {
