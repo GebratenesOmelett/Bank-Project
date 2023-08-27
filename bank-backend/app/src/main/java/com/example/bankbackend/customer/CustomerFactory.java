@@ -1,16 +1,15 @@
 package com.example.bankbackend.customer;
 
 import com.example.bankbackend.customer.dto.CustomerDto;
-import com.example.bankbackend.role.RoleFacade;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
 @Service
 class CustomerFactory {
-    RoleFacade roleFacade;
+    CustomerRoleFacade roleFacade;
 
-    public CustomerFactory(RoleFacade roleFacade) {
+    public CustomerFactory(CustomerRoleFacade roleFacade) {
         this.roleFacade = roleFacade;
     }
 

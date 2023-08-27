@@ -1,7 +1,6 @@
 package com.example.bankbackend.customer;
 
 import com.example.bankbackend.customer.dto.CustomerDto;
-import com.example.bankbackend.role.RoleFacade;
 import com.example.bankbackend.transfer.dto.SimpleTransferQueryEntity;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +11,10 @@ import java.util.Optional;
 public class CustomerFacade {
     CustomerRepository customerRepository;
     CustomerQueryRepository customerQueryRepository;
-    RoleFacade roleFacade;
+    CustomerRoleFacade roleFacade;
     CustomerFactory customerFactory;
 
-    public CustomerFacade(CustomerRepository customerRepository, CustomerQueryRepository customerQueryRepository, RoleFacade roleFacade, CustomerFactory customerFactory) {
+    public CustomerFacade(CustomerRepository customerRepository, CustomerQueryRepository customerQueryRepository, CustomerRoleFacade roleFacade, CustomerFactory customerFactory) {
         this.customerRepository = customerRepository;
         this.customerQueryRepository = customerQueryRepository;
         this.roleFacade = roleFacade;

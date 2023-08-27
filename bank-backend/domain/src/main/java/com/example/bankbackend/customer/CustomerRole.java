@@ -1,19 +1,19 @@
-package com.example.bankbackend.role;
+package com.example.bankbackend.customer;
 
 
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "roles")
-public class Role {
+class CustomerRole {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String role;
 
-    protected Role() {
+    protected CustomerRole() {
     }
-    Role(String role) {
+    CustomerRole(String role) {
         this.role = role;
     }
 

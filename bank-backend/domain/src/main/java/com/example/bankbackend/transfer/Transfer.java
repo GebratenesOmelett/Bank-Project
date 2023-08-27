@@ -1,5 +1,4 @@
 package com.example.bankbackend.transfer;
-import com.example.bankbackend.customer.dto.SimpleCustomerQueryEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -20,8 +19,6 @@ class Transfer {
     private BigDecimal funds;
 
     private int receiverId;
-
-    //todo it transfer should not see the customer, make it uni not bi;
 
     @CreationTimestamp
     private Date transferDate;

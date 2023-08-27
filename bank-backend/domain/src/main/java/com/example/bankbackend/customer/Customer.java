@@ -1,5 +1,4 @@
 package com.example.bankbackend.customer;
-import com.example.bankbackend.role.Role;
 import com.example.bankbackend.transfer.dto.SimpleTransferQueryEntity;
 import jakarta.persistence.*;
 import lombok.ToString;
@@ -25,7 +24,7 @@ class Customer {
             name = "customer_roles",
             joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roleSet;
+    private Set<CustomerRole> roleSet;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<SimpleTransferQueryEntity> transferSet;
@@ -44,7 +43,7 @@ class Customer {
         this.transferSet = new HashSet<>();
         this.enabled = true;
     }
-    void addRole(Role role){
+    void addRole(CustomerRole role){
         roleSet.add(role);
     }
     void addTransfer(SimpleTransferQueryEntity transfer){

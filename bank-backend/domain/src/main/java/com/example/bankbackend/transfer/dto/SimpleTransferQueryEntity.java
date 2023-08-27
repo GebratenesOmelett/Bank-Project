@@ -1,6 +1,6 @@
 package com.example.bankbackend.transfer.dto;
 
-import com.example.bankbackend.customer.dto.SimpleCustomerQueryEntity;
+
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
