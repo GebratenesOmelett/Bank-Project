@@ -16,8 +16,7 @@ class TransferFactory {
     Transfer from(TransferDto transferDto){
         return new Transfer(transferDto.getTitle(),
                 transferDto.getFunds(),
-                transferDto.getReceiverId(),
-                customerFacade.get(transferDto.getLoggedCustomerId()));
+                transferDto.getReceiverId());
 
     }
 }

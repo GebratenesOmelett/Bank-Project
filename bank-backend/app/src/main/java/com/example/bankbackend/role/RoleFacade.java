@@ -15,6 +15,6 @@ public class RoleFacade {
 
     public Role findRole(String roleName){
         return roleRepository.findByRole(roleName)
-                .orElseThrow(() -> new NoSuchElementException("There is no role with name : " + roleName));
+                .orElseThrow(() -> new NoSuchElementException("There is no role with such name : " + roleName));
     }
 }

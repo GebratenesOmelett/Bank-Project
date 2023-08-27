@@ -1,84 +1,58 @@
 package com.example.bankbackend.customer.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.ToString;
 
-@ToString
-@JsonDeserialize(builder = CustomerDto.Builder.class)
-public class CustomerDto {
-    @JsonIg
-    private String firstName;
-    private String lastName;
-    private String password;
-    private String passwordRepeat;
-    private String email;
+@JsonDeserialize(as = CustomerDto.DeserializationImpl.class)
+public interface CustomerDto {
 
-    private CustomerDto(final Builder builder) {
-        firstName = builder.firstName;
-        lastName = builder.lastName;
-        password = builder.password;
-        passwordRepeat = builder.passwordRepeat;
-        email = builder.email;
+    static CustomerDto create(final int id, final String firstName, final String lastName, final String password, final String email){
+        return new DeserializationImpl(id,firstName,lastName,password,email);
     }
-    SimpleCustomerQueryEntity toQueryEntity(){
-        return new SimpleCustomerQueryEntity(id);
-    }
+    int getId();
+    String getFirstName();
+    String getLastName();
+    String getPassword();
+    String getEmail();
 
-    static public Builder builder() {
-        return new Builder();
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    @JsonPOJOBuilder
-    public static class Builder{
+    class DeserializationImpl implements CustomerDto{
+        private int id;
         private String firstName;
         private String lastName;
         private String password;
-        private String passwordRepeat;
         private String email;
 
-        public Builder withFirstName(String firstName) {
+        public DeserializationImpl(int id, String firstName, String lastName, String password, String email) {
+            this.id = id;
             this.firstName = firstName;
-            return this;
-        }
-
-        public Builder withLastName(String lastName) {
             this.lastName = lastName;
-            return this;
-        }
-
-        public Builder withPassword(String password) {
             this.password = password;
-            return this;
-        }
-
-        public Builder withPasswordRepeat(String passwordRepeat) {
-            this.passwordRepeat = passwordRepeat;
-            return this;
-        }
-
-        public Builder withEmail(String email) {
             this.email = email;
-            return this;
         }
-        public CustomerDto build(){
-            return new CustomerDto(this);
+
+        @Override
+        public int getId() {
+            return id;
+        }
+
+        @Override
+        public String getFirstName() {
+            return firstName;
+        }
+
+        @Override
+        public String getLastName() {
+            return lastName;
+        }
+
+        @Override
+        public String getPassword() {
+            return password;
+        }
+
+        @Override
+        public String getEmail() {
+            return email;
         }
     }
 }

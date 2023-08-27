@@ -1,12 +1,14 @@
 package com.example.bankbackend.transfer;
 
 
+import com.example.bankbackend.transfer.dto.TransferCreateDto;
+import com.example.bankbackend.transfer.dto.TransferDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
-@RequestMapping("/transfer")
+@RestController
+@RequestMapping("/transfers")
 class TransferController {
     TransferFacade transferFacade;
 
@@ -22,7 +24,7 @@ class TransferController {
     }
 
     @PostMapping()
-    void create(@RequestBody TransferDto toCreate) {
+    void create(@RequestBody TransferCreateDto toCreate) {
 
         transferFacade.create(toCreate);
     }

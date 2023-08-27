@@ -16,7 +16,7 @@ class CustomerController {
     @GetMapping("/{id}")
     ResponseEntity<CustomerDto> get(@PathVariable int id){
 
-        return customerFacade.get(id)
+        return customerFacade.getDto(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

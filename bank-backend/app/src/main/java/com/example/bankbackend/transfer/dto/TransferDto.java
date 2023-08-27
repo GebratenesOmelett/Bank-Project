@@ -1,70 +1,67 @@
 package com.example.bankbackend.transfer.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 import java.math.BigDecimal;
-@JsonDeserialize(builder = TransferDto.Builder.class)
-class TransferDto {
+import java.sql.Date;
+import java.sql.Time;
 
-    private String title;
-    private BigDecimal funds;
-    private int loggedCustomerId;
-    private int receiverId;
-    private TransferDto(final TransferDto.Builder builder) {
-        title = builder.title;
-        funds = builder.funds;
-        loggedCustomerId = builder.loggedCustomerId;
-        receiverId = builder.receiverId;
+@JsonDeserialize(as = TransferDto.DeserializationImpl.class)
+public interface TransferDto {
+    static TransferDto create(final String title, final BigDecimal funds, final int receiverId, final Date transferDate, final Time transferTime) {
+        return new DeserializationImpl(title, funds, receiverId, transferDate, transferTime);
     }
 
-    public String getTitle() {
-        return title;
-    }
+    String getTitle();
 
-    public BigDecimal getFunds() {
-        return funds;
-    }
+    BigDecimal getFunds();
 
-    public int getLoggedCustomerId() {
-        return loggedCustomerId;
-    }
+    int getReceiverId();
 
-    public int getReceiverId() {
-        return receiverId;
-    }
+    Date getTransferDate();
 
-    static public TransferDto.Builder builder() {
-        return new TransferDto.Builder();
-    }
-    @JsonPOJOBuilder
-    public static class Builder{
-        private String title;
-        private BigDecimal funds;
-        private int loggedCustomerId;
-        private int receiverId;
+    Time getTransferTime();
 
-        public TransferDto.Builder withTitle(String title) {
+    class DeserializationImpl implements TransferDto {
+        private final String title;
+        private final BigDecimal funds;
+        private final int receiverId;
+        private Date transferDate;
+        private Time transferTime;
+
+        public DeserializationImpl(String title, BigDecimal funds, int receiverId, Date transferDate, Time transferTime) {
             this.title = title;
-            return this;
-        }
-
-        public TransferDto.Builder withFunds(BigDecimal funds) {
             this.funds = funds;
-            return this;
-        }
-
-        public TransferDto.Builder withLoggedCustomerId(int loggedCustomerId) {
-            this.loggedCustomerId = loggedCustomerId;
-            return this;
-        }
-
-        public TransferDto.Builder withReceiverId(int receiverId) {
             this.receiverId = receiverId;
-            return this;
+            this.transferDate = transferDate;
+            this.transferTime = transferTime;
         }
-        public TransferDto build(){
-            return new TransferDto(this);
+
+        @Override
+        public String getTitle() {
+            return title;
+        }
+
+        @Override
+        public BigDecimal getFunds() {
+            return funds;
+        }
+
+        @Override
+        public int getReceiverId() {
+            return receiverId;
+        }
+
+        @Override
+        public Date getTransferDate() {
+            return transferDate;
+        }
+
+        @Override
+        public Time getTransferTime() {
+            return transferTime;
         }
     }
+
+
 }

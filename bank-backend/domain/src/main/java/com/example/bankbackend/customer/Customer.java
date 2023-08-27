@@ -1,10 +1,6 @@
 package com.example.bankbackend.customer;
-
-
-import com.example.bankbackend.customer.dto.CustomerDto;
 import com.example.bankbackend.role.Role;
-import com.example.bankbackend.role.dto.RoleDto;
-import com.example.bankbackend.transfer.query.SimpleTransferQueryEntity;
+import com.example.bankbackend.transfer.dto.SimpleTransferQueryEntity;
 import jakarta.persistence.*;
 import lombok.ToString;
 
@@ -31,7 +27,7 @@ class Customer {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roleSet;
 
-    @OneToMany(mappedBy = "customerIdFrom", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<SimpleTransferQueryEntity> transferSet;
     private boolean enabled;
 
@@ -48,18 +44,10 @@ class Customer {
         this.transferSet = new HashSet<>();
         this.enabled = true;
     }
-
-    CustomerDto toDto(){
-        return CustomerDto.builder()
-                .withFirstName(firstName)
-                .withLastName(lastName)
-                .withEmail(email)
-                .withPassword(password)
-                .withPasswordRepeat(password)
-                .build();
-
-    }
     void addRole(Role role){
         roleSet.add(role);
+    }
+    void addTransfer(SimpleTransferQueryEntity transfer){
+        transferSet.add(transfer);
     }
 }

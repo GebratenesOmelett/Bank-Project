@@ -20,9 +20,8 @@ class Transfer {
     private BigDecimal funds;
 
     private int receiverId;
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private SimpleCustomerQueryEntity customerIdFrom;
+
+    //todo it transfer should not see the customer, make it uni not bi;
 
     @CreationTimestamp
     private Date transferDate;
@@ -33,18 +32,9 @@ class Transfer {
     protected Transfer() {
     }
 
-    Transfer(String title, BigDecimal funds, int receiverId, SimpleCustomerQueryEntity customerIdFrom) {
+    Transfer(String title, BigDecimal funds, int receiverId) {
         this.title = title;
         this.funds = funds;
         this.receiverId = receiverId;
-        this.customerIdFrom = customerIdFrom;
-    }
-    TransferDto toDto(){
-        return TransferDto.builder()
-                .withTitle(title)
-                .withFunds(funds)
-                .withLoggedCustomerId(customerIdFrom.getId())
-                .withReceiverId(receiverId)
-                .build();
     }
 }

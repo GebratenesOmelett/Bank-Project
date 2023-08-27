@@ -2,8 +2,10 @@ package com.example.bankbackend.customer;
 
 import com.example.bankbackend.customer.dto.CustomerDto;
 import com.example.bankbackend.role.RoleFacade;
+import com.example.bankbackend.transfer.dto.SimpleTransferQueryEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -20,11 +22,26 @@ public class CustomerFacade {
         this.customerFactory = customerFactory;
     }
 
-    public Optional<CustomerDto> get(int customerId){
-        return customerQueryRepository.findCustomerById(customerId);
+    public Optional<CustomerDto> getDto(int customerId) {
+        return customerQueryRepository.findDtoById(customerId);
     }
-    public void create(CustomerDto customerDto){
+
+    public Customer get(int customerId) {
+        return customerRepository.findCustomerById(customerId)
+                .orElseThrow(() -> new NoSuchElementException("there is no customer with such id : " + customerId));
+    }
+
+    public void create(CustomerDto customerDto) {
+
         customerRepository.save(customerFactory.from(customerDto));
+    }
+
+    public void update(Customer customer) {
+        customerRepository.save(customer);
+    }
+    public Customer addTransfer(Customer customer, SimpleTransferQueryEntity transfer){
+        customer.addTransfer(transfer);
+        return customer;
     }
 
 }
