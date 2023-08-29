@@ -1,16 +1,14 @@
 package com.example.bankbackend.customer;
 
-import com.example.bankbackend.customer.CustomerRole;
-import com.example.bankbackend.customer.CustomerRoleRepository;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 @Component("roleWarmup")
-class Warmup implements ApplicationListener<ContextRefreshedEvent> {
+class CustomerRoleWarmup implements ApplicationListener<ContextRefreshedEvent> {
 
     private final CustomerRoleRepository roleRepository;
-    public Warmup(final CustomerRoleRepository roleRepository) {
+    public CustomerRoleWarmup(final CustomerRoleRepository roleRepository) {
         this.roleRepository = roleRepository;
     }
     @Override

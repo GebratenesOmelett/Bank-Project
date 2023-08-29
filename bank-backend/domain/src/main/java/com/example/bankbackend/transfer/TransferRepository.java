@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-interface TransferRepository extends JpaRepository<Transfer, Integer> {
+interface TransferRepository {
     Optional<Transfer> findTransfersById(int id);
 }
