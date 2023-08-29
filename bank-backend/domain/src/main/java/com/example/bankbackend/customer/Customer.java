@@ -7,23 +7,15 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 @ToString
-@Entity
-@Table(name = "customers")
 class Customer {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private int id;
     private String firstName;
     private String lastName;
     private BigDecimal funds;
     private String password;
     private String email;
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "customer_roles",
-            joinColumns = @JoinColumn(name = "customer_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<CustomerRole> roleSet;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
