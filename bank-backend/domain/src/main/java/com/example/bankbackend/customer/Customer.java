@@ -18,7 +18,7 @@ class Customer {
     private String email;
     private Set<CustomerRole> roleSet;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "customerId",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<SimpleTransferQueryEntity> transferSet;
     private boolean enabled;
 

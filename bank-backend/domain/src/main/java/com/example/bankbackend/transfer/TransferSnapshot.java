@@ -1,5 +1,7 @@
 package com.example.bankbackend.transfer;
 
+import com.example.bankbackend.customer.dto.SimpleCustomerEntity;
+
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
@@ -11,6 +13,7 @@ public class TransferSnapshot {
     private int receiverId;
     private Date transferDate;
     private Time transferTime;
+    private SimpleCustomerEntity customerId;
 
     public TransferSnapshot() {
     }
@@ -20,13 +23,15 @@ public class TransferSnapshot {
                      final BigDecimal funds,
                      final int receiverId,
                      final Date transferDate,
-                     final Time transferTime) {
+                     final Time transferTime,
+                     final SimpleCustomerEntity customerId) {
         this.id = id;
         this.title = title;
         this.funds = funds;
         this.receiverId = receiverId;
         this.transferDate = transferDate;
         this.transferTime = transferTime;
+        this.customerId = customerId;
     }
 
     int getId() {
@@ -51,5 +56,9 @@ public class TransferSnapshot {
 
     Time getTransferTime() {
         return transferTime;
+    }
+
+    SimpleCustomerEntity getCustomerId() {
+        return customerId;
     }
 }

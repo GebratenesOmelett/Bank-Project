@@ -28,9 +28,25 @@
                 <inverse-join-column name="role_id"></inverse-join-column>
             </join-table>
         </many-to-many>
-            <one-to-many name="transferSet" mapped-by="customer" fetch="LAZY"/>
+            <one-to-many name="transferSet" mapped-by="customerId" fetch="LAZY"></one-to-many>
         </attributes>
     </entity>
+    <entity class="com.example.bankbackend.customer.dto.SimpleCustomerEntitySnapshot">
+        <attributes>
+            <id name="id">
+                <generated-value strategy="IDENTITY"/>
+            </id>
+            <basic name="firstName">
+                <column nullable="false"></column>
+            </basic>
+            <basic name="lastName">
+                <column nullable="false"></column>
+            </basic>
+            <one-to-many name="transferSet" mapped-by="customerId" fetch="LAZY">
+            </one-to-many>
+        </attributes>
+    </entity>
+
     <entity class="com.example.bankbackend.transfer.TransferSnapshot">
         <table name="transfers"></table>
         <attributes>
@@ -46,7 +62,7 @@
             <basic name="receiverId">
                 <column nullable="false"></column>
             </basic>
-            <many-to-one name="customer" fetch="LAZY"/>
+            <many-to-one name="customerId" fetch="LAZY"/>
         </attributes>
 
     </entity>

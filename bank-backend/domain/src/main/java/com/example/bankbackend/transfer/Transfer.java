@@ -1,4 +1,5 @@
 package com.example.bankbackend.transfer;
+import com.example.bankbackend.customer.dto.SimpleCustomerEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -19,6 +20,10 @@ class Transfer {
     private BigDecimal funds;
 
     private int receiverId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private SimpleCustomerEntity customerId;
 
     @CreationTimestamp
     private Date transferDate;

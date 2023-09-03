@@ -1,6 +1,7 @@
 package com.example.bankbackend.transfer.dto;
 
 
+import com.example.bankbackend.customer.dto.SimpleCustomerEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -17,11 +18,13 @@ public class SimpleTransferQueryEntity {
     private int id;
     private String title;
     private BigDecimal funds;
-    private int receiverId;
     @CreationTimestamp
     private Date transferDate;
     @CreationTimestamp
     private Time transferTime;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private SimpleCustomerEntity customerId;
 
     protected SimpleTransferQueryEntity() {
     }
