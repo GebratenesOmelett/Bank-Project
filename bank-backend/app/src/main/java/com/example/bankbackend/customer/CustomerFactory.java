@@ -14,11 +14,12 @@ class CustomerFactory {
     }
 
     Customer from(CustomerDto customerDto){
-        return attachDefaultRole(new Customer(customerDto.getFirstName(),
+        return attachDefaultRole(Customer.restore(new CustomerSnapshot(
+                customerDto.getFirstName(),
                 customerDto.getLastName(),
                 new BigDecimal(1000),
                 customerDto.getPassword(),
-                customerDto.getEmail()));
+                customerDto.getEmail())));
 
     }
 

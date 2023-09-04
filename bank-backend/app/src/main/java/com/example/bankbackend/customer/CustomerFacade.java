@@ -29,9 +29,9 @@ public class CustomerFacade {
                 .orElseThrow(() -> new NoSuchElementException("there is no customer with such id : " + customerId));
     }
 
-    public void create(CustomerDto customerDto) {
+    public Customer create(CustomerDto customerDto) {
 
-        customerRepository.save(customerFactory.from(customerDto));
+        return customerRepository.save(customerFactory.from(customerDto));
     }
 
     public void update(Customer customer) {

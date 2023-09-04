@@ -2,6 +2,7 @@ package com.example.bankbackend.transfer.dto;
 
 
 import com.example.bankbackend.customer.dto.SimpleCustomerEntity;
+import com.example.bankbackend.customer.dto.SimpleCustomerEntitySnapshot;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -9,22 +10,18 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
 
-@Entity
-@Table(name = "transfers")
+
 public class SimpleTransferQueryEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String title;
     private BigDecimal funds;
-    @CreationTimestamp
+    private int receiverId;
+
     private Date transferDate;
-    @CreationTimestamp
+
     private Time transferTime;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id")
-    private SimpleCustomerEntity customerId;
+    private SimpleCustomerEntitySnapshot customerId;
 
     protected SimpleTransferQueryEntity() {
     }

@@ -1,18 +1,24 @@
 package com.example.bankbackend.transfer;
-import com.example.bankbackend.customer.dto.SimpleCustomerEntity;
-import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
+import com.example.bankbackend.customer.dto.SimpleCustomerEntitySnapshot;
+
 
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
 
-@Entity
-@Table(name = "transfers")
-class Transfer {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+class Transfer {
+    static Transfer restore(TransferSnapshot snapshot){
+        return new Transfer(
+                snapshot.getId(),
+                snapshot.getTitle(),
+                snapshot.getFunds(),
+                snapshot.getReceiverId(),
+                snapshot.getCustomerId(),
+                snapshot.getTransferDate(),
+                snapshot.getTransferTime()
+        );
+    }
     private int id;
 
     private String title;
@@ -21,14 +27,10 @@ class Transfer {
 
     private int receiverId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id")
-    private SimpleCustomerEntity customerId;
+    private SimpleCustomerEntitySnapshot customerId;
 
-    @CreationTimestamp
     private Date transferDate;
 
-    @CreationTimestamp
     private Time transferTime;
 
     protected Transfer() {
@@ -38,5 +40,15 @@ class Transfer {
         this.title = title;
         this.funds = funds;
         this.receiverId = receiverId;
+    }
+
+    Transfer(int id, String title, BigDecimal funds, int receiverId, SimpleCustomerEntitySnapshot customerId, Date transferDate, Time transferTime) {
+        this.id = id;
+        this.title = title;
+        this.funds = funds;
+        this.receiverId = receiverId;
+        this.customerId = customerId;
+        this.transferDate = transferDate;
+        this.transferTime = transferTime;
     }
 }

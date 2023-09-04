@@ -19,4 +19,12 @@ class CustomerRoleSnapshot {
     String getRole() {
         return role;
     }
+
+    void setId(long id) {
+        this.id = id;
+    }
+
+    void setRole(String role) {
+        this.role = role;
+    }
 }

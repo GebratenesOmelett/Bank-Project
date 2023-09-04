@@ -1,14 +1,23 @@
 package com.example.bankbackend.customer;
 import com.example.bankbackend.transfer.dto.SimpleTransferQueryEntity;
-import jakarta.persistence.*;
-import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
-@ToString
-class Customer {
 
+class Customer {
+    static Customer restore(CustomerSnapshot snapshot){
+        return new Customer(snapshot.getId(),
+                snapshot.getFirstName(),
+                snapshot.getLastName(),
+                snapshot.getFunds(),
+                snapshot.getPassword(),
+                snapshot.getEmail(),
+                snapshot.getRoleSet(),
+                snapshot.getTransferSet(),
+                snapshot.isEnabled()
+        );
+    }
 
     private int id;
     private String firstName;
@@ -17,24 +26,35 @@ class Customer {
     private String password;
     private String email;
     private Set<CustomerRole> roleSet;
-
-    @OneToMany(mappedBy = "customerId",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<SimpleTransferQueryEntity> transferSet;
     private boolean enabled;
 
     protected Customer() {
     }
 
-    Customer(String firstName, String lastName, BigDecimal funds, String password, String email) {
+    public Customer(int id,
+                    String firstName,
+                    String lastName,
+                    BigDecimal funds,
+                    String password,
+                    String email,
+                    Set<CustomerRole> roleSet,
+                    Set<SimpleTransferQueryEntity> transferSet,
+                    boolean enabled) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.funds = funds;
         this.password = password;
         this.email = email;
-        this.roleSet = new HashSet<>();
-        this.transferSet = new HashSet<>();
-        this.enabled = true;
+        this.roleSet = roleSet;
+        this.transferSet = transferSet;
+        this.enabled = enabled;
     }
+    CustomerSnapshot getSnapshot(){
+        return new CustomerSnapshot(firstName,lastName,funds,password,email);
+    }
+
     void addRole(CustomerRole role){
         roleSet.add(role);
     }

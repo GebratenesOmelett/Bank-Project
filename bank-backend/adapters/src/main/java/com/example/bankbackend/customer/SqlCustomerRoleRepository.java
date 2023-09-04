@@ -5,9 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-interface SqlCustomerRoleRepository extends JpaRepository<CustomerRole, Integer> {
-    Optional<CustomerRole> findByRole(String role);
-    CustomerRole save(CustomerRole role);
+interface SqlCustomerRoleRepository extends JpaRepository<CustomerRoleSnapshot, Integer> {
+    Optional<CustomerRoleSnapshot> findByRole(String role);
+    CustomerRole save(CustomerRoleSnapshot role);
 }
 @Repository
 class CustomerRoleRepositoryImpl implements CustomerRoleRepository{

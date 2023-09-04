@@ -14,7 +14,7 @@ public class SimpleCustomerEntity {
     private int id;
     private String firstName;
     private String lastName;
-    @OneToMany(mappedBy = "customerId",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+
     private Set<SimpleTransferQueryEntity> transferSet;
 
 

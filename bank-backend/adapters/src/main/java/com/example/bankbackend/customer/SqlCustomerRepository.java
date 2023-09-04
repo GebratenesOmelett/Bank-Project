@@ -5,13 +5,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-interface SqlCustomerRepository extends JpaRepository<Customer, Integer> {
-    Optional<Customer> findCustomerById(int id);
+interface SqlCustomerRepository extends JpaRepository<CustomerSnapshot, Integer> {
+    Optional<CustomerSnapshot> findCustomerById(int id);
 
-    Customer save(Customer entity);
+    CustomerSnapshot save(CustomerSnapshot entity);
 }
 
-interface SqlCustomerQueryRepository extends CustomerQueryRepository, JpaRepository<Customer, Integer> {
+interface SqlCustomerQueryRepository extends CustomerQueryRepository, JpaRepository<CustomerSnapshot, Integer> {
 }
 
 @Repository
@@ -25,12 +25,14 @@ class CustomerRepositoryImpl implements CustomerRepository {
 
     @Override
     public Optional<Customer> findCustomerById(int id) {
-        return repository.findCustomerById(id);
+        return repository.findCustomerById(id)
+                .map(Customer::restore);
     }
 
     @Override
     public Customer save(Customer entity) {
-        return repository.save(entity);
+
+        return Customer.restore(repository.save(entity.getSnapshot()));
     }
 }
 

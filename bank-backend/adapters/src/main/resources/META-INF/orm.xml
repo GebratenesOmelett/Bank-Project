@@ -1,72 +1,71 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<entity-mappings xmlns="https://jakarta.ee/xml/ns/persistence/orm" version="3.0">
-    <description>XML Mapping file</description>
-    <entity class="com.example.bankbackend.customer.CustomerSnapshot" access="FIELD">
-        <table name="customers"></table>
-        <attributes>
-            <id name="id">
-                <generated-value strategy="IDENTITY"/>
-            </id>
-            <basic name="firstName">
-                <column nullable="false"></column>
-            </basic>
-            <basic name="lastName">
-                <column nullable="false"></column>
-            </basic>
-            <basic name="funds">
-                <column nullable="false"></column>
-            </basic>
-            <basic name="password">
-                <column nullable="false"></column>
-            </basic>
-            <basic name="email">
-                <column nullable="false"></column>
-            </basic>
-        <many-to-many name="roleSet" fetch="LAZY">
-            <join-table name="customer_roles">
-                <join-column name="customer_id"></join-column>
-                <inverse-join-column name="role_id"></inverse-join-column>
-            </join-table>
-        </many-to-many>
-            <one-to-many name="transferSet" mapped-by="customerId" fetch="LAZY"></one-to-many>
-        </attributes>
-    </entity>
-    <entity class="com.example.bankbackend.customer.dto.SimpleCustomerEntitySnapshot">
-        <attributes>
-            <id name="id">
-                <generated-value strategy="IDENTITY"/>
-            </id>
-            <basic name="firstName">
-                <column nullable="false"></column>
-            </basic>
-            <basic name="lastName">
-                <column nullable="false"></column>
-            </basic>
-            <one-to-many name="transferSet" mapped-by="customerId" fetch="LAZY">
-            </one-to-many>
-        </attributes>
-    </entity>
-
-    <entity class="com.example.bankbackend.transfer.TransferSnapshot">
-        <table name="transfers"></table>
-        <attributes>
-            <id name="id">
-                <generated-value strategy="IDENTITY"></generated-value>
-            </id>
-            <basic name="title">
-                <column nullable="false"></column>
-            </basic>
-            <basic name="funds">
-                <column nullable="false"></column>
-            </basic>
-            <basic name="receiverId">
-                <column nullable="false"></column>
-            </basic>
-            <many-to-one name="customerId" fetch="LAZY"/>
-        </attributes>
-
-    </entity>
-
-
-
-</entity-mappings>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.example.bankbackend.transfer.TransferSnapshot" table="transfer">
+        <id name="id" type="int" column="id">
+            <generator class="identity"></generator>
+        </id>
+        <property name="title" type="string" column="title"/>
+        <property name="funds" type="java.math.BigDecimal" column="funds"/>
+        <property name="receiverId" type="int" column="receiver_id"/>
+        <property name="transferDate" type="java.sql.Date" column="transfer_date" generated="insert"/>
+        <property name="transferTime" type="java.sql.Time" column="transfer_time" generated="insert"/>
+        <many-to-one name="customerId" class="com.example.bankbackend.customer.dto.SimpleCustomerEntitySnapshot">
+            <column name="customer_id" not-null="true"></column>
+        </many-to-one>
+    </class>
+    <class name="com.example.bankbackend.transfer.dto.SimpleTransferQueryEntitySnapshot" table="transfer">
+        <id name="id" type="java.lang.Integer" column="id">
+            <generator class="identity"></generator>
+        </id>
+        <property name="title" type="string" column="title"/>
+        <property name="funds" type="java.math.BigDecimal" column="funds"/>
+        <property name="receiverId" type="int" column="receiver_id"/>
+        <property name="transferDate" type="java.sql.Date" column="transfer_date" generated="insert"/>
+        <property name="transferTime" type="java.sql.Time" column="transfer_time" generated="insert"/>
+        <many-to-one name="customerId" class="com.example.bankbackend.customer.dto.SimpleCustomerEntitySnapshot">
+            <column name="customer_id" not-null="true"></column>
+        </many-to-one>
+    </class>
+    <class name="com.example.bankbackend.customer.CustomerSnapshot" table="customer">
+        <id name="id" type="int" column="id">
+            <generator class="identity"></generator>
+        </id>
+        <property name="firstName" type="string" column="first_name"></property>
+        <property name="lastName" type="string" column="last_name"></property>
+        <property name="funds" type="java.math.BigDecimal" column="funds"></property>
+        <property name="password" type="string" column="password"></property>
+        <property name="email" type="string" column="email"></property>
+        <set name="roleSet" table="ROLE_USER" cascade="all">
+            <key column="user_id"></key>
+            <many-to-many column="role_id" class="com.example.bankbackend.customer.CustomerRoleSnapshot"></many-to-many>
+        </set>
+        <set name="transferSet" table="transfer" inverse="true" lazy="true" cascade="all">
+            <key>
+                <column name="customer_id" not-null="true"></column>
+            </key>
+            <one-to-many class="com.example.bankbackend.transfer.dto.SimpleTransferQueryEntitySnapshot"></one-to-many>
+        </set>
+    </class>
+    <class name="com.example.bankbackend.customer.dto.SimpleCustomerEntitySnapshot" table="customer">
+        <id name="id" type="int" column="id">
+            <generator class="identity"></generator>
+        </id>
+        <property name="firstName" type="string" column="first_name"></property>
+        <property name="lastName" type="string" column="last_name"></property>
+        <set name="transferSet" table="transfer" inverse="true" lazy="true" cascade="all">
+            <key>
+                <column name="customer_id" not-null="true"></column>
+            </key>
+            <one-to-many class="com.example.bankbackend.transfer.dto.SimpleTransferQueryEntitySnapshot"></one-to-many>
+        </set>
+    </class>
+    <class name="com.example.bankbackend.customer.CustomerRoleSnapshot" table="role">
+        <id name="id" type="int" column="id">
+            <generator class="identity"></generator>
+        </id>
+        <property name="role" type="string" column="role"></property>
+    </class>
+</hibernate-mapping>
