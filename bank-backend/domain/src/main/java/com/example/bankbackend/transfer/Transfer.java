@@ -33,9 +33,6 @@ class Transfer {
 
     private Time transferTime;
 
-    protected Transfer() {
-    }
-
     Transfer(String title, BigDecimal funds, int receiverId) {
         this.title = title;
         this.funds = funds;
@@ -50,5 +47,16 @@ class Transfer {
         this.customerId = customerId;
         this.transferDate = transferDate;
         this.transferTime = transferTime;
+    }
+    TransferSnapshot getSnapshot(){
+        return new TransferSnapshot(
+                id,
+                title,
+                funds,
+                receiverId,
+                transferDate,
+                transferTime,
+                customerId
+        );
     }
 }

@@ -1,18 +1,25 @@
 package com.example.bankbackend.customer;
 
 
-import jakarta.persistence.*;
-
-
 class CustomerRole {
+    static CustomerRole restore(CustomerRoleSnapshot snapshot){
+        return new CustomerRole(
+                snapshot.getId(),
+                snapshot.getRole()
+        );
+    }
 
     private long id;
     private String role;
 
-    protected CustomerRole() {
-    }
-    CustomerRole(String role) {
+    CustomerRole(long id, String role) {
+        this.id = id;
         this.role = role;
     }
-
+    CustomerRole(String role) {
+             this.role = role;
+    }
+    CustomerRoleSnapshot getSnapshot(){
+        return new CustomerRoleSnapshot(id, role);
+    }
 }

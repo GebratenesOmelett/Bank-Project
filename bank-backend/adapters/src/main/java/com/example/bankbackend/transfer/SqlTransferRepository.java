@@ -4,11 +4,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-interface SqlTransferRepository extends JpaRepository<Transfer, Integer> {
-    Optional<Transfer> findTransfersById(int id);
+interface SqlTransferRepository extends JpaRepository<TransferSnapshot, Integer> {
+    Optional<TransferSnapshot> findTransfersById(int id);
 }
 
-interface SqlTransferQueryRepository extends TransferQueryRepository, JpaRepository<Transfer, Integer> {
+interface SqlTransferQueryRepository extends TransferQueryRepository, JpaRepository<TransferSnapshot, Integer> {
 }
 class TransferRepositoryImpl implements  TransferRepository{
 
@@ -20,6 +20,6 @@ class TransferRepositoryImpl implements  TransferRepository{
 
     @Override
     public Optional<Transfer> findTransfersById(int id) {
-        return repository.findTransfersById(id);
+        return repository.findTransfersById(id).map(Transfer::restore);
     }
 }

@@ -28,10 +28,6 @@ class Customer {
     private Set<CustomerRole> roleSet;
     private Set<SimpleTransferQueryEntity> transferSet;
     private boolean enabled;
-
-    protected Customer() {
-    }
-
     public Customer(int id,
                     String firstName,
                     String lastName,

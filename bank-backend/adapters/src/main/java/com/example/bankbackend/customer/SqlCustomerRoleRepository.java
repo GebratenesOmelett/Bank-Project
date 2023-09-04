@@ -7,7 +7,7 @@ import java.util.Optional;
 
 interface SqlCustomerRoleRepository extends JpaRepository<CustomerRoleSnapshot, Integer> {
     Optional<CustomerRoleSnapshot> findByRole(String role);
-    CustomerRole save(CustomerRoleSnapshot role);
+    CustomerRoleSnapshot save(CustomerRoleSnapshot role);
 }
 @Repository
 class CustomerRoleRepositoryImpl implements CustomerRoleRepository{
@@ -19,11 +19,11 @@ class CustomerRoleRepositoryImpl implements CustomerRoleRepository{
 
     @Override
     public Optional<CustomerRole> findByRole(String role) {
-        return repository.findByRole(role);
+        return repository.findByRole(role).map(CustomerRole::restore);
     }
 
     @Override
     public CustomerRole save(CustomerRole role) {
-        return repository.save(role);
+        return CustomerRole.restore(repository.save(role.getSnapshot()));
     }
 }
