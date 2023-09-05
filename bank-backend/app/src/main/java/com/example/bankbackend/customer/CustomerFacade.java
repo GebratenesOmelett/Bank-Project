@@ -43,7 +43,7 @@ public class CustomerFacade {
                 customerSnapshot.getTransferSet().stream().
                         map(SimpleTransferQueryEntity::restore)
                         .collect(Collectors.toSet())
-                        );
+        );
     }
 
 }

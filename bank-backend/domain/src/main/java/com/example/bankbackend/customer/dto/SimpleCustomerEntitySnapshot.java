@@ -18,9 +18,9 @@ public class SimpleCustomerEntitySnapshot {
     }
 
     SimpleCustomerEntitySnapshot(final int id,
-                                        final String firstName,
-                                        final String lastName,
-                                        final Set<SimpleTransferQueryEntitySnapshot> transferSet) {
+                                 final String firstName,
+                                 final String lastName,
+                                 final Set<SimpleTransferQueryEntitySnapshot> transferSet) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
