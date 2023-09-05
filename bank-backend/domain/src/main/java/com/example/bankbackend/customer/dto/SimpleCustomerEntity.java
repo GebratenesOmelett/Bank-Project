@@ -32,7 +32,8 @@ public class SimpleCustomerEntity {
                 firstName,
                 lastName,
                 transferSet.stream()
-                        .map(SimpleTransferQueryEntity::getSnapshot).collect(Collectors.toSet()));
+                        .map(SimpleTransferQueryEntity::getSnapshot)
+                        .collect(Collectors.toSet()));
     }
 
 }

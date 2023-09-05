@@ -1,7 +1,6 @@
 package com.example.bankbackend.customer;
 
 import com.example.bankbackend.customer.dto.CustomerDto;
-import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.HashSet;

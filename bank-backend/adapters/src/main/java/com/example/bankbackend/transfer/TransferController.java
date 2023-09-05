@@ -25,7 +25,7 @@ class TransferController {
 
     @PostMapping()
     void create(@RequestBody TransferCreateDto toCreate) {
-
+        System.out.println(toCreate);
         transferFacade.create(toCreate);
     }
 }
