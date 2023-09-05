@@ -31,7 +31,7 @@ class CustomerRepositoryImpl implements CustomerRepository {
 
     @Override
     public Customer save(Customer entity) {
-
+        System.out.println(entity.getSnapshot());
         return Customer.restore(repository.save(entity.getSnapshot()));
     }
 }

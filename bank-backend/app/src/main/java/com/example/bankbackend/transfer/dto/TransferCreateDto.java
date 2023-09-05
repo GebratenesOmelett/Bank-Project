@@ -29,9 +29,5 @@ public class TransferCreateDto {
     public int getReceiverId() {
         return receiverId;
     }
-    public SimpleTransferQueryEntity toSimpleEntity(){
-        return new SimpleTransferQueryEntity(title,
-                funds,
-                receiverId);
-    }
+
 }

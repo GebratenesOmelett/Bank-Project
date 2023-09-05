@@ -1,9 +1,10 @@
 package com.example.bankbackend.customer;
+
 import com.example.bankbackend.transfer.dto.SimpleTransferQueryEntity;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 class Customer {
     static Customer restore(CustomerSnapshot snapshot){
@@ -13,21 +14,25 @@ class Customer {
                 snapshot.getFunds(),
                 snapshot.getPassword(),
                 snapshot.getEmail(),
-                snapshot.getRoleSet(),
-                snapshot.getTransferSet(),
+                snapshot.getRoleSet().stream()
+                        .map(CustomerRole::restore)
+                        .collect(Collectors.toSet()),
+                snapshot.getTransferSet().stream()
+                        .map(SimpleTransferQueryEntity::restore)
+                        .collect(Collectors.toSet()),
                 snapshot.isEnabled()
         );
     }
 
-    private int id;
-    private String firstName;
-    private String lastName;
-    private BigDecimal funds;
-    private String password;
-    private String email;
-    private Set<CustomerRole> roleSet;
-    private Set<SimpleTransferQueryEntity> transferSet;
-    private boolean enabled;
+    private final int id;
+    private final String firstName;
+    private final String lastName;
+    private final BigDecimal funds;
+    private final String password;
+    private final String email;
+    private final Set<CustomerRole> roleSet;
+    private final Set<SimpleTransferQueryEntity> transferSet;
+    private final boolean enabled;
     public Customer(int id,
                     String firstName,
                     String lastName,
@@ -48,7 +53,20 @@ class Customer {
         this.enabled = enabled;
     }
     CustomerSnapshot getSnapshot(){
-        return new CustomerSnapshot(firstName,lastName,funds,password,email);
+        return CustomerSnapshot.builder()
+                .id(id)
+                .firstName(firstName)
+                .lastName(lastName)
+                .funds(funds)
+                .password(password)
+                .email(email)
+                .transferSet(transferSet.stream()
+                        .map(SimpleTransferQueryEntity::getSnapshot).collect(Collectors.toSet()))
+                .roleSet(roleSet.stream().
+                        map(CustomerRole::getSnapshot)
+                        .collect(Collectors.toSet()))
+                .enabled(enabled)
+                .build();
     }
 
     void addRole(CustomerRole role){
@@ -57,4 +75,6 @@ class Customer {
     void addTransfer(SimpleTransferQueryEntity transfer){
         transferSet.add(transfer);
     }
+
+
 }

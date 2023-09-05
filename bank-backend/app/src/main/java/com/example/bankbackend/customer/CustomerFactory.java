@@ -4,6 +4,7 @@ import com.example.bankbackend.customer.dto.CustomerDto;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 
 
 class CustomerFactory {
@@ -13,17 +14,21 @@ class CustomerFactory {
         this.roleFacade = roleFacade;
     }
 
-    Customer from(CustomerDto customerDto){
-        return attachDefaultRole(Customer.restore(new CustomerSnapshot(
-                customerDto.getFirstName(),
-                customerDto.getLastName(),
-                new BigDecimal(1000),
-                customerDto.getPassword(),
-                customerDto.getEmail())));
+    Customer from(CustomerDto customerDto) {
+        return attachDefaultRole(Customer.restore(CustomerSnapshot.builder()
+                .firstName(customerDto.getFirstName())
+                .lastName(customerDto.getLastName())
+                .funds(new BigDecimal(1000))
+                .password(customerDto.getPassword())
+                .email(customerDto.getEmail())
+                .roleSet(new HashSet<>())
+                .transferSet(new HashSet<>())
+                .enabled(true)
+                .build()));
 
     }
 
-    public Customer attachDefaultRole(Customer customer){
+    public Customer attachDefaultRole(Customer customer) {
         customer.addRole(roleFacade.findRole("ROLE_USER"));
         return customer;
     }

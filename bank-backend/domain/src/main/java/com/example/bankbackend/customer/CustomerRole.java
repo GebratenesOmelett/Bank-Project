@@ -9,10 +9,10 @@ class CustomerRole {
         );
     }
 
-    private long id;
+    private int id;
     private String role;
 
-    CustomerRole(long id, String role) {
+    CustomerRole(int id, String role) {
         this.id = id;
         this.role = role;
     }

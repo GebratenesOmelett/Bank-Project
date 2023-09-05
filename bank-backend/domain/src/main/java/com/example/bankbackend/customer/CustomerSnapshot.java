@@ -1,12 +1,15 @@
 package com.example.bankbackend.customer;
 
-import com.example.bankbackend.transfer.dto.SimpleTransferQueryEntity;
+import com.example.bankbackend.transfer.dto.SimpleTransferQueryEntitySnapshot;
+import lombok.Builder;
+import lombok.ToString;
 
 
 import java.math.BigDecimal;
-import java.util.HashSet;
 import java.util.Set;
 
+@ToString
+@Builder
 class CustomerSnapshot {
 
     private int id;
@@ -15,22 +18,23 @@ class CustomerSnapshot {
     private BigDecimal funds;
     private String password;
     private String email;
-    private Set<CustomerRole> roleSet;
-    private Set<SimpleTransferQueryEntity> transferSet;
+    private Set<CustomerRoleSnapshot> roleSet;
+    private Set<SimpleTransferQueryEntitySnapshot> transferSet;
     private boolean enabled;
 
     public CustomerSnapshot() {
     }
 
-    CustomerSnapshot(final String firstName,final String lastName,final BigDecimal funds,final String password, String email) {
+    public CustomerSnapshot(int id, String firstName, String lastName, BigDecimal funds, String password, String email, Set<CustomerRoleSnapshot> roleSet, Set<SimpleTransferQueryEntitySnapshot> transferSet, boolean enabled) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.funds = funds;
         this.password = password;
         this.email = email;
-        this.roleSet = new HashSet<>();
-        this.transferSet = new HashSet<>();
-        this.enabled = true;
+        this.roleSet = roleSet;
+        this.transferSet = transferSet;
+        this.enabled = enabled;
     }
 
     int getId() {
@@ -57,11 +61,11 @@ class CustomerSnapshot {
         return email;
     }
 
-    Set<CustomerRole> getRoleSet() {
+    Set<CustomerRoleSnapshot> getRoleSet() {
         return roleSet;
     }
 
-    Set<SimpleTransferQueryEntity> getTransferSet() {
+    Set<SimpleTransferQueryEntitySnapshot> getTransferSet() {
         return transferSet;
     }
 
@@ -93,11 +97,11 @@ class CustomerSnapshot {
         this.email = email;
     }
 
-    void setRoleSet(Set<CustomerRole> roleSet) {
+    void setRoleSet(Set<CustomerRoleSnapshot> roleSet) {
         this.roleSet = roleSet;
     }
 
-    void setTransferSet(Set<SimpleTransferQueryEntity> transferSet) {
+    void setTransferSet(Set<SimpleTransferQueryEntitySnapshot> transferSet) {
         this.transferSet = transferSet;
     }
 

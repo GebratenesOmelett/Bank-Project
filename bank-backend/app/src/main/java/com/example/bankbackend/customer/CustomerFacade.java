@@ -1,11 +1,12 @@
 package com.example.bankbackend.customer;
 
 import com.example.bankbackend.customer.dto.CustomerDto;
+import com.example.bankbackend.customer.dto.SimpleCustomerEntity;
 import com.example.bankbackend.transfer.dto.SimpleTransferQueryEntity;
-import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class CustomerFacade {
     CustomerRepository customerRepository;
@@ -30,16 +31,19 @@ public class CustomerFacade {
     }
 
     public Customer create(CustomerDto customerDto) {
-
         return customerRepository.save(customerFactory.from(customerDto));
     }
 
-    public void update(Customer customer) {
-        customerRepository.save(customer);
-    }
-    public Customer addTransfer(Customer customer, SimpleTransferQueryEntity transfer){
-        customer.addTransfer(transfer);
-        return customer;
+    public SimpleCustomerEntity toSimpleCustomerEntity(Customer customer) {
+        CustomerSnapshot customerSnapshot = customer.getSnapshot();
+        return new SimpleCustomerEntity(
+                customerSnapshot.getId(),
+                customerSnapshot.getFirstName(),
+                customerSnapshot.getLastName(),
+                customerSnapshot.getTransferSet().stream().
+                        map(SimpleTransferQueryEntity::restore)
+                        .collect(Collectors.toSet())
+                        );
     }
 
 }

@@ -2,9 +2,6 @@ package com.example.bankbackend.transfer.dto;
 
 
 import com.example.bankbackend.customer.dto.SimpleCustomerEntity;
-import com.example.bankbackend.customer.dto.SimpleCustomerEntitySnapshot;
-import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -12,24 +9,34 @@ import java.sql.Time;
 
 
 public class SimpleTransferQueryEntity {
+    public static SimpleTransferQueryEntity restore(SimpleTransferQueryEntitySnapshot snapshot){
+        return new SimpleTransferQueryEntity(
+                snapshot.getId(),
+                snapshot.getTitle(),
+                snapshot.getFunds(),
+                snapshot.getReceiverId(),
+                snapshot.getTransferDate(),
+                snapshot.getTransferTime(),
+                SimpleCustomerEntity.restore(snapshot.getCustomerId()));
+    }
 
     private int id;
     private String title;
     private BigDecimal funds;
     private int receiverId;
-
     private Date transferDate;
 
     private Time transferTime;
-    private SimpleCustomerEntitySnapshot customerId;
+    private SimpleCustomerEntity customerId;
 
-    protected SimpleTransferQueryEntity() {
-    }
-
-    public SimpleTransferQueryEntity(String title, BigDecimal funds, int receiverId) {
+    public SimpleTransferQueryEntity(int id, String title, BigDecimal funds, int receiverId, Date transferDate, Time transferTime, SimpleCustomerEntity customerId) {
+        this.id = id;
         this.title = title;
         this.funds = funds;
         this.receiverId = receiverId;
+        this.transferDate = transferDate;
+        this.transferTime = transferTime;
+        this.customerId = customerId;
     }
 
     public String getTitle() {
@@ -42,5 +49,15 @@ public class SimpleTransferQueryEntity {
 
     public int getReceiverId() {
         return receiverId;
+    }
+
+    public SimpleTransferQueryEntitySnapshot getSnapshot(){
+        return new SimpleTransferQueryEntitySnapshot(id,
+                title,
+                funds,
+                receiverId,
+                transferDate,
+                transferTime,
+                customerId.getSnapshot());
     }
 }

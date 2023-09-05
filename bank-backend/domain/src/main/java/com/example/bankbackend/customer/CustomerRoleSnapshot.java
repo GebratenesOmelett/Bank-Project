@@ -1,18 +1,22 @@
 package com.example.bankbackend.customer;
+
+import lombok.ToString;
+
+@ToString
 class CustomerRoleSnapshot {
 
-    private long id;
+    private int id;
     private String role;
 
     public CustomerRoleSnapshot() {
     }
 
-    CustomerRoleSnapshot(final long id, final String role) {
+    CustomerRoleSnapshot(final int id, final String role) {
         this.id = id;
         this.role = role;
     }
 
-    long getId() {
+    int getId() {
         return id;
     }
 
@@ -20,7 +24,7 @@ class CustomerRoleSnapshot {
         return role;
     }
 
-    void setId(long id) {
+    void setId(int id) {
         this.id = id;
     }
 

@@ -9,11 +9,13 @@ import java.util.Optional;
 
 public class TransferFacade {
     TransferQueryRepository transferQueryRepository;
-    CustomerFacade customerFacade;
+    TransferRepository transferRepository;
+    TransferFactory transferFactory;
 
-    public TransferFacade(TransferQueryRepository transferQueryRepository, CustomerFacade customerFacade) {
+    public TransferFacade(TransferQueryRepository transferQueryRepository, TransferRepository transferRepository, TransferFactory transferFactory) {
         this.transferQueryRepository = transferQueryRepository;
-        this.customerFacade = customerFacade;
+        this.transferRepository = transferRepository;
+        this.transferFactory = transferFactory;
     }
 
     public Optional<TransferDto> get(int id) {
@@ -22,7 +24,6 @@ public class TransferFacade {
     }
 
     public void create(TransferCreateDto toCreate) {
-        customerFacade.update(customerFacade.addTransfer(customerFacade.get(toCreate.getLoggedCustomerId()),
-                toCreate.toSimpleEntity()));
+        transferRepository.save(transferFactory.from(toCreate));
     }
 }

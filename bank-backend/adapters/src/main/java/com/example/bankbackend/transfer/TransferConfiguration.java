@@ -8,9 +8,11 @@ import org.springframework.context.annotation.Configuration;
 class TransferConfiguration {
     @Bean
     TransferFacade transferFacade(TransferQueryRepository transferQueryRepository,
-                                  CustomerFacade customerFacade) {
+                                  TransferRepository transferRepository,
+                                  TransferFactory transferFactory) {
         return new TransferFacade(
                 transferQueryRepository,
-                customerFacade);
+                transferRepository,
+                transferFactory);
     }
 }

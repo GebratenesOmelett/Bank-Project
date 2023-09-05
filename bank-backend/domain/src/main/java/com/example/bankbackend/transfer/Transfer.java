@@ -1,12 +1,13 @@
 package com.example.bankbackend.transfer;
-import com.example.bankbackend.customer.dto.SimpleCustomerEntitySnapshot;
+import com.example.bankbackend.customer.dto.SimpleCustomerEntity;
+import lombok.ToString;
 
 
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
 
-
+@ToString
 class Transfer {
     static Transfer restore(TransferSnapshot snapshot){
         return new Transfer(
@@ -14,32 +15,34 @@ class Transfer {
                 snapshot.getTitle(),
                 snapshot.getFunds(),
                 snapshot.getReceiverId(),
-                snapshot.getCustomerId(),
+                SimpleCustomerEntity.restore(snapshot.getCustomerId()),
                 snapshot.getTransferDate(),
                 snapshot.getTransferTime()
         );
     }
     private int id;
 
-    private String title;
+    private final String title;
 
-    private BigDecimal funds;
+    private final BigDecimal funds;
 
-    private int receiverId;
+    private final int receiverId;
 
-    private SimpleCustomerEntitySnapshot customerId;
+    private final SimpleCustomerEntity customerId;
 
     private Date transferDate;
 
     private Time transferTime;
 
-    Transfer(String title, BigDecimal funds, int receiverId) {
+    Transfer(String title, BigDecimal funds, int receiverId, SimpleCustomerEntity customerId) {
         this.title = title;
         this.funds = funds;
         this.receiverId = receiverId;
+        this.customerId = customerId;
+
     }
 
-    Transfer(int id, String title, BigDecimal funds, int receiverId, SimpleCustomerEntitySnapshot customerId, Date transferDate, Time transferTime) {
+    Transfer(int id, String title, BigDecimal funds, int receiverId, SimpleCustomerEntity customerId, Date transferDate, Time transferTime) {
         this.id = id;
         this.title = title;
         this.funds = funds;
@@ -48,6 +51,7 @@ class Transfer {
         this.transferDate = transferDate;
         this.transferTime = transferTime;
     }
+
     TransferSnapshot getSnapshot(){
         return new TransferSnapshot(
                 id,
@@ -56,7 +60,7 @@ class Transfer {
                 receiverId,
                 transferDate,
                 transferTime,
-                customerId
+                customerId.getSnapshot()
         );
     }
 }

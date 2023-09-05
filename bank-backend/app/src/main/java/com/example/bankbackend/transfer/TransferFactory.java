@@ -1,7 +1,7 @@
 package com.example.bankbackend.transfer;
 
 import com.example.bankbackend.customer.CustomerFacade;
-import com.example.bankbackend.transfer.dto.TransferDto;
+import com.example.bankbackend.transfer.dto.TransferCreateDto;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,10 +13,12 @@ class TransferFactory {
         this.customerFacade = customerFacade;
     }
 
-    Transfer from(TransferDto transferDto){
-        return new Transfer(transferDto.getTitle(),
-                transferDto.getFunds(),
-                transferDto.getReceiverId());
-
+    Transfer from(TransferCreateDto transferCreateDto){
+        Transfer transfer = new Transfer(transferCreateDto.getTitle(),
+                transferCreateDto.getFunds(),
+                transferCreateDto.getReceiverId(),
+                customerFacade.toSimpleCustomerEntity(customerFacade.get(transferCreateDto.getLoggedCustomerId())));
+        System.out.println(transfer);
+        return transfer;
     }
 }
