@@ -13,7 +13,7 @@ public class SimpleCustomerEntity {
         return new SimpleCustomerEntity(snapshot.getId(),
                 snapshot.getFirstName(),
                 snapshot.getLastName(),
-                snapshot.getTransferSet().stream().map(SimpleTransferQueryEntity::restore).collect(Collectors.toSet()));
+                null);
     }
 
     private final int id;
@@ -31,9 +31,7 @@ public class SimpleCustomerEntity {
         return new SimpleCustomerEntitySnapshot(id,
                 firstName,
                 lastName,
-                transferSet.stream()
-                        .map(SimpleTransferQueryEntity::getSnapshot)
-                        .collect(Collectors.toSet()));
+                null);
     }
 
 }
