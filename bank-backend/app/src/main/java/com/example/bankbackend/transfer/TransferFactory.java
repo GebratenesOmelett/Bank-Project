@@ -14,13 +14,9 @@ class TransferFactory {
     }
 
     Transfer from(TransferCreateDto transferCreateDto){
-        System.out.println(customerFacade.get(1));
-        System.out.println(customerFacade.get(transferCreateDto.getLoggedCustomerId()));
-        Transfer transfer = new Transfer(transferCreateDto.getTitle(),
+        return new Transfer(transferCreateDto.getTitle(),
                 transferCreateDto.getFunds(),
                 transferCreateDto.getReceiverId(),
                 customerFacade.toSimpleCustomerEntity(customerFacade.get(transferCreateDto.getLoggedCustomerId())));
-        System.out.println(transfer);
-        return transfer;
     }
 }

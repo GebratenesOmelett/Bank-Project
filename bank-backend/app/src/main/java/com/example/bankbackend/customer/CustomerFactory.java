@@ -1,6 +1,8 @@
 package com.example.bankbackend.customer;
 
 import com.example.bankbackend.customer.dto.CustomerDto;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -8,9 +10,11 @@ import java.util.HashSet;
 
 class CustomerFactory {
     CustomerRoleFacade roleFacade;
+    PasswordEncoder encoder;
 
-    public CustomerFactory(CustomerRoleFacade roleFacade) {
+    public CustomerFactory(CustomerRoleFacade roleFacade, BCryptPasswordEncoder encoder) {
         this.roleFacade = roleFacade;
+        this.encoder = encoder;
     }
 
     Customer from(CustomerDto customerDto) {
@@ -18,7 +22,7 @@ class CustomerFactory {
                 .firstName(customerDto.getFirstName())
                 .lastName(customerDto.getLastName())
                 .funds(new BigDecimal(1000))
-                .password(customerDto.getPassword())
+                .password(encoder.encode(customerDto.getPassword()))
                 .email(customerDto.getEmail())
                 .roleSet(new HashSet<>())
                 .transferSet(new HashSet<>())

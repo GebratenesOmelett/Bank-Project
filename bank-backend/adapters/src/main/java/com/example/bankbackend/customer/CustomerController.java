@@ -21,7 +21,7 @@ class CustomerController {
                 .orElse(ResponseEntity.notFound().build());
     }
     @PostMapping()
-    void create(@RequestBody CustomerDto toCreate){
+    void create(@ModelAttribute CustomerDto toCreate){
         customerFacade.create(toCreate);
     }
 }

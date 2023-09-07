@@ -2,6 +2,7 @@ package com.example.bankbackend.customer;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 class CustomerConfiguration {
@@ -14,6 +15,7 @@ class CustomerConfiguration {
                 customerRepository,
                 customerQueryRepository,
                 customerRoleFacade,
-                new CustomerFactory(customerRoleFacade));
+                new CustomerFactory(customerRoleFacade,
+                        new BCryptPasswordEncoder()));
     }
 }
