@@ -9,16 +9,17 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class SimpleTransferQueryEntitySnapshot {
     private int id;
     private String title;
     private BigDecimal funds;
     private int receiverId;
-    private Date transferDate;
-    private Time transferTime;
+    private LocalDate transferDate;
+    private LocalTime transferTime;
     private SimpleCustomerEntitySnapshot customerId;
-
 
 
     public void setCustomerId(SimpleCustomerEntitySnapshot customerId) {
@@ -32,8 +33,8 @@ public class SimpleTransferQueryEntitySnapshot {
                                       final String title,
                                       final BigDecimal funds,
                                       final int receiverId,
-                                      final Date transferDate,
-                                      final Time transferTime,
+                                      final LocalDate transferDate,
+                                      final LocalTime transferTime,
                                       final SimpleCustomerEntitySnapshot customerId) {
         this.id = id;
         this.title = title;
@@ -60,13 +61,14 @@ public class SimpleTransferQueryEntitySnapshot {
         return receiverId;
     }
 
-    Date getTransferDate() {
+    LocalDate getTransferDate() {
         return transferDate;
     }
 
-    Time getTransferTime() {
+    LocalTime getTransferTime() {
         return transferTime;
     }
+
     SimpleCustomerEntitySnapshot getCustomerId() {
         return customerId;
     }
@@ -87,11 +89,11 @@ public class SimpleTransferQueryEntitySnapshot {
         this.receiverId = receiverId;
     }
 
-    void setTransferDate(Date transferDate) {
+    void setTransferDate(LocalDate transferDate) {
         this.transferDate = transferDate;
     }
 
-    void setTransferTime(Time transferTime) {
+    void setTransferTime(LocalTime transferTime) {
         this.transferTime = transferTime;
     }
 }

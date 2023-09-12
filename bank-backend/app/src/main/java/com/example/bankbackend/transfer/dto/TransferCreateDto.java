@@ -1,9 +1,11 @@
 package com.example.bankbackend.transfer.dto;
 
+import com.example.bankbackend.transfer.Validation.IdCanNotBeTheSameValidation;
 import lombok.ToString;
 
 import java.math.BigDecimal;
 @ToString
+@IdCanNotBeTheSameValidation
 public class TransferCreateDto {
     private final String title;
     private final BigDecimal funds;

@@ -1,14 +1,14 @@
 package com.example.bankbackend.customer;
 
+import com.example.bankbackend.transfer.dto.SimpleTransferQueryEntity;
 import com.example.bankbackend.transfer.dto.SimpleTransferQueryEntitySnapshot;
 import lombok.Builder;
-import lombok.ToString;
+
 
 
 import java.math.BigDecimal;
 import java.util.Set;
 
-@ToString
 @Builder
 class CustomerSnapshot {
 
@@ -107,5 +107,12 @@ class CustomerSnapshot {
 
     void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    void addRole(CustomerRoleSnapshot role){
+        roleSet.add(role);
+    }
+    void addTransfer(SimpleTransferQueryEntitySnapshot transfer){
+        transferSet.add(transfer);
     }
 }

@@ -3,12 +3,12 @@ package com.example.bankbackend.transfer.dto;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @JsonDeserialize(as = TransferDto.DeserializationImpl.class)
 public interface TransferDto {
-    static TransferDto create(final String title, final BigDecimal funds, final int receiverId, final Date transferDate, final Time transferTime) {
+    static TransferDto create(final String title, final BigDecimal funds, final int receiverId, final LocalDate transferDate, final LocalTime transferTime) {
         return new DeserializationImpl(title, funds, receiverId, transferDate, transferTime);
     }
 
@@ -18,18 +18,18 @@ public interface TransferDto {
 
     int getReceiverId();
 
-    Date getTransferDate();
+    LocalDate getTransferDate();
 
-    Time getTransferTime();
+    LocalTime getTransferTime();
 
     class DeserializationImpl implements TransferDto {
         private final String title;
         private final BigDecimal funds;
         private final int receiverId;
-        private Date transferDate;
-        private Time transferTime;
+        private final LocalDate transferDate;
+        private final LocalTime transferTime;
 
-        public DeserializationImpl(String title, BigDecimal funds, int receiverId, Date transferDate, Time transferTime) {
+        public DeserializationImpl(String title, BigDecimal funds, int receiverId, LocalDate transferDate, LocalTime transferTime) {
             this.title = title;
             this.funds = funds;
             this.receiverId = receiverId;
@@ -53,12 +53,12 @@ public interface TransferDto {
         }
 
         @Override
-        public Date getTransferDate() {
+        public LocalDate getTransferDate() {
             return transferDate;
         }
 
         @Override
-        public Time getTransferTime() {
+        public LocalTime getTransferTime() {
             return transferTime;
         }
     }

@@ -14,14 +14,12 @@ class CustomerController {
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<CustomerDto> get(@PathVariable int id){
+    CustomerDto get(@PathVariable int id){
 
-        return customerFacade.getDto(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return customerFacade.getDto(id);
     }
     @PostMapping()
-    void create(@ModelAttribute CustomerDto toCreate){
+    void create(@RequestBody CustomerDto toCreate){
         customerFacade.create(toCreate);
     }
 }

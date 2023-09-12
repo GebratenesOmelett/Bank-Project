@@ -21,7 +21,7 @@ public class SimpleCustomerEntity {
     private final String lastName;
     private final Set<SimpleTransferQueryEntity> transferSet;
 
-    public SimpleCustomerEntity(int id, String firstName, String lastName, Set<SimpleTransferQueryEntity> transferSet) {
+    private SimpleCustomerEntity(int id, String firstName, String lastName, Set<SimpleTransferQueryEntity> transferSet) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

@@ -1,11 +1,11 @@
 package com.example.bankbackend.transfer;
+
 import com.example.bankbackend.customer.dto.SimpleCustomerEntity;
 import lombok.ToString;
 
-
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @ToString
 class Transfer {
@@ -20,7 +20,7 @@ class Transfer {
                 snapshot.getTransferTime()
         );
     }
-    private int id;
+    private final int id;
 
     private final String title;
 
@@ -30,19 +30,11 @@ class Transfer {
 
     private final SimpleCustomerEntity customerId;
 
-    private Date transferDate;
+    private final LocalDate transferDate;
 
-    private Time transferTime;
+    private final LocalTime transferTime;
 
-    Transfer(String title, BigDecimal funds, int receiverId, SimpleCustomerEntity customerId) {
-        this.title = title;
-        this.funds = funds;
-        this.receiverId = receiverId;
-        this.customerId = customerId;
-
-    }
-
-    Transfer(int id, String title, BigDecimal funds, int receiverId, SimpleCustomerEntity customerId, Date transferDate, Time transferTime) {
+    private Transfer(int id, String title, BigDecimal funds, int receiverId, SimpleCustomerEntity customerId, LocalDate transferDate, LocalTime transferTime) {
         this.id = id;
         this.title = title;
         this.funds = funds;

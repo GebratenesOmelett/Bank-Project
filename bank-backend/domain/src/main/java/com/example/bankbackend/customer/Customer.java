@@ -33,7 +33,7 @@ class Customer {
     private final Set<CustomerRole> roleSet;
     private final Set<SimpleTransferQueryEntity> transferSet;
     private final boolean enabled;
-    public Customer(int id,
+    private Customer(int id,
                     String firstName,
                     String lastName,
                     BigDecimal funds,
@@ -69,12 +69,7 @@ class Customer {
                 .build();
     }
 
-    void addRole(CustomerRole role){
-        roleSet.add(role);
-    }
-    void addTransfer(SimpleTransferQueryEntity transfer){
-        transferSet.add(transfer);
-    }
+
 
 
 }

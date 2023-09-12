@@ -9,10 +9,12 @@ class TransferConfiguration {
     @Bean
     TransferFacade transferFacade(TransferQueryRepository transferQueryRepository,
                                   TransferRepository transferRepository,
-                                  TransferFactory transferFactory) {
+                                  TransferFactory transferFactory,
+                                  CustomerFacade customerFacade) {
         return new TransferFacade(
                 transferQueryRepository,
                 transferRepository,
-                transferFactory);
+                transferFactory,
+                customerFacade);
     }
 }

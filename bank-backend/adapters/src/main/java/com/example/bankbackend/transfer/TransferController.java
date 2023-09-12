@@ -3,6 +3,7 @@ package com.example.bankbackend.transfer;
 
 import com.example.bankbackend.transfer.dto.TransferCreateDto;
 import com.example.bankbackend.transfer.dto.TransferDto;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -17,14 +18,12 @@ class TransferController {
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<TransferDto> get(@PathVariable int id) {
-        return transferFacade.get(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    TransferDto get(@PathVariable int id) {
+        return transferFacade.get(id);
     }
 
     @PostMapping()
-    void create(@RequestBody TransferCreateDto toCreate) {
+    void create(@RequestBody @Valid TransferCreateDto toCreate) {
         System.out.println(toCreate);
         transferFacade.create(toCreate);
     }

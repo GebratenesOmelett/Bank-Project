@@ -17,7 +17,7 @@ public class SimpleCustomerEntitySnapshot {
     public SimpleCustomerEntitySnapshot() {
     }
 
-    SimpleCustomerEntitySnapshot(final int id,
+    public SimpleCustomerEntitySnapshot(final int id,
                                  final String firstName,
                                  final String lastName,
                                  final Set<SimpleTransferQueryEntitySnapshot> transferSet) {

@@ -32,7 +32,7 @@ class CustomerFactory {
     }
 
     public Customer attachDefaultRole(Customer customer) {
-        customer.addRole(roleFacade.findRole("ROLE_USER"));
+        customer.getSnapshot().addRole(roleFacade.findRole("ROLE_USER").getSnapshot());
         return customer;
     }
 }

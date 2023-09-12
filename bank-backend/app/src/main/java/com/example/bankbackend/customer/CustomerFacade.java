@@ -2,11 +2,12 @@ package com.example.bankbackend.customer;
 
 import com.example.bankbackend.customer.dto.CustomerDto;
 import com.example.bankbackend.customer.dto.SimpleCustomerEntity;
-import com.example.bankbackend.transfer.dto.SimpleTransferQueryEntity;
+import com.example.bankbackend.customer.dto.SimpleCustomerEntitySnapshot;
+import com.example.bankbackend.customer.exceptions.CustomerNotFoundException;
+import com.example.bankbackend.transfer.dto.TransferCreateDto;
+import com.example.bankbackend.transfer.dto.TransferDto;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class CustomerFacade {
     CustomerRepository customerRepository;
@@ -21,29 +22,39 @@ public class CustomerFacade {
         this.customerFactory = customerFactory;
     }
 
-    public Optional<CustomerDto> getDto(int customerId) {
-        return customerQueryRepository.findDtoById(customerId);
+    public CustomerDto getDto(int customerId) {
+        return customerQueryRepository.findDtoById(customerId)
+                .orElseThrow(() -> new CustomerNotFoundException(customerId));
     }
 
     public Customer get(int customerId) {
         return customerRepository.findCustomerById(customerId)
-                .orElseThrow(() -> new NoSuchElementException("there is no customer with such id : " + customerId));
+                .orElseThrow(() -> new CustomerNotFoundException(customerId));
     }
 
     public Customer create(CustomerDto customerDto) {
         return customerRepository.save(customerFactory.from(customerDto));
     }
+    public void update(CustomerSnapshot customerSnapshot){
+        customerRepository.save(Customer.restore(customerSnapshot));
+    }
+
+    public void updateFunds(TransferCreateDto toCreate){
+        CustomerSnapshot receiverCustomer = get(toCreate.getReceiverId()).getSnapshot();
+        CustomerSnapshot loggedCustomer = get(toCreate.getLoggedCustomerId()).getSnapshot();
+        receiverCustomer.setFunds(receiverCustomer.getFunds().add(toCreate.getFunds()));
+        loggedCustomer.setFunds(loggedCustomer.getFunds().subtract(toCreate.getFunds()));
+        update(receiverCustomer);
+        update(loggedCustomer);
+    }
 
     public SimpleCustomerEntity toSimpleCustomerEntity(Customer customer) {
-        CustomerSnapshot customerSnapshot = customer.getSnapshot();
-        return new SimpleCustomerEntity(
-                customerSnapshot.getId(),
-                customerSnapshot.getFirstName(),
-                customerSnapshot.getLastName(),
-                customerSnapshot.getTransferSet().stream().
-                        map(SimpleTransferQueryEntity::restore)
-                        .collect(Collectors.toSet())
-        );
+        return SimpleCustomerEntity.restore(new SimpleCustomerEntitySnapshot(
+                customer.getSnapshot().getId(),
+                customer.getSnapshot().getFirstName(),
+                customer.getSnapshot().getLastName(),
+                customer.getSnapshot().getTransferSet()
+        ));
     }
 
 }

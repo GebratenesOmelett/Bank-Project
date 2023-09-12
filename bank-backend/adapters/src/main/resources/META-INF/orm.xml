@@ -10,8 +10,8 @@
         <property name="title" type="string" column="title"/>
         <property name="funds" type="java.math.BigDecimal" column="funds"/>
         <property name="receiverId" type="int" column="receiver_id"/>
-        <property name="transferDate" type="java.sql.Date" column="transfer_date" generated="insert" update="false" insert="false"/>
-        <property name="transferTime" type="java.sql.Time" column="transfer_time" generated="insert" update="false" insert="false"/>
+        <property name="transferDate" type="java.time.LocalDate" column="transfer_date" update="false"/>
+        <property name="transferTime" type="java.time.LocalTime" column="transfer_time" update="false"/>
         <many-to-one name="customerId" class="com.example.bankbackend.customer.dto.SimpleCustomerEntitySnapshot">
             <column name="customer_id" not-null="true"></column>
         </many-to-one>
@@ -23,8 +23,8 @@
         <property name="title" type="string" column="title"/>
         <property name="funds" type="java.math.BigDecimal" column="funds"/>
         <property name="receiverId" type="int" column="receiver_id"/>
-        <property name="transferDate" type="java.sql.Date" column="transfer_date" generated="insert" update="false" insert="false"/>
-        <property name="transferTime" type="java.sql.Time" column="transfer_time" generated="insert" update="false" insert="false"/>
+        <property name="transferDate" type="java.time.LocalDate" column="transfer_date"  update="false"/>
+        <property name="transferTime" type="java.time.LocalTime" column="transfer_time"  update="false"/>
         <many-to-one name="customerId" class="com.example.bankbackend.customer.dto.SimpleCustomerEntitySnapshot">
             <column name="customer_id" not-null="true"></column>
         </many-to-one>
