@@ -4,7 +4,6 @@ import com.example.bankbackend.customer.CustomerFacade;
 import com.example.bankbackend.transfer.dto.TransferCreateDto;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
 

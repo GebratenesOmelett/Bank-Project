@@ -1,13 +1,10 @@
 package com.example.bankbackend.transfer;
 
-import com.example.bankbackend.customer.dto.SimpleCustomerEntity;
 import com.example.bankbackend.customer.dto.SimpleCustomerEntitySnapshot;
 import lombok.Builder;
 import lombok.ToString;
 
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 @ToString

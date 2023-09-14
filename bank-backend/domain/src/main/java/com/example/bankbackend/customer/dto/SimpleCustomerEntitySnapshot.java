@@ -1,10 +1,6 @@
 package com.example.bankbackend.customer.dto;
 
-import com.example.bankbackend.transfer.dto.SimpleTransferQueryEntity;
 import com.example.bankbackend.transfer.dto.SimpleTransferQueryEntitySnapshot;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
 
 import java.util.Set;
 

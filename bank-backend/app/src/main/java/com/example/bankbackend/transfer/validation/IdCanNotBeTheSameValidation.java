@@ -1,4 +1,4 @@
-package com.example.bankbackend.transfer.Validation;
+package com.example.bankbackend.transfer.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

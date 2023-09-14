@@ -3,9 +3,9 @@ package com.example.bankbackend.transfer;
 
 import com.example.bankbackend.transfer.dto.TransferCreateDto;
 import com.example.bankbackend.transfer.dto.TransferDto;
+import com.example.bankbackend.transfer.exceptions.TransferValidationException;
 import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,8 +23,10 @@ class TransferController {
     }
 
     @PostMapping()
-    void create(@RequestBody @Valid TransferCreateDto toCreate) {
-        System.out.println(toCreate);
+    void create(@RequestBody @Valid TransferCreateDto toCreate, BindingResult errors) {
+        if (errors.hasErrors()){
+            throw new TransferValidationException(errors);
+        }
         transferFacade.create(toCreate);
     }
 }

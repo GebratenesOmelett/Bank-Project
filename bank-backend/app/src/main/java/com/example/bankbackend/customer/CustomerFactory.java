@@ -1,5 +1,6 @@
 package com.example.bankbackend.customer;
 
+import com.example.bankbackend.customer.dto.CustomerCreateDto;
 import com.example.bankbackend.customer.dto.CustomerDto;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +18,7 @@ class CustomerFactory {
         this.encoder = encoder;
     }
 
-    Customer from(CustomerDto customerDto) {
+    Customer from(CustomerCreateDto customerDto) {
         return attachDefaultRole(Customer.restore(CustomerSnapshot.builder()
                 .firstName(customerDto.getFirstName())
                 .lastName(customerDto.getLastName())

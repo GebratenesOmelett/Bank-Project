@@ -5,7 +5,7 @@ import com.example.bankbackend.transfer.dto.SimpleTransferQueryEntity;
 import lombok.ToString;
 
 import java.util.Set;
-import java.util.stream.Collectors;
+
 
 @ToString
 public class SimpleCustomerEntity {

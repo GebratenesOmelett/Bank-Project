@@ -1,7 +1,10 @@
 package com.example.bankbackend.customer;
 
+import com.example.bankbackend.customer.dto.CustomerCreateDto;
 import com.example.bankbackend.customer.dto.CustomerDto;
-import org.springframework.http.ResponseEntity;
+import com.example.bankbackend.transfer.exceptions.TransferValidationException;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,7 +22,10 @@ class CustomerController {
         return customerFacade.getDto(id);
     }
     @PostMapping()
-    void create(@RequestBody CustomerDto toCreate){
+    void create(@RequestBody @Valid CustomerCreateDto toCreate, BindingResult errors){
+        if(errors.hasErrors()){
+            throw new TransferValidationException(errors);
+        }
         customerFacade.create(toCreate);
     }
 }

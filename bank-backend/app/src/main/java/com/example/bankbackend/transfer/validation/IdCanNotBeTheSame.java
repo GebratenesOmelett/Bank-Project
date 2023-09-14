@@ -1,4 +1,4 @@
-package com.example.bankbackend.transfer.Validation;
+package com.example.bankbackend.transfer.validation;
 
 import com.example.bankbackend.transfer.dto.TransferCreateDto;
 import jakarta.validation.ConstraintValidator;

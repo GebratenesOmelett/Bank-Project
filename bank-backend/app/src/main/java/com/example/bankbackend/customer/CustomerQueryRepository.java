@@ -6,5 +6,6 @@ import java.util.Optional;
 public interface CustomerQueryRepository{
 
     Optional<CustomerDto> findDtoById(int id);
+    Optional<CustomerDto> findDtoByEmail(String email);
 
 }
