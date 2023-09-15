@@ -1,10 +1,7 @@
 package com.example.bankbackend.customer;
 
-import com.example.bankbackend.transfer.dto.SimpleTransferQueryEntity;
 import com.example.bankbackend.transfer.dto.SimpleTransferQueryEntitySnapshot;
 import lombok.Builder;
-
-
 
 import java.math.BigDecimal;
 import java.util.Set;

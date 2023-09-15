@@ -9,7 +9,7 @@ class CustomerRole {
         );
     }
     private int id;
-    private String role;
+    private final String role;
     private CustomerRole(int id, String role) {
         this.id = id;
         this.role = role;

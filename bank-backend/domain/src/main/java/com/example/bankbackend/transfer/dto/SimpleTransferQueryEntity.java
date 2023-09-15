@@ -4,8 +4,6 @@ package com.example.bankbackend.transfer.dto;
 import com.example.bankbackend.customer.dto.SimpleCustomerEntity;
 
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -22,14 +20,14 @@ public class SimpleTransferQueryEntity {
                 SimpleCustomerEntity.restore(snapshot.getCustomerId()));
     }
 
-    private int id;
-    private String title;
-    private BigDecimal funds;
-    private int receiverId;
-    private LocalDate transferDate;
+    private final int id;
+    private final String title;
+    private final BigDecimal funds;
+    private final int receiverId;
+    private final LocalDate transferDate;
 
-    private LocalTime transferTime;
-    private SimpleCustomerEntity customerId;
+    private final LocalTime transferTime;
+    private final SimpleCustomerEntity customerId;
 
     private SimpleTransferQueryEntity(int id, String title, BigDecimal funds, int receiverId, LocalDate transferDate, LocalTime transferTime, SimpleCustomerEntity customerId) {
         this.id = id;
