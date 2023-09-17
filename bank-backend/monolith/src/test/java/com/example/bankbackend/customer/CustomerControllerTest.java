@@ -44,7 +44,7 @@ class CustomerControllerTest {
 
     @BeforeEach
     public void setupRoles() {
-        if(roleRepository.findByRole("ROLE_USER").isEmpty()){
+        if (roleRepository.findByRole("ROLE_USER").isEmpty()) {
             roleRepository.save(new CustomerRole("ROLE_USER"));
             roleRepository.save(new CustomerRole("ROLE_ADMIN"));
         }
@@ -74,6 +74,14 @@ class CustomerControllerTest {
     }
 
     @Test
+    @DisplayName("getShouldReturnCustomerNotFoundException")
+    void getCustomerNotFoundException() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/customers/{id}", 1))
+                .andExpect(status().is4xxClientError()).andReturn();
+    }
+
+    @Test
+    @DisplayName("createShouldCreateCustomer")
     void create() throws Exception {
         CustomerSnapshot customerSnapshot = CustomerSnapshot.builder()
                 .id(1)
@@ -107,5 +115,46 @@ class CustomerControllerTest {
 
 
     }
+    @Test
+    @DisplayName("createShouldReturnCustomerEmailAlreadyExist")
+    void createCustomerEmailAlreadyExistException() throws Exception {
+        CustomerCreateDto customerCreateDtoFirst = new CustomerCreateDto(
+                "Pieter",
+                "Bark",
+                "testPassword",
+                "testPassword",
+                "Pieter@gmail.com"
+        );
+        customerFacade.create(customerCreateDtoFirst);
+
+        Assertions.assertNotNull(customerFacade.get(1));
+
+        CustomerCreateDto customerCreateDtoSecond = new CustomerCreateDto(
+                "Pieter",
+                "Bark",
+                "testPassword",
+                "testPassword",
+                "Pieter@gmail.com"
+        );
+        this.mockMvc.perform(post("/customers")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(customerCreateDtoSecond)))
+                .andExpect(status().is4xxClientError()).andReturn();
+
+    }
+    @Test
+    @DisplayName("createShouldReturnCustomerValidation")
+    void createCustomerValidationException() throws Exception {
+        CustomerCreateDto customerCreateDtoSecond = new CustomerCreateDto(
+                "Pieter",
+                "Bark",
+                "correctPassword",
+                "wrongPassword",
+                "Pieter@gmail.com"
+        );
+        this.mockMvc.perform(post("/customers")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(customerCreateDtoSecond)))
+                .andExpect(status().is4xxClientError()).andReturn();
+    }
 }
-//ToDo napisz testy dla exceptionów OwO
