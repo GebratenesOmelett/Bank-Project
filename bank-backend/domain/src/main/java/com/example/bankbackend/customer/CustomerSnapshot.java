@@ -112,4 +112,5 @@ class CustomerSnapshot {
     void addTransfer(SimpleTransferQueryEntitySnapshot transfer){
         transferSet.add(transfer);
     }
+
 }

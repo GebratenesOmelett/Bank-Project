@@ -4,6 +4,8 @@ import com.example.bankbackend.customer.dto.CustomerCreateDto;
 import com.example.bankbackend.customer.dto.CustomerDto;
 import com.example.bankbackend.transfer.exceptions.TransferValidationException;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,15 +20,16 @@ class CustomerController {
     }
 
     @GetMapping("/{id}")
-    CustomerDto get(@PathVariable int id){
 
-        return customerFacade.getDto(id);
+    ResponseEntity<CustomerDto> get(@PathVariable int id){
+
+        return new ResponseEntity<>(customerFacade.getDto(id), HttpStatus.OK);
     }
     @PostMapping()
-    void create(@RequestBody @Valid CustomerCreateDto toCreate, BindingResult errors){
+    ResponseEntity<CustomerDto> create(@RequestBody @Valid CustomerCreateDto toCreate, BindingResult errors){
         if(errors.hasErrors()){
             throw new TransferValidationException(errors);
         }
-        customerFacade.create(toCreate);
+        return new ResponseEntity<>(customerFacade.create(toCreate), HttpStatus.CREATED);
     }
 }

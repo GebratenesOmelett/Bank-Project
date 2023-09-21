@@ -77,6 +77,7 @@ class CustomerControllerTest {
     @DisplayName("getShouldReturnCustomerNotFoundException")
     void getCustomerNotFoundException() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/customers/{id}", 1))
+                .andExpect(result -> Assertions.assertEquals("There is no customer with id : 1", result.getResolvedException().getMessage()))
                 .andExpect(status().is4xxClientError()).andReturn();
     }
 
@@ -102,7 +103,7 @@ class CustomerControllerTest {
         this.mockMvc.perform(post("/customers")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customerCreateDto)))
-                .andExpect(status().isOk()).andReturn();
+                .andExpect(status().is2xxSuccessful()).andReturn();
 
 
         CustomerSnapshot toFindSnapshot = customerFacade.get(1).getSnapshot();
@@ -139,12 +140,13 @@ class CustomerControllerTest {
         this.mockMvc.perform(post("/customers")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customerCreateDtoSecond)))
+                .andExpect(result -> Assertions.assertEquals("Customer with that email already exists: Pieter@gmail.com", result.getResolvedException().getMessage()))
                 .andExpect(status().is4xxClientError()).andReturn();
 
     }
     @Test
-    @DisplayName("createShouldReturnCustomerValidation")
-    void createCustomerValidationException() throws Exception {
+    @DisplayName("createShouldReturnCustomerValidationPassword")
+    void createCustomerValidationPasswordException() throws Exception {
         CustomerCreateDto customerCreateDtoSecond = new CustomerCreateDto(
                 "Pieter",
                 "Bark",
@@ -155,6 +157,7 @@ class CustomerControllerTest {
         this.mockMvc.perform(post("/customers")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customerCreateDtoSecond)))
+                .andExpect(result -> Assertions.assertEquals("Passwords are not the same", result.getResolvedException().getMessage()))
                 .andExpect(status().is4xxClientError()).andReturn();
     }
 }

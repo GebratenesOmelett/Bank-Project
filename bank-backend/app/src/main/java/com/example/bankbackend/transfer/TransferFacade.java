@@ -27,12 +27,21 @@ public class TransferFacade {
 
     }
 
-    public void create(TransferCreateDto toCreate) {
+    public TransferDto create(TransferCreateDto toCreate) {
         exchangeFunds(toCreate);
-        transferRepository.save(transferFactory.from(toCreate));
+        return toTransferDto(transferRepository.save(transferFactory.from(toCreate)).getSnapshot());
     }
 
     public void exchangeFunds(TransferCreateDto toCreate){
         customerFacade.updateFunds(toCreate);
     }
+
+    public TransferDto toTransferDto(TransferSnapshot transferSnapshot){
+        return TransferDto.create(transferSnapshot.getTitle(),
+                transferSnapshot.getFunds(),
+                transferSnapshot.getReceiverId(),
+                transferSnapshot.getTransferDate(),
+                transferSnapshot.getTransferTime());
+    }
+
 }

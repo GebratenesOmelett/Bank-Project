@@ -33,11 +33,11 @@ public class CustomerFacade {
                 .orElseThrow(() -> new CustomerNotFoundException(customerId));
     }
 
-    public Customer create(CustomerCreateDto customerDto) {
-        if (doesCustomerExist(customerDto)) {
-            throw new CustomerEmailAlreadyExistException(customerDto.getEmail());
+    public CustomerDto create(CustomerCreateDto customerCreateDto) {
+        if (doesCustomerExist(customerCreateDto)) {
+            throw new CustomerEmailAlreadyExistException(customerCreateDto.getEmail());
         }
-        return customerRepository.save(customerFactory.from(customerDto));
+        return toCustomerDto(customerRepository.save(customerFactory.from(customerCreateDto)).getSnapshot());
     }
 
     public void update(CustomerSnapshot customerSnapshot) {
@@ -68,6 +68,14 @@ public class CustomerFacade {
 
     public boolean doesCustomerExist(CustomerCreateDto customerDto) {
         return customerQueryRepository.findDtoByEmail((customerDto.getEmail())).isPresent();
+    }
+    public CustomerDto toCustomerDto(CustomerSnapshot customerSnapshot){
+        return CustomerDto.create(customerSnapshot.getId(),
+                customerSnapshot.getFirstName(),
+                customerSnapshot.getLastName(),
+                customerSnapshot.getPassword(),
+                customerSnapshot.getEmail(),
+                customerSnapshot.getFunds());
     }
 
 }
