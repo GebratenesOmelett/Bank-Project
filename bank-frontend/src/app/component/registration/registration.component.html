@@ -1,2 +1,49 @@
-<p>registration works!</p>
-dfd
+<div class="center">
+  <div class="container">
+    <form [formGroup]="checkoutFormGroup" (ngSubmit)="onSubmit()">
+      <div formGroupName="customer">
+        <label class="form-label">First Name</label>
+        <div class="mb-3">
+          <div class="input-space">
+            <input type="text" formControlName="firstName" class="form-control">
+          </div>
+        </div>
+
+        <label class="form-label">Last Name</label>
+        <div class="mb-3">
+          <div class="input-space">
+            <input type="text" formControlName="lastName" class="form-control">
+          </div>
+        </div>
+
+        <label class="form-label">Email</label>
+        <div class="mb-3">
+          <div class="input-space">
+            <input type="text" formControlName="email" class="form-control">
+          </div>
+        </div>
+
+        <label class="form-label">Password</label>
+        <div class="mb-3">
+          <div class="input-space">
+            <input type="text" formControlName="password" class="form-control">
+          </div>
+        </div>
+
+        <label class="form-label">Password Repeat</label>
+        <div class="mb-3">
+          <div class="input-space">
+            <input type="text" formControlName="passwordRepeat" class="form-control">
+          </div>
+        </div>
+
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-info float-end">Register</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+

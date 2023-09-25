@@ -62,7 +62,7 @@ class CustomerControllerTest {
         );
         customerFacade.create(customerCreateDto);
 
-        Assertions.assertNotNull(customerFacade.get(1));
+        Assertions.assertNotNull(customerFacade.getById(1));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/customers/{id}", 1))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -106,7 +106,7 @@ class CustomerControllerTest {
                 .andExpect(status().is2xxSuccessful()).andReturn();
 
 
-        CustomerSnapshot toFindSnapshot = customerFacade.get(1).getSnapshot();
+        CustomerSnapshot toFindSnapshot = customerFacade.getById(1).getSnapshot();
 
         Assertions.assertNotNull(toFindSnapshot);
         Assertions.assertEquals(customerSnapshot.getFirstName(), toFindSnapshot.getFirstName());
@@ -128,7 +128,7 @@ class CustomerControllerTest {
         );
         customerFacade.create(customerCreateDtoFirst);
 
-        Assertions.assertNotNull(customerFacade.get(1));
+        Assertions.assertNotNull(customerFacade.getById(1));
 
         CustomerCreateDto customerCreateDtoSecond = new CustomerCreateDto(
                 "Pieter",

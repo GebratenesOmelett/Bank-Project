@@ -16,6 +16,7 @@ class CustomerConfiguration {
                 customerQueryRepository,
                 customerRoleFacade,
                 new CustomerFactory(customerRoleFacade,
-                        new BCryptPasswordEncoder()));
+                        new BCryptPasswordEncoder()),
+                new BCryptPasswordEncoder());
     }
 }

@@ -22,7 +22,7 @@ class TransferFactory {
                 .title(transferCreateDto.getTitle())
                 .funds(transferCreateDto.getFunds())
                 .receiverId(transferCreateDto.getReceiverId())
-                .customerId(customerFacade.toSimpleCustomerEntity(customerFacade.get(transferCreateDto.getLoggedCustomerId())).getSnapshot())
+                .customerId(customerFacade.toSimpleCustomerEntity(customerFacade.getById(transferCreateDto.getLoggedCustomerId())).getSnapshot())
                 .transferDate(LocalDate.now())
                 .transferTime(LocalTime.now())
                 .build());

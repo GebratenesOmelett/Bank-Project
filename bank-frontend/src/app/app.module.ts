@@ -6,8 +6,14 @@ import {RouterModule, Routes} from "@angular/router";
 import { RegistrationComponent } from './component/registration/registration.component';
 import {HttpClientModule} from "@angular/common/http";
 import { HomeComponent } from './component/home/home.component';
+import {ReactiveFormsModule} from "@angular/forms";
+import {NgOptimizedImage} from "@angular/common";
+import { LoginComponent } from './component/login/login.component';
+import { MainComponent } from './component/main/main.component';
 
 const routes: Routes = [
+  {path: 'main', component: MainComponent},
+  {path: 'login', component: LoginComponent},
   {path: 'registration', component: RegistrationComponent},
   {path: 'home', component: HomeComponent},
   {path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -18,12 +24,16 @@ const routes: Routes = [
   declarations: [
     AppComponent,
     RegistrationComponent,
-    HomeComponent
+    HomeComponent,
+    LoginComponent,
+    MainComponent
   ],
   imports: [
     RouterModule.forRoot(routes),
     HttpClientModule,
-    BrowserModule
+    BrowserModule,
+    ReactiveFormsModule,
+    NgOptimizedImage
   ],
   providers: [],
   bootstrap: [AppComponent]

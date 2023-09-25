@@ -1,40 +1,43 @@
 package com.example.bankbackend.customer;
 
-import com.example.bankbackend.customer.dto.CustomerCreateDto;
-import com.example.bankbackend.customer.dto.CustomerDto;
-import com.example.bankbackend.customer.dto.SimpleCustomerEntity;
-import com.example.bankbackend.customer.dto.SimpleCustomerEntitySnapshot;
+import com.example.bankbackend.customer.dto.*;
 import com.example.bankbackend.customer.exceptions.CustomerEmailAlreadyExistException;
 import com.example.bankbackend.customer.exceptions.CustomerNotEnoughFundsException;
 import com.example.bankbackend.customer.exceptions.CustomerNotFoundException;
 import com.example.bankbackend.transfer.dto.TransferCreateDto;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
 
 public class CustomerFacade {
     CustomerRepository customerRepository;
     CustomerQueryRepository customerQueryRepository;
     CustomerRoleFacade roleFacade;
     CustomerFactory customerFactory;
+    PasswordEncoder encoder;
 
-    public CustomerFacade(CustomerRepository customerRepository, CustomerQueryRepository customerQueryRepository, CustomerRoleFacade roleFacade, CustomerFactory customerFactory) {
+    public CustomerFacade(CustomerRepository customerRepository, CustomerQueryRepository customerQueryRepository, CustomerRoleFacade roleFacade, CustomerFactory customerFactory, PasswordEncoder encoder) {
         this.customerRepository = customerRepository;
         this.customerQueryRepository = customerQueryRepository;
         this.roleFacade = roleFacade;
         this.customerFactory = customerFactory;
+        this.encoder = encoder;
     }
 
-    public CustomerDto getDto(int customerId) {
+    public CustomerDto getDtoById(int customerId) {
         return customerQueryRepository.findDtoById(customerId)
                 .orElseThrow(() -> new CustomerNotFoundException(customerId));
     }
+
     @Transactional
-    public Customer get(int customerId) {
+    public Customer getById(int customerId) {
         return customerRepository.findCustomerById(customerId)
                 .orElseThrow(() -> new CustomerNotFoundException(customerId));
     }
 
     public CustomerDto create(CustomerCreateDto customerCreateDto) {
-        if (doesCustomerExist(customerCreateDto)) {
+        if (CustomerExists(customerCreateDto.getEmail())) {
             throw new CustomerEmailAlreadyExistException(customerCreateDto.getEmail());
         }
         return toCustomerDto(customerRepository.save(customerFactory.from(customerCreateDto)).getSnapshot());
@@ -44,17 +47,32 @@ public class CustomerFacade {
         customerRepository.save(Customer.restore(customerSnapshot));
     }
 
-    public void updateFunds(TransferCreateDto toCreate) {
-        CustomerSnapshot receiverCustomer = get(toCreate.getReceiverId()).getSnapshot();
-        CustomerSnapshot loggedCustomer = get(toCreate.getLoggedCustomerId()).getSnapshot();
-        if (loggedCustomer.getFunds().compareTo(toCreate.getFunds()) < 0) {
+
+    public void addFunds(int id, BigDecimal funds) {
+        CustomerSnapshot receiverCustomer = getById(id).getSnapshot();
+        receiverCustomer.setFunds(receiverCustomer.getFunds().add(funds));
+        update(receiverCustomer);
+    }
+
+    public void subtractFunds(int id, BigDecimal funds) {
+        CustomerSnapshot loggedCustomer = getById(id).getSnapshot();
+        if (loggedCustomer.getFunds().compareTo(funds) < 0) {
             throw new CustomerNotEnoughFundsException();
         }
-        receiverCustomer.setFunds(receiverCustomer.getFunds().add(toCreate.getFunds()));
-        loggedCustomer.setFunds(loggedCustomer.getFunds().subtract(toCreate.getFunds()));
-
-        update(receiverCustomer);
+        loggedCustomer.setFunds(loggedCustomer.getFunds().subtract(funds));
         update(loggedCustomer);
+    }
+
+    public CustomerLoginResponseDto login(CustomerLoginDto customerLoginDto) {
+        if (!CustomerExists(customerLoginDto.getEmail())) {
+            return new CustomerLoginResponseDto("Login Failed", false);
+        }
+
+        if (!encoder.matches(customerLoginDto.getPassword(), customerQueryRepository.findDtoByEmail(customerLoginDto.getEmail()).get().getPassword())) {
+            return new CustomerLoginResponseDto("Login Failed", false);
+        }
+
+        return new CustomerLoginResponseDto("Login Succeed", true);
     }
 
     public SimpleCustomerEntity toSimpleCustomerEntity(Customer customer) {
@@ -66,10 +84,11 @@ public class CustomerFacade {
         ));
     }
 
-    public boolean doesCustomerExist(CustomerCreateDto customerDto) {
-        return customerQueryRepository.findDtoByEmail((customerDto.getEmail())).isPresent();
+    public boolean CustomerExists(String email) {
+        return customerQueryRepository.findDtoByEmail(email).isPresent();
     }
-    public CustomerDto toCustomerDto(CustomerSnapshot customerSnapshot){
+
+    public CustomerDto toCustomerDto(CustomerSnapshot customerSnapshot) {
         return CustomerDto.create(customerSnapshot.getId(),
                 customerSnapshot.getFirstName(),
                 customerSnapshot.getLastName(),

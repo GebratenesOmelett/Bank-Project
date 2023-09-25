@@ -33,7 +33,8 @@ public class TransferFacade {
     }
 
     public void exchangeFunds(TransferCreateDto toCreate){
-        customerFacade.updateFunds(toCreate);
+        customerFacade.subtractFunds(toCreate.getLoggedCustomerId(), toCreate.getFunds());
+        customerFacade.addFunds(toCreate.getReceiverId(), toCreate.getFunds());
     }
 
     public TransferDto toTransferDto(TransferSnapshot transferSnapshot){
