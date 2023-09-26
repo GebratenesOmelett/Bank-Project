@@ -4,7 +4,6 @@ import com.example.bankbackend.customer.dto.*;
 import com.example.bankbackend.customer.exceptions.CustomerEmailAlreadyExistException;
 import com.example.bankbackend.customer.exceptions.CustomerNotEnoughFundsException;
 import com.example.bankbackend.customer.exceptions.CustomerNotFoundException;
-import com.example.bankbackend.transfer.dto.TransferCreateDto;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +27,11 @@ public class CustomerFacade {
     public CustomerDto getDtoById(int customerId) {
         return customerQueryRepository.findDtoById(customerId)
                 .orElseThrow(() -> new CustomerNotFoundException(customerId));
+    }
+
+    public CustomerDto getDtoByEmail(String email){
+        return customerQueryRepository.findDtoByEmail(email)
+                .orElseThrow(() -> new CustomerNotFoundException(email));
     }
 
     @Transactional

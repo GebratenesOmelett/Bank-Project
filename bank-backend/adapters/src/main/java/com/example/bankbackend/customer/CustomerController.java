@@ -22,12 +22,16 @@ class CustomerController {
         this.customerFacade = customerFacade;
     }
 
-    @GetMapping("/{id}")
-
-    ResponseEntity<CustomerDto> get(@PathVariable int id){
+    @GetMapping("/id/{id}")
+    ResponseEntity<CustomerDto> getById(@PathVariable int id){
 
         return new ResponseEntity<>(customerFacade.getDtoById(id), HttpStatus.OK);
     }
+    @GetMapping("/email/{email}")
+    ResponseEntity<CustomerDto> getByEmail(@PathVariable String email){
+        return new ResponseEntity<>(customerFacade.getDtoByEmail(email), HttpStatus.OK);
+    }
+
     @PostMapping()
     ResponseEntity<CustomerDto> create(@RequestBody @Valid CustomerCreateDto toCreate, BindingResult errors){
         if(errors.hasErrors()){

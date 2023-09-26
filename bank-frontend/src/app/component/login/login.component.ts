@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit{
     this.loginService.loginCustomer(customerLogin).subscribe(data =>{
       if(data.message == "Login Succeed"){
         console.log("successfully logged")
-        this.router.navigateByUrl('/main');
+        this.router.navigateByUrl('/main').then();
       }
       else if(data.message == "Login Failed"){
         console.log("failed")
