@@ -31,13 +31,14 @@ export class LoginComponent implements OnInit{
     this.loginService.loginCustomer(customerLogin).subscribe(data =>{
       if(data.message == "Login Succeed"){
         console.log("successfully logged")
-        this.router.navigateByUrl('/main').then();
+        this.loginService.email = customerLogin.email;
+        this.router.navigateByUrl('/main');
       }
       else if(data.message == "Login Failed"){
         console.log("failed")
       }
       else{
-        console.log("something got wrong")
+        console.log("something went wrong")
       }
     })
 

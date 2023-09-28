@@ -1,11 +1,12 @@
 package com.example.bankbackend.customer;
 
 import com.example.bankbackend.transfer.dto.SimpleTransferQueryEntity;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.util.Set;
 import java.util.stream.Collectors;
-
+@ToString
 class Customer {
     static Customer restore(CustomerSnapshot snapshot){
         return new Customer(snapshot.getId(),

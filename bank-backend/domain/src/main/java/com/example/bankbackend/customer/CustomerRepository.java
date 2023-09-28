@@ -6,5 +6,7 @@ interface CustomerRepository {
 
     Customer save(Customer entity);
 
+    Optional<Customer> findCustomerByEmail(String email);
+
 
 }

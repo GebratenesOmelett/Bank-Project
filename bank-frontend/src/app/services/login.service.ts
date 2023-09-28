@@ -9,7 +9,8 @@ import {Customer} from "../common/customer";
 })
 export class LoginService {
 
-  customer!: Customer;
+
+  email: string = "";
 
   private loginUrl = "http://localhost:8080/api/customers/login"
 
@@ -20,14 +21,16 @@ export class LoginService {
     return this.httpClient.post<CustomerLogin>(this.loginUrl, customerLogin);
   }
 
-  getCustomer(email: string): Observable<Customer> {
-    const searchUrl = `http://localhost:8080/api/customers/email/${email}`;
-
-    return this.httpClient.get<GerResponseCustomer>(searchUrl).pipe(
-      map(response => response.customer));
+  getCustomer(): Observable<Customer>{
+    console.log(this.email)
+    const searchUrl = `http://localhost:8080/api/customers/email/${this.email}`;
+    return this.httpClient.get<Customer>(searchUrl);
   }
+
+
+
+
+
 }
 
-interface GerResponseCustomer {
-  customer: Customer;
-}
+

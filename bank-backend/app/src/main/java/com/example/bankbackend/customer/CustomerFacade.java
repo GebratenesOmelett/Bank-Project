@@ -39,6 +39,10 @@ public class CustomerFacade {
         return customerRepository.findCustomerById(customerId)
                 .orElseThrow(() -> new CustomerNotFoundException(customerId));
     }
+    public Customer getByEmail(String email){
+        return  customerRepository.findCustomerByEmail(email)
+                .orElseThrow(() -> new CustomerNotFoundException(email));
+    }
 
     public CustomerDto create(CustomerCreateDto customerCreateDto) {
         if (CustomerExists(customerCreateDto.getEmail())) {
@@ -100,5 +104,7 @@ public class CustomerFacade {
                 customerSnapshot.getEmail(),
                 customerSnapshot.getFunds());
     }
+
+
 
 }
