@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {CustomerLogin} from "../common/customer-login";
 import {map, Observable} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Customer} from "../common/customer";
 
 @Injectable({
@@ -18,7 +18,8 @@ export class LoginService {
   }
 
   loginCustomer(customerLogin: CustomerLogin): Observable<any> {
-    return this.httpClient.post<CustomerLogin>(this.loginUrl, customerLogin);
+    const headers = new HttpHeaders({Authorization: 'Basic '+btoa(customerLogin.email+":"+customerLogin.password)})
+    return this.httpClient.post<CustomerLogin>(this.loginUrl, customerLogin, {headers, responseType:'text' as 'json'});
   }
 
   getCustomer(): Observable<Customer>{

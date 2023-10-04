@@ -20,6 +20,7 @@ public class CustomerUserDetailService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         CustomerSnapshot customer = customerFacade.getByEmail(username).getSnapshot();
+        System.out.println(customer);
         return User.withUsername(customer.getEmail())
                 .password(customer.getPassword())
                 .authorities(customer.getRoleSet().stream()

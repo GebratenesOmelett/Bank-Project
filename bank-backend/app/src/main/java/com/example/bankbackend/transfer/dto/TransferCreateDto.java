@@ -1,10 +1,10 @@
 package com.example.bankbackend.transfer.dto;
 
 import com.example.bankbackend.transfer.validation.IdCanNotBeTheSameValidation;
-import lombok.ToString;
+
 
 import java.math.BigDecimal;
-@ToString
+
 @IdCanNotBeTheSameValidation
 public class TransferCreateDto {
     private final String title;

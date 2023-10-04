@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {CheckuotService} from "../../services/checkuot.service";
 import {Customer} from "../../common/customer";
+import {AxiosService} from "../../services/axios.service";
 
 @Component({
   selector: 'app-registration',
@@ -13,7 +14,8 @@ export class RegistrationComponent implements OnInit {
   checkoutFormGroup!: FormGroup;
 
   constructor(private formBuilder: FormBuilder,
-              private checkoutService: CheckuotService) {
+              private checkoutService: CheckuotService,
+              private axiosService: AxiosService) {
   }
 
   ngOnInit(): void {
@@ -28,20 +30,32 @@ export class RegistrationComponent implements OnInit {
     });
   }
 
-
+  get firstName(){
+    return this.checkoutFormGroup.get('customer.firstName')?.value;
+  }
+  get lastName(){
+    return this.checkoutFormGroup.get('customer.lastName')?.value;
+  }
+  get email(){
+    return this.checkoutFormGroup.get('customer.email')?.value;
+  }
+  get password(){
+    return this.checkoutFormGroup.get('customer.password')?.value;
+  }
+  get passwordRepeat(){
+    return this.checkoutFormGroup.get('customer.passwordRepeat')?.value;
+  }
   onSubmit() {
-    console.log(this.checkoutFormGroup.get('customer')?.value);
-
-    let customer = this.checkoutFormGroup.controls['customer'].value;
-
-
-    this.checkoutService.registerCustomer(customer).subscribe({
-      next: response =>{
-        alert(`You have created a new account`)
-      },
-      error: err =>{
-        alert(`Failed to create new user`)
+    this.axiosService.request(
+      "POST",
+      "/api/customers",
+      {
+        firstName: this.firstName,
+        lastName: this.lastName,
+        email: this.email,
+        password: this.password,
+        passwordRepeat: this.passwordRepeat
       }
-    });
+    )
   }
 }
