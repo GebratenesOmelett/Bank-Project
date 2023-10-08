@@ -23,6 +23,8 @@ public interface TransferDto {
     LocalTime getTransferTime();
 
     class DeserializationImpl implements TransferDto {
+
+
         private final String title;
         private final BigDecimal funds;
         private final int receiverId;
@@ -61,6 +63,8 @@ public interface TransferDto {
         public LocalTime getTransferTime() {
             return transferTime;
         }
+
+
     }
 
 

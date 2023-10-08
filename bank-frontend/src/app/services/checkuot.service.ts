@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Customer} from "../common/customer";
+import {CustomerCreate} from "../common/customerCreate";
 import {Observable} from "rxjs";
 
 @Injectable({
@@ -12,7 +12,7 @@ export class CheckuotService {
 
   constructor(private httpClient: HttpClient ) {};
 
-  registerCustomer(customer: Customer): Observable<any>{
-    return this.httpClient.post<Customer>(this.createUrl, customer);
+  registerCustomer(customer: CustomerCreate): Observable<any>{
+    return this.httpClient.post<CustomerCreate>(this.createUrl, customer);
   }
 }

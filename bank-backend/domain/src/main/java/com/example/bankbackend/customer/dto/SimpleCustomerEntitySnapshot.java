@@ -1,10 +1,15 @@
 package com.example.bankbackend.customer.dto;
 
 import com.example.bankbackend.transfer.dto.SimpleTransferQueryEntitySnapshot;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import java.util.Set;
 
 public class SimpleCustomerEntitySnapshot {
+
     private int id;
     private String firstName;
     private String lastName;
@@ -23,19 +28,19 @@ public class SimpleCustomerEntitySnapshot {
         this.transferSet = transferSet;
     }
 
-    int getId() {
+    public int getId() {
         return id;
     }
 
-    String getFirstName() {
+    public String getFirstName() {
         return firstName;
     }
 
-    String getLastName() {
+    public String getLastName() {
         return lastName;
     }
 
-    Set<SimpleTransferQueryEntitySnapshot> getTransferSet() {
+    public Set<SimpleTransferQueryEntitySnapshot> getTransferSet() {
         return transferSet;
     }
 

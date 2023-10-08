@@ -1,8 +1,12 @@
 package com.example.bankbackend.customer;
 
 import com.example.bankbackend.transfer.dto.SimpleTransferQueryEntitySnapshot;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.ToString;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -58,9 +62,7 @@ class CustomerSnapshot {
 
     String getEmail() {
         return email;
-    }
-
-    Set<CustomerRoleSnapshot> getRoleSet() {
+    }Set<CustomerRoleSnapshot> getRoleSet() {
         return roleSet;
     }
 

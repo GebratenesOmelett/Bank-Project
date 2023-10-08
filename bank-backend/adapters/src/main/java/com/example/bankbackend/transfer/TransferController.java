@@ -10,8 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 @RestController
 @RequestMapping("/api/transfers")
+@CrossOrigin
 class TransferController {
     TransferFacade transferFacade;
 
@@ -19,9 +22,13 @@ class TransferController {
         this.transferFacade = transferFacade;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     ResponseEntity<TransferDto> get(@PathVariable int id) {
-        return new ResponseEntity<>(transferFacade.get(id), HttpStatus.OK);
+        return new ResponseEntity<>(transferFacade.getDtoById(id), HttpStatus.OK);
+    }
+    @GetMapping("/email/{email}")
+    ResponseEntity<Set<TransferDto>> getCustomerTransfers(@PathVariable String email){
+        return new ResponseEntity<>(transferFacade.getCustomerTransfers(email), HttpStatus.OK);
     }
 
     @PostMapping()

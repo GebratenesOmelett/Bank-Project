@@ -8,10 +8,9 @@ import java.util.Optional;
 interface SqlTransferRepository extends JpaRepository<TransferSnapshot, Integer> {
     Optional<TransferSnapshot> findTransfersById(int id);
     TransferSnapshot save(TransferSnapshot transfer);
+
 }
 
-interface SqlTransferQueryRepository extends TransferQueryRepository, JpaRepository<TransferSnapshot, Integer> {
-}
 @Repository
 class TransferRepositoryImpl implements  TransferRepository{
 

@@ -5,31 +5,49 @@ import com.example.bankbackend.transfer.dto.TransferCreateDto;
 import com.example.bankbackend.transfer.dto.TransferDto;
 import com.example.bankbackend.transfer.exceptions.TransferNotFoundException;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 public class TransferFacade {
     TransferQueryRepository transferQueryRepository;
     TransferRepository transferRepository;
     TransferFactory transferFactory;
     CustomerFacade customerFacade;
+    TransferMapper transferMapper;
 
     public TransferFacade(TransferQueryRepository transferQueryRepository,
                           TransferRepository transferRepository,
                           TransferFactory transferFactory,
-                          CustomerFacade customerFacade) {
+                          CustomerFacade customerFacade,
+                          TransferMapper transferMapper) {
         this.transferQueryRepository = transferQueryRepository;
         this.transferRepository = transferRepository;
         this.transferFactory = transferFactory;
         this.customerFacade = customerFacade;
+        this.transferMapper = transferMapper;
     }
 
-    public TransferDto get(int id) {
+    public TransferDto getDtoById(int id) {
         return transferQueryRepository.findDtoById(id)
                 .orElseThrow(() -> new TransferNotFoundException(id));
 
     }
+    public Set<TransferDto> getDtoByReceiverId(int id) {
+        return transferQueryRepository.findDtoByReceiverId(id)
+                .orElseThrow(() -> new TransferNotFoundException(id));
+
+    }
+    public Set<TransferDto> getCustomerTransfers(String email){
+        return transferQueryRepository.findCustomerTransfers(email)
+                .orElseThrow(() -> new TransferNotFoundException(email))
+                .stream()
+                .map(transfer -> transferMapper.toTransferDto(transfer))
+                .collect(Collectors.toSet());
+    }
 
     public TransferDto create(TransferCreateDto toCreate) {
         exchangeFunds(toCreate);
-        return toTransferDto(transferRepository.save(transferFactory.from(toCreate)).getSnapshot());
+        return transferMapper.toTransferDto(transferRepository.save(transferFactory.from(toCreate)).getSnapshot());
     }
 
     public void exchangeFunds(TransferCreateDto toCreate){
@@ -37,12 +55,6 @@ public class TransferFacade {
         customerFacade.addFunds(toCreate.getReceiverId(), toCreate.getFunds());
     }
 
-    public TransferDto toTransferDto(TransferSnapshot transferSnapshot){
-        return TransferDto.create(transferSnapshot.getTitle(),
-                transferSnapshot.getFunds(),
-                transferSnapshot.getReceiverId(),
-                transferSnapshot.getTransferDate(),
-                transferSnapshot.getTransferTime());
-    }
+
 
 }

@@ -1,9 +1,13 @@
 package com.example.bankbackend.customer;
 
-import com.example.bankbackend.customer.dto.*;
+import com.example.bankbackend.customer.dto.CustomerCreateDto;
+import com.example.bankbackend.customer.dto.CustomerDto;
+import com.example.bankbackend.customer.dto.CustomerLoginDto;
+import com.example.bankbackend.customer.dto.CustomerLoginResponseDto;
 import com.example.bankbackend.customer.exceptions.CustomerEmailAlreadyExistException;
 import com.example.bankbackend.customer.exceptions.CustomerNotEnoughFundsException;
 import com.example.bankbackend.customer.exceptions.CustomerNotFoundException;
+import com.example.bankbackend.transfer.TransferQueryRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,13 +19,24 @@ public class CustomerFacade {
     CustomerRoleFacade roleFacade;
     CustomerFactory customerFactory;
     PasswordEncoder encoder;
+    CustomerMapper customerMapper;
+    TransferQueryRepository transferQueryRepository;
 
-    public CustomerFacade(CustomerRepository customerRepository, CustomerQueryRepository customerQueryRepository, CustomerRoleFacade roleFacade, CustomerFactory customerFactory, PasswordEncoder encoder) {
+
+    public CustomerFacade(CustomerRepository customerRepository,
+                          CustomerQueryRepository customerQueryRepository,
+                          CustomerRoleFacade roleFacade,
+                          CustomerFactory customerFactory,
+                          PasswordEncoder encoder,
+                          CustomerMapper customerMapper,
+                          TransferQueryRepository transferQueryRepository) {
         this.customerRepository = customerRepository;
         this.customerQueryRepository = customerQueryRepository;
         this.roleFacade = roleFacade;
         this.customerFactory = customerFactory;
         this.encoder = encoder;
+        this.customerMapper = customerMapper;
+        this.transferQueryRepository = transferQueryRepository;
     }
 
     public CustomerDto getDtoById(int customerId) {
@@ -40,7 +55,7 @@ public class CustomerFacade {
                 .orElseThrow(() -> new CustomerNotFoundException(customerId));
     }
     public Customer getByEmail(String email){
-        return  customerRepository.findCustomerByEmail(email)
+        return  customerQueryRepository.findCustomerByEmail(email)
                 .orElseThrow(() -> new CustomerNotFoundException(email));
     }
 
@@ -48,7 +63,7 @@ public class CustomerFacade {
         if (CustomerExists(customerCreateDto.getEmail())) {
             throw new CustomerEmailAlreadyExistException(customerCreateDto.getEmail());
         }
-        return toCustomerDto(customerRepository.save(customerFactory.from(customerCreateDto)).getSnapshot());
+        return customerMapper.toCustomerDto(customerRepository.save(customerFactory.from(customerCreateDto)).getSnapshot());
     }
 
     public void update(CustomerSnapshot customerSnapshot) {
@@ -75,36 +90,15 @@ public class CustomerFacade {
         if (!CustomerExists(customerLoginDto.getEmail())) {
             return new CustomerLoginResponseDto("Login Failed", false);
         }
-
-        if (!encoder.matches(customerLoginDto.getPassword(), customerQueryRepository.findDtoByEmail(customerLoginDto.getEmail()).get().getPassword())) {
+        if (!encoder.matches(customerLoginDto.getPassword(), getByEmail(customerLoginDto.getEmail()).getSnapshot().getPassword())) {
             return new CustomerLoginResponseDto("Login Failed", false);
         }
 
         return new CustomerLoginResponseDto("Login Succeed", true);
     }
 
-    public SimpleCustomerEntity toSimpleCustomerEntity(Customer customer) {
-        return SimpleCustomerEntity.restore(new SimpleCustomerEntitySnapshot(
-                customer.getSnapshot().getId(),
-                customer.getSnapshot().getFirstName(),
-                customer.getSnapshot().getLastName(),
-                customer.getSnapshot().getTransferSet()
-        ));
-    }
-
     public boolean CustomerExists(String email) {
         return customerQueryRepository.findDtoByEmail(email).isPresent();
     }
-
-    public CustomerDto toCustomerDto(CustomerSnapshot customerSnapshot) {
-        return CustomerDto.create(customerSnapshot.getId(),
-                customerSnapshot.getFirstName(),
-                customerSnapshot.getLastName(),
-                customerSnapshot.getPassword(),
-                customerSnapshot.getEmail(),
-                customerSnapshot.getFunds());
-    }
-
-
 
 }

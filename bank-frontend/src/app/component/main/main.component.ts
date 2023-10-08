@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Customer} from "../../common/customer";
+import {CustomerCreate} from "../../common/customerCreate";
 import {LoginService} from "../../services/login.service";
+import {CustomerReceived} from "../../common/customer-received";
+import {Transfer} from "../../common/transfer";
 
 @Component({
   selector: 'app-main',
@@ -9,20 +11,15 @@ import {LoginService} from "../../services/login.service";
 })
 export class MainComponent implements OnInit {
 
-  customer!: Customer;
+  customer!: CustomerReceived;
+  transferSet!: Transfer[];
 
   constructor(private loginService: LoginService) {
   }
 
   ngOnInit(): void {
-    this.setCustomer();
-    console.log(this.customer)
-  }
-
-  setCustomer() {
-    if (this.customer == null) {
-      this.loginService.getCustomer().subscribe(customer => this.customer = customer);
-    }
+    this.loginService.customerReceived.subscribe(customer => this.customer = customer);
+    this.loginService.transferReceived.subscribe(transfer => this.transferSet = transfer);
   }
 
 }

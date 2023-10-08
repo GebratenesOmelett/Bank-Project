@@ -1,12 +1,11 @@
 package com.example.bankbackend.config;
 
+
 import com.example.bankbackend.customer.CustomerUserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -23,7 +22,7 @@ class SecurityFilterConfig {
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.authorizeHttpRequests(configurer ->
                 configurer
-                        .requestMatchers("/api/customers/login", "/api/customers").permitAll()
+                        .requestMatchers("/api/customers/login", "/api/customers", "/api/customers/email/**", "/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .userDetailsService(customerUserDetailService)

@@ -1,8 +1,11 @@
 import {Injectable} from '@angular/core';
 import {CustomerLogin} from "../common/customer-login";
-import {map, Observable} from "rxjs";
+import {BehaviorSubject, Observable, Subject} from "rxjs";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Customer} from "../common/customer";
+import {CustomerCreate} from "../common/customerCreate";
+import {AxiosService} from "./axios.service";
+import {CustomerReceived} from "../common/customer-received";
+import {Transfer} from "../common/transfer";
 
 @Injectable({
   providedIn: 'root'
@@ -10,28 +13,36 @@ import {Customer} from "../common/customer";
 export class LoginService {
 
 
-  email: string = "";
+  customerReceived: Subject<CustomerReceived> = new BehaviorSubject<CustomerReceived>(new CustomerReceived(0, "", "", "", 0));
+  transferReceived: Subject<Transfer[]> = new BehaviorSubject<Transfer[]>([])
 
   private loginUrl = "http://localhost:8080/api/customers/login"
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient,
+              private axiosService: AxiosService) {
   }
 
-  loginCustomer(customerLogin: CustomerLogin): Observable<any> {
-    const headers = new HttpHeaders({Authorization: 'Basic '+btoa(customerLogin.email+":"+customerLogin.password)})
-    return this.httpClient.post<CustomerLogin>(this.loginUrl, customerLogin, {headers, responseType:'text' as 'json'});
+  getCustomerByEmail(email: string) {
+    this.axiosService.request(
+      "GET",
+      `/api/customers/email/${email}`,
+      null
+    ).then(response => {
+        this.customerReceived.next(response.data);
+      }
+    );
   }
 
-  getCustomer(): Observable<Customer>{
-    console.log(this.email)
-    const searchUrl = `http://localhost:8080/api/customers/email/${this.email}`;
-    return this.httpClient.get<Customer>(searchUrl);
+  getTransfersByEmail(email: string) {
+    this.axiosService.request(
+      "GET",
+      `api/transfers/email/${email}`,
+      null
+    ).then(response => {
+        this.transferReceived.next(response.data)
+      }
+    );
   }
-
-
-
-
-
 }
 
 

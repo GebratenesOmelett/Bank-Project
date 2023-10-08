@@ -10,31 +10,28 @@ public interface CustomerDto {
     static CustomerDto create(final int id,
                               final String firstName,
                               final String lastName,
-                              final String password,
                               final String email,
                               final BigDecimal funds) {
-        return new DeserializationImpl(id,firstName,lastName,password,email,funds);
+        return new DeserializationImpl(id,firstName,lastName,email,funds);
     }
     int getId();
     String getFirstName();
     String getLastName();
-    String getPassword();
     String getEmail();
     BigDecimal getFunds();
 
-    class DeserializationImpl implements CustomerDto{
+
+    class DeserializationImpl implements CustomerDto {
         private final int id;
         private final String firstName;
         private final String lastName;
-        private final String password;
         private final String email;
         private final BigDecimal funds;
 
-        public DeserializationImpl(int id, String firstName, String lastName, String password, String email, BigDecimal funds) {
+        public DeserializationImpl(int id, String firstName, String lastName, String email, BigDecimal funds) {
             this.id = id;
             this.firstName = firstName;
             this.lastName = lastName;
-            this.password = password;
             this.email = email;
             this.funds = funds;
         }
@@ -54,10 +51,6 @@ public interface CustomerDto {
             return lastName;
         }
 
-        @Override
-        public String getPassword() {
-            return password;
-        }
 
         @Override
         public String getEmail() {
@@ -68,5 +61,7 @@ public interface CustomerDto {
         public BigDecimal getFunds() {
             return funds;
         }
+
+
     }
 }

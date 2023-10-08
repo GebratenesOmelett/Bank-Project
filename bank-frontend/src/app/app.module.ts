@@ -10,8 +10,10 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {NgOptimizedImage} from "@angular/common";
 import { LoginComponent } from './component/login/login.component';
 import { MainComponent } from './component/main/main.component';
+import { TransferComponent } from './component/transfer/transfer.component';
 
 const routes: Routes = [
+  {path: 'transfer', component: TransferComponent},
   {path: 'main', component: MainComponent},
   {path: 'login', component: LoginComponent},
   {path: 'registration', component: RegistrationComponent},
@@ -26,7 +28,8 @@ const routes: Routes = [
     RegistrationComponent,
     HomeComponent,
     LoginComponent,
-    MainComponent
+    MainComponent,
+    TransferComponent
   ],
   imports: [
     RouterModule.forRoot(routes),

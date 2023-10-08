@@ -1,9 +1,11 @@
-export class Customer {
+export class CustomerCreate {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
   passwordRepeat: string;
+
+
   constructor(firstName: string, lastName: string, email: string, password: string, passwordRepeat: string) {
     this.firstName = firstName;
     this.lastName = lastName;

@@ -3,13 +3,14 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {LoginService} from "../../services/login.service";
 import {Router} from "@angular/router";
 import {AxiosService} from "../../services/axios.service";
+import {MainComponent} from "../main/main.component";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit{
+export class LoginComponent implements OnInit {
 
   loginFormGroup!: FormGroup;
 
@@ -18,6 +19,7 @@ export class LoginComponent implements OnInit{
               private router: Router,
               private axiosService: AxiosService) {
   }
+
   ngOnInit(): void {
     this.loginFormGroup = this.formBuilder.group({
       login: this.formBuilder.group({
@@ -27,31 +29,15 @@ export class LoginComponent implements OnInit{
     })
   }
 
-  // onSubmit() {
-  //   let customerLogin = this.loginFormGroup.controls['login'].value;
-  //
-  //   this.loginService.loginCustomer(customerLogin).subscribe(data =>{
-  //     if(data.message == "Login Succeed"){
-  //       console.log("successfully logged")
-  //       this.loginService.email = customerLogin.email;
-  //       this.router.navigateByUrl('/main');
-  //     }
-  //     else if(data.message == "Login Failed"){
-  //       console.log("failed")
-  //     }
-  //     else{
-  //       console.log("something went wrong")
-  //     }
-  //   })
-  //
-  // }
-  get email(){
+  get email() {
     return this.loginFormGroup.get("login.email")?.value;
   }
-  get password(){
+
+  get password() {
     return this.loginFormGroup.get("login.password")?.value;
   }
-  onSubmit(){
+
+  onSubmit() {
     this.axiosService.request(
       "POST",
       "/api/customers/login",
@@ -59,6 +45,16 @@ export class LoginComponent implements OnInit{
         email: this.email,
         password: this.password
       }
-    )
+    ).then(data => {
+      if (data.data.status) {
+        this.loginService.getCustomerByEmail(this.email)
+        this.loginService.getTransfersByEmail(this.email)
+        this.router.navigateByUrl("/main")
+      } else if (!data.data.status) {
+        console.log("failed")
+      } else {
+        console.log("something went wrong")
+      }
+    })
   }
 }

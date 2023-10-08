@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 @ControllerAdvice
-public class TransferControllerAdvice extends ResponseEntityExceptionHandler {
+class TransferControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = TransferNotFoundException.class)
     ResponseEntity<Object> transferNotFound(RuntimeException ex, WebRequest request){

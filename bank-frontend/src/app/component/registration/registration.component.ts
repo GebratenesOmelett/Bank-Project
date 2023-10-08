@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {CheckuotService} from "../../services/checkuot.service";
-import {Customer} from "../../common/customer";
+import {CustomerCreate} from "../../common/customerCreate";
 import {AxiosService} from "../../services/axios.service";
 
 @Component({

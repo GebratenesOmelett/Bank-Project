@@ -1,4 +1,57 @@
-<p>{{customer.email}}</p>
-<p>{{customer.password}}</p>
-<p>{{customer.lastName}}</p>
-<p>{{customer.email}}</p>
+<div class="container p-3">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="border rounded-3 border-secondary bg-dark text-white ">
+        <div class="d-flex justify-content-between p-2">
+          <div class="">
+            <span>CustomerCreate</span><br>
+            <span>{{customer.email}}</span>
+          </div>
+          <div>
+            <span>First name</span><br>
+            <span>{{customer.firstName}}</span>
+          </div>
+          <div>
+            <span>Last name</span><br>
+            <span>{{customer.lastName}}</span>
+          </div>
+          <div>
+            <span>Bank account</span><br>
+            <span class="mt-3">Bank account : {{customer.id}}</span>
+          </div>
+          <div>
+            <span>Available funds</span><br>
+            <span>{{customer.funds}}</span>
+          </div>
+        </div>
+      </div>
+      <form routerLink="/transfer" class="mb-2 input-block-level pt-2">
+        <button type="submit" class="btn btn-secondary w-100">transfer</button>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="row">
+    <div class="border-0 border-secondary border-top">
+      <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+        <tr class="">
+          <th>Name</th>
+          <th>Title</th>
+          <th>Money</th>
+          <th>Receiver</th>
+          <th>Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let transfer of transferSet">
+          <td>{{customer.firstName}} {{customer.lastName}}</td>
+          <td>{{transfer.title}}</td>
+          <td>{{transfer.funds}}</td>
+          <td>{{transfer.receiverId}}</td>
+          <td>{{transfer.transferDate}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+</div>

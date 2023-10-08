@@ -4,6 +4,7 @@ import com.example.bankbackend.customer.dto.CustomerCreateDto;
 import com.example.bankbackend.customer.dto.CustomerDto;
 import com.example.bankbackend.customer.dto.CustomerLoginDto;
 import com.example.bankbackend.customer.dto.CustomerLoginResponseDto;
+import com.example.bankbackend.transfer.TransferFacade;
 import com.example.bankbackend.transfer.exceptions.TransferValidationException;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ class CustomerController {
 
 
     CustomerFacade customerFacade;
+
     public CustomerController(CustomerFacade customerFacade) {
         this.customerFacade = customerFacade;
     }

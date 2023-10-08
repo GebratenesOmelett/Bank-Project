@@ -16,10 +16,6 @@ public class SimpleTransferQueryEntitySnapshot {
     private SimpleCustomerEntitySnapshot customerId;
 
 
-    public void setCustomerId(SimpleCustomerEntitySnapshot customerId) {
-        this.customerId = customerId;
-    }
-
     public SimpleTransferQueryEntitySnapshot() {
     }
 
@@ -39,31 +35,31 @@ public class SimpleTransferQueryEntitySnapshot {
         this.customerId = customerId;
     }
 
-    int getId() {
+    public int getId() {
         return id;
     }
 
-    String getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    BigDecimal getFunds() {
+    public BigDecimal getFunds() {
         return funds;
     }
 
-    int getReceiverId() {
+    public int getReceiverId() {
         return receiverId;
     }
 
-    LocalDate getTransferDate() {
+    public LocalDate getTransferDate() {
         return transferDate;
     }
 
-    LocalTime getTransferTime() {
+    public LocalTime getTransferTime() {
         return transferTime;
     }
 
-    SimpleCustomerEntitySnapshot getCustomerId() {
+    public SimpleCustomerEntitySnapshot getCustomerId() {
         return customerId;
     }
 
@@ -89,5 +85,8 @@ public class SimpleTransferQueryEntitySnapshot {
 
     void setTransferTime(LocalTime transferTime) {
         this.transferTime = transferTime;
+    }
+    public void setCustomerId(SimpleCustomerEntitySnapshot customerId) {
+        this.customerId = customerId;
     }
 }
