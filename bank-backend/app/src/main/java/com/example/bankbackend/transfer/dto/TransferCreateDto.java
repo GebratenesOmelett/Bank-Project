@@ -34,4 +34,13 @@ public class TransferCreateDto {
         return receiverId;
     }
 
+    @Override
+    public String toString() {
+        return "TransferCreateDto{" +
+                "title='" + title + '\'' +
+                ", funds=" + funds +
+                ", loggedCustomerId=" + loggedCustomerId +
+                ", receiverId=" + receiverId +
+                '}';
+    }
 }

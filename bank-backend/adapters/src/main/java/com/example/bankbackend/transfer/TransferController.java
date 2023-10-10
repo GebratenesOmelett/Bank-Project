@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -27,12 +28,13 @@ class TransferController {
         return new ResponseEntity<>(transferFacade.getDtoById(id), HttpStatus.OK);
     }
     @GetMapping("/email/{email}")
-    ResponseEntity<Set<TransferDto>> getCustomerTransfers(@PathVariable String email){
+    ResponseEntity<List<TransferDto>> getCustomerTransfers(@PathVariable String email){
         return new ResponseEntity<>(transferFacade.getCustomerTransfers(email), HttpStatus.OK);
     }
 
     @PostMapping()
     ResponseEntity<TransferDto> create(@RequestBody @Valid TransferCreateDto toCreate, BindingResult errors) {
+        System.out.println(toCreate);
         if (errors.hasErrors()){
             throw new TransferValidationException(errors);
         }

@@ -1,10 +1,7 @@
 package com.example.bankbackend.customer.dto;
 
 import com.example.bankbackend.transfer.dto.SimpleTransferQueryEntitySnapshot;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
+
 
 import java.util.Set;
 

@@ -1,12 +1,8 @@
 package com.example.bankbackend.transfer;
 
 import com.example.bankbackend.customer.dto.SimpleCustomerEntitySnapshot;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.ToString;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

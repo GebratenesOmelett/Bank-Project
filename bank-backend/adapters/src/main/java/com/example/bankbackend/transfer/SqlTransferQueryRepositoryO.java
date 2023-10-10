@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -13,8 +14,8 @@ interface SqlTransferQueryRepository extends JpaRepository<TransferSnapshot, Int
     Optional<TransferDto> findDtoById(int id);
     Optional<Set<TransferDto>> findDtoByReceiverId(int id);
 //    @Query(value = "SELECT ts FROM com.example.bankbackend.transfer.TransferSnapshot ts, com.example.bankbackend.customer.CustomerSnapshot cs WHERE (ts.getCustomerId = cs.id OR ts.receiverId = cs.id) and cs.email = :email")
-    @Query(value = "SELECT transfer.* FROM transfer, customer WHERE (transfer.customer_id = customer.id OR transfer.receiver_id = customer.id) AND customer.email = :email", nativeQuery = true)
-    Optional<Set<TransferSnapshot>> findCustomerTransfers(@Param("email") String email);
+    @Query(value = "SELECT transfer.* FROM transfer, customer WHERE (transfer.customer_id = customer.id OR transfer.receiver_id = customer.id) AND customer.email = :email ORDER BY transfer.transfer_date DESC,transfer.transfer_time DESC", nativeQuery = true)
+    Optional<List<TransferSnapshot>> findCustomerTransfers(@Param("email") String email);
 
 }
 @Repository
@@ -36,7 +37,7 @@ class TransferQueryRepositoryImpl implements TransferQueryRepository{
     }
 
     @Override
-    public Optional<Set<TransferSnapshot>> findCustomerTransfers(String email) {
+    public Optional<List<TransferSnapshot>> findCustomerTransfers(String email) {
         return repository.findCustomerTransfers(email);
     }
 }

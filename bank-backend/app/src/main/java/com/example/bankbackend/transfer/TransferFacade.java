@@ -5,6 +5,7 @@ import com.example.bankbackend.transfer.dto.TransferCreateDto;
 import com.example.bankbackend.transfer.dto.TransferDto;
 import com.example.bankbackend.transfer.exceptions.TransferNotFoundException;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -37,12 +38,12 @@ public class TransferFacade {
                 .orElseThrow(() -> new TransferNotFoundException(id));
 
     }
-    public Set<TransferDto> getCustomerTransfers(String email){
+    public List<TransferDto> getCustomerTransfers(String email){
         return transferQueryRepository.findCustomerTransfers(email)
                 .orElseThrow(() -> new TransferNotFoundException(email))
                 .stream()
                 .map(transfer -> transferMapper.toTransferDto(transfer))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     public TransferDto create(TransferCreateDto toCreate) {
