@@ -1,0 +1,49 @@
+<div class="col-8">
+  <div class="container  w-50">
+    <div class="my-3">
+      <form [formGroup]="transferFormGroup" (ngSubmit)="onSubmit()"
+            class="form-horizontal">
+        <div formGroupName="transfer">
+          <span>Bank account:</span>
+
+          <span>{{customer.id}}</span><br>
+
+          <label class="form-label">Bank account to transfer</label>
+          <input type="number" formControlName="receiverId" class="form-control" placeholder="#000000000"
+                 max="999999999">
+
+          <!--        <div th:if="${#fields.hasErrors('customerIdTo')}">-->
+          <!--          <p class="alert alert-danger alert-link">Invalid Id</p>-->
+          <!--        </div>-->
+
+          <!--        <div th:if="${#fields.hasErrors('customerLoggedId')}">-->
+          <!--          <p class="alert alert-danger alert-link">Id can not be the same</p>-->
+          <!--        </div>-->
+
+          <label class="form-label">Title</label>
+          <input type="text" formControlName="title" placeholder="" class="form-control">
+
+          <!--        <div th:if="${#fields.hasErrors('title')}">-->
+          <!--          <p class="alert alert-danger alert-link">Title too short</p>-->
+          <!--        </div>-->
+
+          <label class="form-label">Money</label>
+          <input type="number" formControlName="funds" name="money" class="form-control" step="0.01" min="0.01">
+
+          <!--        <div th:if="${#fields.hasErrors('customerLoggedAmountOfMoney')}">-->
+          <!--          <p class="alert alert-danger alert-link">Not enough money</p>-->
+          <!--        </div>-->
+
+          <br>
+
+          <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-info col-2">Transfer</button>
+            <form routerLink="/main" class="mb-2 input-block-level pt-2">
+              <button type="submit" class="btn btn-secondary w-100">Back</button>
+            </form>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
