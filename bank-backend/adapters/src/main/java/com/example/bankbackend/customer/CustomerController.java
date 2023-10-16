@@ -1,10 +1,7 @@
 package com.example.bankbackend.customer;
 
-import com.example.bankbackend.customer.dto.CustomerCreateDto;
-import com.example.bankbackend.customer.dto.CustomerDto;
-import com.example.bankbackend.customer.dto.CustomerLoginDto;
-import com.example.bankbackend.customer.dto.CustomerLoginResponseDto;
-import com.example.bankbackend.transfer.TransferFacade;
+
+import com.example.bankbackend.customer.dto.*;
 import com.example.bankbackend.transfer.exceptions.TransferValidationException;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -26,12 +23,15 @@ class CustomerController {
 
     @GetMapping("/id/{id}")
     ResponseEntity<CustomerDto> getById(@PathVariable int id){
-
         return new ResponseEntity<>(customerFacade.getDtoById(id), HttpStatus.OK);
     }
     @GetMapping("/email/{email}")
     ResponseEntity<CustomerDto> getByEmail(@PathVariable String email){
         return new ResponseEntity<>(customerFacade.getDtoByEmail(email), HttpStatus.OK);
+    }
+    @GetMapping("/exist/{email}")
+    ResponseEntity<Boolean> CustomerExists(@PathVariable String email){
+        return new ResponseEntity<>(customerFacade.customerExists(email), HttpStatus.OK);
     }
 
     @PostMapping()
@@ -43,7 +43,8 @@ class CustomerController {
     }
 
     @PostMapping("/login")
-    ResponseEntity<CustomerLoginResponseDto> loginCustomer(@RequestBody CustomerLoginDto customerloginDto){
-        return new ResponseEntity<>(customerFacade.login(customerloginDto), HttpStatus.OK);
+    ResponseEntity<CustomerLoginResponseDto> loginCustomerMessage(@RequestBody CustomerLoginDto customerloginDto){
+        CustomerLoginResponseDto customerLoginResponseDto = customerFacade.loginMessage(customerloginDto);
+        return new ResponseEntity<>(customerLoginResponseDto, HttpStatus.OK);
     }
 }

@@ -34,7 +34,6 @@ class TransferController {
 
     @PostMapping()
     ResponseEntity<TransferDto> create(@RequestBody @Valid TransferCreateDto toCreate, BindingResult errors) {
-        System.out.println(toCreate);
         if (errors.hasErrors()){
             throw new TransferValidationException(errors);
         }

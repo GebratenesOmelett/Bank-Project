@@ -2,6 +2,10 @@
   <div class="container">
     <form [formGroup]="loginFormGroup" (ngSubmit)="onSubmit()">
       <div formGroupName="login">
+        <div *ngIf="loginFailed"
+             class="alert alert-danger mt-1">
+              Login Failed
+        </div>
         <label class="form-label">Email</label>
         <div class="mb-3">
           <div class="input-space">

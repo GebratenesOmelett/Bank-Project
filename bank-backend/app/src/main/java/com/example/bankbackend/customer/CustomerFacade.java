@@ -20,7 +20,6 @@ public class CustomerFacade {
     CustomerFactory customerFactory;
     PasswordEncoder encoder;
     CustomerMapper customerMapper;
-    TransferQueryRepository transferQueryRepository;
 
 
     public CustomerFacade(CustomerRepository customerRepository,
@@ -36,7 +35,6 @@ public class CustomerFacade {
         this.customerFactory = customerFactory;
         this.encoder = encoder;
         this.customerMapper = customerMapper;
-        this.transferQueryRepository = transferQueryRepository;
     }
 
     public CustomerDto getDtoById(int customerId) {
@@ -60,7 +58,7 @@ public class CustomerFacade {
     }
 
     public CustomerDto create(CustomerCreateDto customerCreateDto) {
-        if (CustomerExists(customerCreateDto.getEmail())) {
+        if (customerExists(customerCreateDto.getEmail())) {
             throw new CustomerEmailAlreadyExistException(customerCreateDto.getEmail());
         }
         return customerMapper.toCustomerDto(customerRepository.save(customerFactory.from(customerCreateDto)).getSnapshot());
@@ -86,8 +84,8 @@ public class CustomerFacade {
         update(loggedCustomer);
     }
 
-    public CustomerLoginResponseDto login(CustomerLoginDto customerLoginDto) {
-        if (!CustomerExists(customerLoginDto.getEmail())) {
+    public CustomerLoginResponseDto loginMessage(CustomerLoginDto customerLoginDto) {
+        if (!customerExists(customerLoginDto.getEmail())) {
             return new CustomerLoginResponseDto("Login Failed", false);
         }
         if (!encoder.matches(customerLoginDto.getPassword(), getByEmail(customerLoginDto.getEmail()).getSnapshot().getPassword())) {
@@ -97,7 +95,8 @@ public class CustomerFacade {
         return new CustomerLoginResponseDto("Login Succeed", true);
     }
 
-    public boolean CustomerExists(String email) {
+
+    public boolean customerExists(String email) {
         return customerQueryRepository.findDtoByEmail(email).isPresent();
     }
 

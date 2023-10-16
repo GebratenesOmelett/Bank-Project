@@ -4,6 +4,7 @@ public class CustomerLoginResponseDto {
     final String message;
     final boolean status;
 
+
     public CustomerLoginResponseDto(String message, boolean status) {
         this.message = message;
         this.status = status;
@@ -16,4 +17,6 @@ public class CustomerLoginResponseDto {
     public boolean isStatus() {
         return status;
     }
+
+
 }

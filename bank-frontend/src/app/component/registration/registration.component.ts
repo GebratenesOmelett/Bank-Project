@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {CheckuotService} from "../../services/checkuot.service";
-import {CustomerCreate} from "../../common/customerCreate";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AxiosService} from "../../services/axios.service";
+import {Router} from "@angular/router";
+import {GeneralValidation} from "../../validate/general-validation";
+import {PasswordValidation} from "../../validate/password-validation";
 
 @Component({
   selector: 'app-registration',
@@ -10,52 +11,95 @@ import {AxiosService} from "../../services/axios.service";
   styleUrls: ['./registration.component.css']
 })
 export class RegistrationComponent implements OnInit {
+  emailDoesExist!: boolean;
 
   checkoutFormGroup!: FormGroup;
 
   constructor(private formBuilder: FormBuilder,
-              private checkoutService: CheckuotService,
+              private route: Router,
               private axiosService: AxiosService) {
   }
 
   ngOnInit(): void {
     this.checkoutFormGroup = this.formBuilder.group({
       customer: this.formBuilder.group({
-        firstName: [''],
-        lastName: [''],
-        email: [''],
-        password: [''],
-        passwordRepeat: ['']
-      })
+        firstName: new FormControl('', [Validators.required, GeneralValidation.notOnlyWhiteSpace]),
+        lastName: new FormControl('', [Validators.required, GeneralValidation.notOnlyWhiteSpace]),
+        email: new FormControl('', [Validators.required,
+          Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]),
+        password: new FormControl('', [Validators.required, GeneralValidation.notOnlyWhiteSpace, Validators.minLength(8)]),
+        passwordRepeat: new FormControl('', [])
+      },
+        {
+          validators : PasswordValidation.passwordsShouldBeTheSame("password", "passwordRepeat")
+        })
     });
   }
+  get passwordValidation(){
+    return this.checkoutFormGroup.controls['customer'];
+  }
 
-  get firstName(){
+  get getFirstName() {
     return this.checkoutFormGroup.get('customer.firstName')?.value;
   }
-  get lastName(){
+
+  get getLastName() {
     return this.checkoutFormGroup.get('customer.lastName')?.value;
   }
-  get email(){
+
+  get getEmail() {
     return this.checkoutFormGroup.get('customer.email')?.value;
   }
-  get password(){
+
+  get getPassword() {
     return this.checkoutFormGroup.get('customer.password')?.value;
   }
-  get passwordRepeat(){
+
+  get getPasswordRepeat() {
     return this.checkoutFormGroup.get('customer.passwordRepeat')?.value;
   }
+
+  get firstName() {
+    return this.checkoutFormGroup.get('customer.firstName');
+  }
+
+  get lastName() {
+    return this.checkoutFormGroup.get('customer.lastName');
+  }
+
+  get email() {
+    return this.checkoutFormGroup.get('customer.email');
+  }
+
+  get password() {
+    return this.checkoutFormGroup.get('customer.password');
+  }
+
+  get passwordRepeat() {
+    return this.checkoutFormGroup.get('customer.passwordRepeat');
+  }
+
+
+
   onSubmit() {
+    if (this.checkoutFormGroup.invalid) {
+      this.checkoutFormGroup.markAllAsTouched();
+      return
+    }
     this.axiosService.request(
       "POST",
       "/api/customers",
       {
-        firstName: this.firstName,
-        lastName: this.lastName,
-        email: this.email,
-        password: this.password,
-        passwordRepeat: this.passwordRepeat
+        firstName: this.getFirstName,
+        lastName: this.getLastName,
+        email: this.getEmail,
+        password: this.getPassword,
+        passwordRepeat: this.getPasswordRepeat
       }
-    )
+    ).then(data => {
+      this.route.navigateByUrl("/home")
+    }).catch(err =>{
+    this.emailDoesExist = true;
+    });
   }
 }

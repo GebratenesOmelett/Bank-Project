@@ -21,6 +21,7 @@ public interface CustomerDto {
     BigDecimal getFunds();
 
 
+
     class DeserializationImpl implements CustomerDto {
         private final int id;
         private final String firstName;
@@ -61,6 +62,8 @@ public interface CustomerDto {
         public BigDecimal getFunds() {
             return funds;
         }
+
+
 
 
     }

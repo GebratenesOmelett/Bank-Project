@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {LoginService} from "../../services/login.service";
 import {Router} from "@angular/router";
 import {AxiosService} from "../../services/axios.service";
-import {MainComponent} from "../main/main.component";
+
 
 @Component({
   selector: 'app-login',
@@ -11,6 +11,8 @@ import {MainComponent} from "../main/main.component";
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+
+  loginFailed!: boolean;
 
   loginFormGroup!: FormGroup;
 
@@ -52,6 +54,7 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl("/main")
       } else if (!data.data.status) {
         console.log("failed")
+        this.loginFailed = true
       } else {
         console.log("something went wrong")
       }

@@ -1,4 +1,3 @@
-import {Transfer} from "./transfer";
 
 export class CustomerReceived {
   id: number;

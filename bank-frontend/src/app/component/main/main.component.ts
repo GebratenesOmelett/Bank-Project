@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {CustomerCreate} from "../../common/customerCreate";
 import {LoginService} from "../../services/login.service";
 import {CustomerReceived} from "../../common/customer-received";
 import {Transfer} from "../../common/transfer";
@@ -18,18 +17,11 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit(): void {
-      this.loginService.customerReceived.subscribe(customer => {
-        if(customer?.email === this.customer?.email){
-          console.log(customer?.email)
-          console.log(this.customer?.email)
-          this.loginService.getCustomerByEmail(this.customer.email);
-          this.loginService.getTransfersByEmail(this.customer.email);
-        }
-        this.customer = customer
-      });
-      this.loginService.transferReceived.subscribe(transfer => this.transferSet = transfer);
+    this.loginService.customerReceived.subscribe(customer => {
+      this.customer = customer
+    });
+    this.loginService.transferReceived.subscribe(transfer => this.transferSet = transfer);
 
   }
-
 
 }
