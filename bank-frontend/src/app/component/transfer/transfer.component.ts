@@ -5,6 +5,7 @@ import {LoginService} from "../../services/login.service";
 import {CustomerReceived} from "../../common/customer-received";
 import {Router} from "@angular/router";
 import {GeneralValidation} from "../../validate/general-validation";
+import {Transfer} from "../../common/transfer";
 
 @Component({
   selector: 'app-transfer',
@@ -15,6 +16,8 @@ export class TransferComponent implements OnInit {
 
   transferFormGroup!: FormGroup;
   customer!: CustomerReceived;
+  transferSet!: Transfer[];
+  addressBookHaspMap = new Set<number>;
 
   customerDoesExist!: boolean;
 
@@ -34,6 +37,8 @@ export class TransferComponent implements OnInit {
       )
     });
     this.loginService.customerReceived.subscribe(customer => this.customer = customer);
+    this.loginService.transferReceived.subscribe(transfer => this.transferSet = transfer);
+    this.getAddressBook()
   }
 
   get getTitle() {
@@ -59,8 +64,14 @@ export class TransferComponent implements OnInit {
   get receiverId() {
     return this.transferFormGroup.get('transfer.receiverId');
   }
+  getAddressBook(){
+    for(let i = 0; i < this.transferSet.length; i++){
+      this.addressBookHaspMap.add(this.transferSet[i].receiverId);
+    }
+  }
 
   onSubmit() {
+    this.customerDoesExist = false;
     if (this.transferFormGroup.invalid) {
       this.transferFormGroup.markAllAsTouched();
       return

@@ -10,6 +10,7 @@ import {Transfer} from "../common/transfer";
 })
 export class LoginService {
 
+  logged!: boolean;
 
   customerReceived: Subject<CustomerReceived> = new BehaviorSubject<CustomerReceived>(new CustomerReceived(0, "", "", "", 0));
   transferReceived: Subject<Transfer[]> = new BehaviorSubject<Transfer[]>([])
@@ -17,6 +18,14 @@ export class LoginService {
 
   constructor(private httpClient: HttpClient,
               private axiosService: AxiosService) {
+  }
+  login(){
+    this.logged = true;
+  }
+  logout(){
+    this.logged = false;
+    this.customerReceived = new BehaviorSubject<CustomerReceived>(new CustomerReceived(0, "", "", "", 0));
+    this.transferReceived = new BehaviorSubject<Transfer[]>([])
   }
 
   getCustomerByEmail(email: string) {

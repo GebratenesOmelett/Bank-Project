@@ -4,7 +4,7 @@
       <div class="border rounded-3 border-secondary bg-dark text-white ">
         <div class="d-flex justify-content-between p-2">
           <div class="">
-            <span>CustomerCreate</span><br>
+            <span>Email</span><br>
             <span>{{customer.email}}</span>
           </div>
           <div>
@@ -31,27 +31,26 @@
     </div>
   </div>
 </div>
-<div class="row">
-    <div class="border-0 border-secondary border-top">
-      <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-        <tr class="">
-          <th>Name</th>
-          <th>Title</th>
-          <th>Money</th>
-          <th>Receiver</th>
-          <th>Date</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let transfer of transferSet">
-          <td>{{customer.firstName}} {{customer.lastName}}</td>
-          <td>{{transfer.title}}</td>
-          <td>{{transfer.funds}}</td>
-          <td>{{transfer.receiverId}}</td>
-          <td>{{transfer.transferDate}}</td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
+
+<div class="border-0 border-secondary border-top">
+  <table class="table table-bordered table-striped">
+    <thead class="table-dark">
+    <tr class="">
+      <th>Name</th>
+      <th>Title</th>
+      <th>Money</th>
+      <th>Receiver</th>
+      <th>Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let transfer of transferSet">
+      <td>{{customer.firstName}} {{customer.lastName}}</td>
+      <td>{{transfer.title}}</td>
+      <td>{{transfer.funds}}</td>
+      <td>{{transfer.receiverId}}</td>
+      <td>{{transfer.transferDate}}</td>
+    </tr>
+    </tbody>
+  </table>
 </div>

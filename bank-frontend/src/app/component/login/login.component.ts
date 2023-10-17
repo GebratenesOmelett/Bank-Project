@@ -51,6 +51,7 @@ export class LoginComponent implements OnInit {
       if (data.data.status) {
         this.loginService.getCustomerByEmail(this.email)
         this.loginService.getTransfersByEmail(this.email)
+        this.loginService.login();
         this.router.navigateByUrl("/main")
       } else if (!data.data.status) {
         console.log("failed")

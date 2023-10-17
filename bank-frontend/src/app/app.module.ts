@@ -11,6 +11,7 @@ import {NgOptimizedImage} from "@angular/common";
 import { LoginComponent } from './component/login/login.component';
 import { MainComponent } from './component/main/main.component';
 import { TransferComponent } from './component/transfer/transfer.component';
+import { NavBarComponentComponent } from './component/nav-bar-component/nav-bar-component.component';
 
 const routes: Routes = [
   {path: 'transfer', component: TransferComponent},
@@ -29,7 +30,8 @@ const routes: Routes = [
     HomeComponent,
     LoginComponent,
     MainComponent,
-    TransferComponent
+    TransferComponent,
+    NavBarComponentComponent
   ],
   imports: [
     RouterModule.forRoot(routes),

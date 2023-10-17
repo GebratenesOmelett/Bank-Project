@@ -1,10 +1,10 @@
 <div class="center">
-  <div class="container">
+  <div class="container-fluid w-50">
     <form [formGroup]="loginFormGroup" (ngSubmit)="onSubmit()">
       <div formGroupName="login">
         <div *ngIf="loginFailed"
              class="alert alert-danger mt-1">
-              Login Failed
+          Login Failed
         </div>
         <label class="form-label">Email</label>
         <div class="mb-3">

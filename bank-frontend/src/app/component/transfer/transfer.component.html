@@ -1,6 +1,6 @@
-<div class="row m-0 p-0">
-  <div class="col-8">
-    <div class="container  w-50">
+<div class="row m-0 p-00 bg-light">
+  <div class="col-9">
+    <div class="container  w-50 ">
       <div class="my-3">
         <form [formGroup]="transferFormGroup" (ngSubmit)="onSubmit()"
               class="form-horizontal">
@@ -65,9 +65,10 @@
       </div>
     </div>
   </div>
-  <div class="col-4 bg-dark ">
-    <div class=" ">
-
+  <div class="col-3 bg-dark  min-vh-100 text-white">
+    <span class="text-white h1  text-center">Address Book</span>
+    <div class="list-group  p-1" *ngFor="let id of addressBookHaspMap">
+      <span class="list-group-item list-group-item-action h4">{{id}}</span>
     </div>
   </div>
 </div>

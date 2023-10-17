@@ -70,13 +70,15 @@ public class CustomerFacade {
 
 
     public void addFunds(int id, BigDecimal funds) {
-        CustomerSnapshot receiverCustomer = getById(id).getSnapshot();
+        CustomerSnapshot receiverCustomer = customerRepository.findCustomerById(id)
+                .orElseThrow(() -> new CustomerNotFoundException(id)).getSnapshot();
         receiverCustomer.setFunds(receiverCustomer.getFunds().add(funds));
         update(receiverCustomer);
     }
 
     public void subtractFunds(int id, BigDecimal funds) {
-        CustomerSnapshot loggedCustomer = getById(id).getSnapshot();
+        CustomerSnapshot loggedCustomer = customerRepository.findCustomerById(id)
+                .orElseThrow(() -> new CustomerNotFoundException(id)).getSnapshot();
         if (loggedCustomer.getFunds().compareTo(funds) < 0) {
             throw new CustomerNotEnoughFundsException();
         }

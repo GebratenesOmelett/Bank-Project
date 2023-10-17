@@ -1,0 +1,30 @@
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+  <div class="container-fluid">
+    <span class="navbar-brand h1">Main Page</span>
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <li *ngIf="loginService.logged" class="nav-item">
+        <a class="nav-link" routerLink="/main">Main</a>
+      </li>
+      <li *ngIf="!loginService.logged" class="nav-item">
+        <a class="nav-link" href="#">Home</a>
+      </li>
+      <li *ngIf="!loginService.logged" class="nav-item">
+        <a class="nav-link" href="#">Pricing</a>
+      </li>
+      <li *ngIf="!loginService.logged" class="nav-item">
+        <a class="nav-link" href="#">Offers</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <li *ngIf="!loginService.logged" class="nav-item">
+        <a routerLink="/login"  class="nav-link p-2">Login</a>
+      </li>
+      <li *ngIf="!loginService.logged"class="nav-item">
+        <a routerLink="/registration" class=" nav-link p-2">Register</a>
+      </li>
+      <li *ngIf="loginService.logged" class="nav-item">
+        <a routerLink="home" class=" nav-link p-2" (click)="logout()">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>

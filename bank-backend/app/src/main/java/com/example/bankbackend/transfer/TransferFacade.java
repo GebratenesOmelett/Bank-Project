@@ -52,8 +52,8 @@ public class TransferFacade {
     }
 
     public void exchangeFunds(TransferCreateDto toCreate){
-        customerFacade.subtractFunds(toCreate.getLoggedCustomerId(), toCreate.getFunds());
         customerFacade.addFunds(toCreate.getReceiverId(), toCreate.getFunds());
+        customerFacade.subtractFunds(toCreate.getLoggedCustomerId(), toCreate.getFunds());
     }
 
 
