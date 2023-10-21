@@ -47,7 +47,8 @@
     <tr *ngFor="let transfer of transferSet">
       <td>{{customer.firstName}} {{customer.lastName}}</td>
       <td>{{transfer.title}}</td>
-      <td>{{transfer.funds}}</td>
+      <td *ngIf="customer.id == transfer.receiverId">+{{transfer.funds}}</td>
+      <td *ngIf="customer.id != transfer.receiverId">-{{transfer.funds}}</td>
       <td>{{transfer.receiverId}}</td>
       <td>{{transfer.transferDate}}</td>
     </tr>
