@@ -1,7 +1,6 @@
 package com.example.bankbackend.transfer;
 
 import com.example.bankbackend.transfer.dto.TransferDto;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,7 +1,6 @@
 package com.example.bankbackend.transfer;
 
 import com.example.bankbackend.customer.CustomerFacade;
-import com.example.bankbackend.customer.CustomerMapper;
 import com.example.bankbackend.customer.CustomerRoleFacade;
 import com.example.bankbackend.customer.dto.CustomerCreateDto;
 import com.example.bankbackend.customer.dto.CustomerRoleCreateDto;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,9 +22,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Date;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -38,21 +33,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class TransferControllerTest {
 
-    private MockMvc mockMvc;
-    private CustomerFacade customerFacade;
-    private ObjectMapper objectMapper;
-    private CustomerMapper customerMapper;
-    private TransferMapper transferMapper;
-    private CustomerRoleFacade customerRoleFacade;
-    private TransferFacade transferFacade;
+    private final MockMvc mockMvc;
+    private final CustomerFacade customerFacade;
+    private final ObjectMapper objectMapper;
+    private final CustomerRoleFacade customerRoleFacade;
+    private final TransferFacade transferFacade;
 
     @Autowired
-    public TransferControllerTest(MockMvc mockMvc, CustomerFacade customerFacade, ObjectMapper objectMapper, CustomerMapper customerMapper, TransferMapper transferMapper, CustomerRoleFacade customerRoleFacade, TransferFacade transferFacade) {
+    public TransferControllerTest(MockMvc mockMvc,
+                                  CustomerFacade customerFacade,
+                                  ObjectMapper objectMapper,
+                                  CustomerRoleFacade customerRoleFacade,
+                                  TransferFacade transferFacade) {
         this.mockMvc = mockMvc;
         this.customerFacade = customerFacade;
         this.objectMapper = objectMapper;
-        this.customerMapper = customerMapper;
-        this.transferMapper = transferMapper;
         this.customerRoleFacade = customerRoleFacade;
         this.transferFacade = transferFacade;
     }

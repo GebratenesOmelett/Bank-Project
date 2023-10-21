@@ -30,14 +30,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class CustomerControllerTest {
 
 
-    private MockMvc mockMvc;
-    private CustomerFacade customerFacade;
-    private ObjectMapper objectMapper;
-    private CustomerRoleRepository roleRepository;
+    private final MockMvc mockMvc;
+    private final CustomerFacade customerFacade;
+    private final ObjectMapper objectMapper;
+    private final CustomerRoleRepository roleRepository;
 
 
     @Autowired
-    public CustomerControllerTest(MockMvc mockMvc, CustomerFacade customerFacade, ObjectMapper objectMapper, CustomerRoleRepository roleRepository) {
+    public CustomerControllerTest(MockMvc mockMvc,
+                                  CustomerFacade customerFacade,
+                                  ObjectMapper objectMapper,
+                                  CustomerRoleRepository roleRepository) {
         this.mockMvc = mockMvc;
         this.customerFacade = customerFacade;
         this.objectMapper = objectMapper;

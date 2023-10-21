@@ -7,7 +7,6 @@ import com.example.bankbackend.customer.dto.CustomerLoginResponseDto;
 import com.example.bankbackend.customer.exceptions.CustomerEmailAlreadyExistException;
 import com.example.bankbackend.customer.exceptions.CustomerNotEnoughFundsException;
 import com.example.bankbackend.customer.exceptions.CustomerNotFoundException;
-import com.example.bankbackend.transfer.TransferQueryRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
