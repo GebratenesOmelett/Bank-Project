@@ -1,5 +1,5 @@
-# Bank Application
-Desktop bank app created with Angular, Spring Boot and MySql. It's main purpose is to simulate bank operations.
+# Bank Application 
+Desktop bank app created with Angular, Spring Boot and MySql. It's main purpose is to simulate bank operations. 
 
 ## Technologies
 * Bootstrap 5
