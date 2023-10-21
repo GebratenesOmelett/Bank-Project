@@ -13,9 +13,7 @@ class CustomerConfiguration {
     CustomerFacade customerFacade(CustomerRepository customerRepository,
                                   CustomerQueryRepository customerQueryRepository,
                                   CustomerRoleFacade customerRoleFacade,
-                                  CustomerMapper customerMapper,
-                                  TransferQueryRepository transferQueryRepository,
-                                  TransferMapper transferMapper) {
+                                  CustomerMapper customerMapper) {
         return new CustomerFacade(
                 customerRepository,
                 customerQueryRepository,
@@ -23,7 +21,12 @@ class CustomerConfiguration {
                 new CustomerFactory(customerRoleFacade,
                         new BCryptPasswordEncoder()),
                 new BCryptPasswordEncoder(),
-                customerMapper,
-                transferQueryRepository);
+                customerMapper);
+    }
+    @Bean
+    CustomerRoleFacade customerRoleFacade(CustomerRoleRepository customerRoleRepository) {
+        return new CustomerRoleFacade(customerRoleRepository,
+                new CustomerRoleFactory());
+
     }
 }

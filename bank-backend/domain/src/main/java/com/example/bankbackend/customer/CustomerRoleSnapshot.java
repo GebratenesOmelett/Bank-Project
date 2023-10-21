@@ -15,6 +15,9 @@ class CustomerRoleSnapshot {
         this.id = id;
         this.role = role;
     }
+    CustomerRoleSnapshot(final String role) {
+        this.role = role;
+    }
 
     int getId() {
         return id;

@@ -18,7 +18,6 @@ class CustomerFactory {
     }
 
     Customer from(CustomerCreateDto customerDto) {
-
         return attachDefaultRole(Customer.restore(CustomerSnapshot.builder()
                 .firstName(customerDto.getFirstName())
                 .lastName(customerDto.getLastName())

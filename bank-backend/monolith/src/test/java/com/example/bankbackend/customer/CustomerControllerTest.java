@@ -1,6 +1,8 @@
 package com.example.bankbackend.customer;
 
 import com.example.bankbackend.customer.dto.CustomerCreateDto;
+import com.example.bankbackend.customer.dto.CustomerLoginDto;
+import com.example.bankbackend.customer.exceptions.CustomerNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,8 +53,8 @@ class CustomerControllerTest {
     }
 
     @Test
-    @DisplayName("getShouldReturnCustomer")
-    void get() throws Exception {
+    @DisplayName("getShouldReturnCustomerEmail")
+    void getById() throws Exception {
         CustomerCreateDto customerCreateDto = new CustomerCreateDto(
                 "Pieter",
                 "Bark",
@@ -64,7 +66,7 @@ class CustomerControllerTest {
 
         Assertions.assertNotNull(customerFacade.getById(1));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/customers/{id}", 1))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/customers/id/{id}", 1))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.firstName", is("Pieter")))
@@ -74,10 +76,39 @@ class CustomerControllerTest {
     }
 
     @Test
-    @DisplayName("getShouldReturnCustomerNotFoundException")
-    void getCustomerNotFoundException() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/customers/{id}", 1))
-                .andExpect(result -> Assertions.assertEquals("There is no customer with id : 1", result.getResolvedException().getMessage()))
+    @DisplayName("getByIdShouldReturnCustomerNotFoundException")
+    void getCustomerByIdNotFoundException() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/customers/id/{id}", 1))
+                .andExpect(result -> Assertions.assertEquals("There is no customer with : 1", result.getResolvedException().getMessage()))
+                .andExpect(status().is4xxClientError()).andReturn();
+    }
+    @Test
+    @DisplayName("getShouldReturnCustomerByEmail")
+    void getByEmail() throws Exception {
+        CustomerCreateDto customerCreateDto = new CustomerCreateDto(
+                "Pieter",
+                "Bark",
+                "testPassword",
+                "testPassword",
+                "Pieter@gmail.com"
+        );
+        customerFacade.create(customerCreateDto);
+
+        Assertions.assertNotNull(customerFacade.getByEmail(customerCreateDto.getEmail()));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/customers/email/{email}", "Pieter@gmail.com"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.firstName", is("Pieter")))
+                .andExpect(jsonPath("$.lastName", is("Bark")))
+                .andExpect(jsonPath("$.email", is("Pieter@gmail.com")))
+                .andExpect(status().isOk()).andReturn();
+    }
+    @Test
+    @DisplayName("getByEmailShouldReturnCustomerNotFoundException")
+    void getCustomerByEmailNotFoundException() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/customers/email/{email}", "Pieter@gmail.com"))
+                .andExpect(result -> Assertions.assertEquals("There is no customer with : Pieter@gmail.com", result.getResolvedException().getMessage()))
                 .andExpect(status().is4xxClientError()).andReturn();
     }
 
@@ -100,7 +131,7 @@ class CustomerControllerTest {
                 "testPassword",
                 "Pieter@gmail.com"
         );
-        this.mockMvc.perform(post("/customers")
+        this.mockMvc.perform(post("/api/customers")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customerCreateDto)))
                 .andExpect(status().is2xxSuccessful()).andReturn();
@@ -137,7 +168,7 @@ class CustomerControllerTest {
                 "testPassword",
                 "Pieter@gmail.com"
         );
-        this.mockMvc.perform(post("/customers")
+        this.mockMvc.perform(post("/api/customers")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customerCreateDtoSecond)))
                 .andExpect(result -> Assertions.assertEquals("Customer with that email already exists: Pieter@gmail.com", result.getResolvedException().getMessage()))
@@ -154,10 +185,72 @@ class CustomerControllerTest {
                 "wrongPassword",
                 "Pieter@gmail.com"
         );
-        this.mockMvc.perform(post("/customers")
+        this.mockMvc.perform(post("/api/customers")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customerCreateDtoSecond)))
                 .andExpect(result -> Assertions.assertEquals("Passwords are not the same", result.getResolvedException().getMessage()))
                 .andExpect(status().is4xxClientError()).andReturn();
+    }
+    @Test
+    @DisplayName("existShouldReturnTrue")
+    void existTrue() throws Exception {
+        CustomerCreateDto customerCreateDto = new CustomerCreateDto(
+                "Pieter",
+                "Bark",
+                "testPassword",
+                "testPassword",
+                "Pieter@gmail.com"
+        );
+        customerFacade.create(customerCreateDto);
+
+        Assertions.assertNotNull(customerFacade.getByEmail(customerCreateDto.getEmail()));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/customers/exist/{email}", "Pieter@gmail.com"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().string("true"))
+                .andExpect(status().isOk()).andReturn();
+    }
+    @Test
+    @DisplayName("existShouldReturnFalse")
+    void existFalse() throws Exception {
+        Assertions.assertThrows(CustomerNotFoundException.class, () -> customerFacade.getByEmail("Pieter@gmail.com"));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/customers/exist/{email}", "Pieter@gmail.com"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().string("false"))
+                .andExpect(status().isOk()).andReturn();
+    }
+    @Test
+    @DisplayName("loginShouldReturnSuccess")
+    void loginSuccess() throws Exception {
+        CustomerLoginDto customerLoginDto = new CustomerLoginDto("Pieter@gmail.com", "testPassword");
+
+        CustomerCreateDto customerCreateDto = new CustomerCreateDto(
+                "Pieter",
+                "Bark",
+                "testPassword",
+                "testPassword",
+                "Pieter@gmail.com"
+        );
+        customerFacade.create(customerCreateDto);
+
+        this.mockMvc.perform(post("/api/customers/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(customerLoginDto)))
+                .andExpect(jsonPath("$.message", is("Login Succeed")))
+                .andExpect(jsonPath("$.status", is(true)))
+                .andExpect(status().is2xxSuccessful()).andReturn();
+    }
+    @Test
+    @DisplayName("loginShouldReturnFailed")
+    void loginFailed() throws Exception {
+        CustomerLoginDto customerLoginDto = new CustomerLoginDto("Pieter@gmail.com", "testPassword");
+
+        this.mockMvc.perform(post("/api/customers/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(customerLoginDto)))
+                .andExpect(jsonPath("$.message", is("Login Failed")))
+                .andExpect(jsonPath("$.status", is(false)))
+                .andExpect(status().is2xxSuccessful()).andReturn();
     }
 }

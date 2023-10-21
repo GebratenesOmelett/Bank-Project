@@ -4,6 +4,7 @@ import com.example.bankbackend.customer.CustomerFacade;
 import com.example.bankbackend.transfer.dto.TransferCreateDto;
 import com.example.bankbackend.transfer.dto.TransferDto;
 import com.example.bankbackend.transfer.exceptions.TransferNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -27,18 +28,21 @@ public class TransferFacade {
         this.customerFacade = customerFacade;
         this.transferMapper = transferMapper;
     }
-
+    @Transactional
     public TransferDto getDtoById(int id) {
         return transferQueryRepository.findDtoById(id)
                 .orElseThrow(() -> new TransferNotFoundException(id));
 
     }
+
     public Set<TransferDto> getDtoByReceiverId(int id) {
         return transferQueryRepository.findDtoByReceiverId(id)
                 .orElseThrow(() -> new TransferNotFoundException(id));
 
     }
-    public List<TransferDto> getCustomerTransfers(String email){
+
+    public List<TransferDto> getCustomerTransfers(String email) {
+         customerFacade.getByEmail(email);
         return transferQueryRepository.findCustomerTransfers(email)
                 .orElseThrow(() -> new TransferNotFoundException(email))
                 .stream()
@@ -51,11 +55,8 @@ public class TransferFacade {
         return transferMapper.toTransferDto(transferRepository.save(transferFactory.from(toCreate)).getSnapshot());
     }
 
-    public void exchangeFunds(TransferCreateDto toCreate){
-        customerFacade.addFunds(toCreate.getReceiverId(), toCreate.getFunds());
-        customerFacade.subtractFunds(toCreate.getLoggedCustomerId(), toCreate.getFunds());
+    public void exchangeFunds(TransferCreateDto toCreate) {
+        customerFacade.updateFunds(toCreate.getReceiverId(), toCreate.getLoggedCustomerId(), toCreate.getFunds());
     }
-
-
 
 }

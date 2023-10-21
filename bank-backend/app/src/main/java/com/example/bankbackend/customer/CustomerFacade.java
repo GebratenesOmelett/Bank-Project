@@ -27,8 +27,7 @@ public class CustomerFacade {
                           CustomerRoleFacade roleFacade,
                           CustomerFactory customerFactory,
                           PasswordEncoder encoder,
-                          CustomerMapper customerMapper,
-                          TransferQueryRepository transferQueryRepository) {
+                          CustomerMapper customerMapper) {
         this.customerRepository = customerRepository;
         this.customerQueryRepository = customerQueryRepository;
         this.roleFacade = roleFacade;
@@ -52,6 +51,7 @@ public class CustomerFacade {
         return customerRepository.findCustomerById(customerId)
                 .orElseThrow(() -> new CustomerNotFoundException(customerId));
     }
+    @Transactional
     public Customer getByEmail(String email){
         return  customerQueryRepository.findCustomerByEmail(email)
                 .orElseThrow(() -> new CustomerNotFoundException(email));
@@ -67,23 +67,28 @@ public class CustomerFacade {
     public void update(CustomerSnapshot customerSnapshot) {
         customerRepository.save(Customer.restore(customerSnapshot));
     }
-
-
-    public void addFunds(int id, BigDecimal funds) {
-        CustomerSnapshot receiverCustomer = customerRepository.findCustomerById(id)
-                .orElseThrow(() -> new CustomerNotFoundException(id)).getSnapshot();
-        receiverCustomer.setFunds(receiverCustomer.getFunds().add(funds));
-        update(receiverCustomer);
+    public void updateFunds(int idReceiver,int idAddressee, BigDecimal funds){
+        CustomerSnapshot customerReceiver = addFunds(idReceiver, funds);
+        CustomerSnapshot customerAddressee = subtractFunds(idAddressee, funds);
+        update(customerAddressee);
+        update(customerReceiver);
     }
 
-    public void subtractFunds(int id, BigDecimal funds) {
-        CustomerSnapshot loggedCustomer = customerRepository.findCustomerById(id)
-                .orElseThrow(() -> new CustomerNotFoundException(id)).getSnapshot();
+
+    public CustomerSnapshot addFunds(int id, BigDecimal funds) {
+        CustomerSnapshot receiverCustomer = getById(id).getSnapshot();
+        receiverCustomer.setFunds(receiverCustomer.getFunds().add(funds));
+        return receiverCustomer;
+
+    }
+
+    public CustomerSnapshot subtractFunds(int id, BigDecimal funds) {
+        CustomerSnapshot loggedCustomer = getById(id).getSnapshot();
         if (loggedCustomer.getFunds().compareTo(funds) < 0) {
             throw new CustomerNotEnoughFundsException();
         }
         loggedCustomer.setFunds(loggedCustomer.getFunds().subtract(funds));
-        update(loggedCustomer);
+        return loggedCustomer;
     }
 
     public CustomerLoginResponseDto loginMessage(CustomerLoginDto customerLoginDto) {

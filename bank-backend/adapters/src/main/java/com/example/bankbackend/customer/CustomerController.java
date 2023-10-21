@@ -16,9 +16,11 @@ class CustomerController {
 
 
     CustomerFacade customerFacade;
+    CustomerRoleFacade customerRoleFacade;
 
-    public CustomerController(CustomerFacade customerFacade) {
+    public CustomerController(CustomerFacade customerFacade, CustomerRoleFacade customerRoleFacade) {
         this.customerFacade = customerFacade;
+        this.customerRoleFacade = customerRoleFacade;
     }
 
     @GetMapping("/id/{id}")
@@ -44,7 +46,7 @@ class CustomerController {
 
     @PostMapping("/login")
     ResponseEntity<CustomerLoginResponseDto> loginCustomerMessage(@RequestBody CustomerLoginDto customerloginDto){
-        CustomerLoginResponseDto customerLoginResponseDto = customerFacade.loginMessage(customerloginDto);
-        return new ResponseEntity<>(customerLoginResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>(customerFacade.loginMessage(customerloginDto), HttpStatus.OK);
     }
+
 }
