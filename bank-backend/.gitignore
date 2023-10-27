@@ -1,5 +1,8 @@
 HELP.md
-target/
+adapters/target/
+app/target/
+domain/target/
+monolith/target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
