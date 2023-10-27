@@ -37,6 +37,7 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+					<mainClass>com.example.bankbackend.BankBackendApplication</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>

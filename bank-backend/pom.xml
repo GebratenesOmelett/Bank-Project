@@ -16,4 +16,5 @@
 		<module>app</module>
 		<module>adapters</module>
 	</modules>
+
 </project>
