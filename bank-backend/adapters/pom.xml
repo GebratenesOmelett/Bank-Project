@@ -13,18 +13,20 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>adapters</name>
 	<description>adapters-bank-backend</description>
+
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.example</groupId>
-			<artifactId>domain</artifactId>
+			<artifactId>app</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.example</groupId>
-			<artifactId>app</artifactId>
+			<artifactId>domain</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -54,5 +56,4 @@
 			<artifactId>h2</artifactId>
 		</dependency>
     </dependencies>
-
 </project>
