@@ -28,7 +28,7 @@ class TransferFactory {
                 .receiverId(transferCreateDto.getReceiverId())
                 .customerId(customerMapper.toSimpleCustomerEntity(customerFacade.getById(transferCreateDto.getLoggedCustomerId())).getSnapshot())
                 .transferDate(LocalDate.now())
-                .transferTime(LocalTime.now())
+                .transferTime(LocalTime.of(LocalTime.now().getHour(), LocalTime.now().getMinute()))
                 .build());
     }
 }
