@@ -3,7 +3,7 @@ adapters/target/
 app/target/
 domain/target/
 monolith/target/
-adapters/src/main/resources/application-prod.properties
+bank-backend/adapters/src/main/resources/application-prod.properties
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
