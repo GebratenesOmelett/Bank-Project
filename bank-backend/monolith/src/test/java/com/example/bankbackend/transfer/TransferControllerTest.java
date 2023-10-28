@@ -284,13 +284,14 @@ class TransferControllerTest {
 
         this.mockMvc.perform(post("/api/transfers")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(transferCreateDto)))
+                        .content(objectMapper.writeValueAsString(transferCreateDtoSecond)))
                 .andExpect(status().is2xxSuccessful()).andReturn();
 
         this.mockMvc.perform(post("/api/transfers")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(transferCreateDtoSecond)))
+                        .content(objectMapper.writeValueAsString(transferCreateDto)))
                 .andExpect(status().is2xxSuccessful()).andReturn();
+
 
         Assertions.assertNotNull(customerFacade.getByEmail("Pieter@gmail.com"));
         Assertions.assertNotNull(customerFacade.getByEmail("Molik@gmail.com"));
