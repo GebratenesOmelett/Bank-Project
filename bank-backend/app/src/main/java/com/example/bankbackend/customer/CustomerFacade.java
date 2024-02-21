@@ -1,5 +1,6 @@
 package com.example.bankbackend.customer;
 
+import com.example.bankbackend.config.JwtService;
 import com.example.bankbackend.customer.dto.CustomerCreateDto;
 import com.example.bankbackend.customer.dto.CustomerDto;
 import com.example.bankbackend.customer.dto.CustomerLoginDto;
@@ -7,18 +8,22 @@ import com.example.bankbackend.customer.dto.CustomerLoginResponseDto;
 import com.example.bankbackend.customer.exceptions.CustomerEmailAlreadyExistException;
 import com.example.bankbackend.customer.exceptions.CustomerNotEnoughFundsException;
 import com.example.bankbackend.customer.exceptions.CustomerNotFoundException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
 public class CustomerFacade {
-    CustomerRepository customerRepository;
-    CustomerQueryRepository customerQueryRepository;
-    CustomerRoleFacade roleFacade;
-    CustomerFactory customerFactory;
-    PasswordEncoder encoder;
-    CustomerMapper customerMapper;
+    private final CustomerRepository customerRepository;
+    private final CustomerQueryRepository customerQueryRepository;
+    private final CustomerRoleFacade roleFacade;
+    private final CustomerFactory customerFactory;
+    private final PasswordEncoder encoder;
+    private final CustomerMapper customerMapper;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
 
     public CustomerFacade(CustomerRepository customerRepository,
@@ -26,13 +31,15 @@ public class CustomerFacade {
                           CustomerRoleFacade roleFacade,
                           CustomerFactory customerFactory,
                           PasswordEncoder encoder,
-                          CustomerMapper customerMapper) {
+                          CustomerMapper customerMapper, JwtService jwtService, AuthenticationManager authenticationManager) {
         this.customerRepository = customerRepository;
         this.customerQueryRepository = customerQueryRepository;
         this.roleFacade = roleFacade;
         this.customerFactory = customerFactory;
         this.encoder = encoder;
         this.customerMapper = customerMapper;
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
     }
 
     public CustomerDto getDtoById(int customerId) {
@@ -40,19 +47,21 @@ public class CustomerFacade {
                 .orElseThrow(() -> new CustomerNotFoundException(customerId));
     }
 
-    public CustomerDto getDtoByEmail(String email){
+    public CustomerDto getDtoByEmail(String email) {
         return customerQueryRepository.findDtoByEmail(email)
                 .orElseThrow(() -> new CustomerNotFoundException(email));
     }
+
 
     @Transactional
     public Customer getById(int customerId) {
         return customerRepository.findCustomerById(customerId)
                 .orElseThrow(() -> new CustomerNotFoundException(customerId));
     }
+
     @Transactional
-    public Customer getByEmail(String email){
-        return  customerQueryRepository.findCustomerByEmail(email)
+    public Customer getByEmail(String email) {
+        return customerQueryRepository.findCustomerByEmail(email)
                 .orElseThrow(() -> new CustomerNotFoundException(email));
     }
 
@@ -66,7 +75,8 @@ public class CustomerFacade {
     public void update(CustomerSnapshot customerSnapshot) {
         customerRepository.save(Customer.restore(customerSnapshot));
     }
-    public void updateFunds(int idReceiver,int idAddressee, BigDecimal funds){
+
+    public void updateFunds(int idReceiver, int idAddressee, BigDecimal funds) {
         CustomerSnapshot customerReceiver = addFunds(idReceiver, funds);
         CustomerSnapshot customerAddressee = subtractFunds(idAddressee, funds);
         update(customerAddressee);
@@ -90,15 +100,35 @@ public class CustomerFacade {
         return loggedCustomer;
     }
 
-    public CustomerLoginResponseDto loginMessage(CustomerLoginDto customerLoginDto) {
-        if (!customerExists(customerLoginDto.getEmail())) {
-            return new CustomerLoginResponseDto("Login Failed", false);
-        }
-        if (!encoder.matches(customerLoginDto.getPassword(), getByEmail(customerLoginDto.getEmail()).getSnapshot().getPassword())) {
-            return new CustomerLoginResponseDto("Login Failed", false);
-        }
+//    public CustomerLoginResponseDto login(CustomerLoginDto customerLoginDto) {
+//        if (!customerExists(customerLoginDto.getEmail())) {
+//            return new CustomerLoginResponseDto("Login Failed", false, id, firstName, lastName, email, funds, token, expiresIn);
+//        }
+//        if (!encoder.matches(customerLoginDto.getPassword(), getByEmail(customerLoginDto.getEmail()).getSnapshot().getPassword())) {
+//            return new CustomerLoginResponseDto("Login Failed", false, id, firstName, lastName, email, funds, token, expiresIn);
+//        }
+//
+//        return new CustomerLoginResponseDto("Login Succeed", true, id, firstName, lastName, email, funds, token, expiresIn);
+//    }
 
-        return new CustomerLoginResponseDto("Login Succeed", true);
+    public CustomerLoginResponseDto login(CustomerLoginDto customerLoginDto) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        customerLoginDto.getEmail(),
+                        customerLoginDto.getPassword()
+                )
+        );
+        CustomerSnapshot customer = getByEmail(customerLoginDto.getEmail()).getSnapshot();
+        var jwtToken = jwtService.generateToken(customer);
+        return CustomerLoginResponseDto.builder()
+                .id(customer.getId())
+                .firstName(customer.getFirstName())
+                .email(customer.getEmail())
+                .lastName(customer.getLastName())
+                .funds(customer.getFunds())
+                .token(jwtToken)
+                .expiresIn(Integer.toString(JwtService.expiration))
+                .build();
     }
 
 

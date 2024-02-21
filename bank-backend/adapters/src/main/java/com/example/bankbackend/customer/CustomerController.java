@@ -43,10 +43,9 @@ class CustomerController {
         }
         return new ResponseEntity<>(customerFacade.create(toCreate), HttpStatus.CREATED);
     }
-
     @PostMapping("/login")
-    ResponseEntity<CustomerLoginResponseDto> loginCustomerMessage(@RequestBody CustomerLoginDto customerloginDto){
-        return new ResponseEntity<>(customerFacade.loginMessage(customerloginDto), HttpStatus.OK);
+    ResponseEntity<CustomerLoginResponseDto> login(@RequestBody CustomerLoginDto customerloginDto){
+        return new ResponseEntity<>(customerFacade.login(customerloginDto), HttpStatus.OK);
     }
 
 }

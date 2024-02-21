@@ -3,15 +3,22 @@ package com.example.bankbackend.customer;
 import com.example.bankbackend.transfer.dto.SimpleTransferQueryEntitySnapshot;
 
 import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Set;
 
 @Builder
 @ToString
-class CustomerSnapshot {
+@Setter
+@Getter
+class CustomerSnapshot implements UserDetails {
 
     private int id;
     private String firstName;
@@ -26,7 +33,9 @@ class CustomerSnapshot {
     public CustomerSnapshot() {
     }
 
-    public CustomerSnapshot(int id, String firstName, String lastName, BigDecimal funds, String password, String email, Set<CustomerRoleSnapshot> roleSet, Set<SimpleTransferQueryEntitySnapshot> transferSet, boolean enabled) {
+    public CustomerSnapshot(int id, String firstName, String lastName, BigDecimal funds, String password, String email,
+                            Set<CustomerRoleSnapshot> roleSet, Set<SimpleTransferQueryEntitySnapshot> transferSet,
+                            boolean enabled) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -37,75 +46,28 @@ class CustomerSnapshot {
         this.transferSet = transferSet;
         this.enabled = enabled;
     }
-
-    int getId() {
-        return id;
-    }
-
-    String getFirstName() {
-        return firstName;
-    }
-
-    String getLastName() {
-        return lastName;
-    }
-
-    BigDecimal getFunds() {
-        return funds;
-    }
-
-    String getPassword() {
-        return password;
-    }
-
-    String getEmail() {
-        return email;
-    }Set<CustomerRoleSnapshot> getRoleSet() {
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         return roleSet;
     }
-
-    Set<SimpleTransferQueryEntitySnapshot> getTransferSet() {
-        return transferSet;
+    @Override
+    public String getUsername() {
+        return email;
     }
 
-    boolean isEnabled() {
-        return enabled;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    void setId(int id) {
-        this.id = id;
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-    void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    void setFunds(BigDecimal funds) {
-        this.funds = funds;
-    }
-
-    void setPassword(String password) {
-        this.password = password;
-    }
-
-    void setEmail(String email) {
-        this.email = email;
-    }
-
-    void setRoleSet(Set<CustomerRoleSnapshot> roleSet) {
-        this.roleSet = roleSet;
-    }
-
-    void setTransferSet(Set<SimpleTransferQueryEntitySnapshot> transferSet) {
-        this.transferSet = transferSet;
-    }
-
-    void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
     void addRole(CustomerRoleSnapshot role){

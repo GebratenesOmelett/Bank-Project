@@ -37,5 +37,9 @@ class CustomerQueryRepositoryImpl implements CustomerQueryRepository{
         return repository.findCustomerByEmail(email)
                 .map(Customer::restore);
     }
+    @Override
+    public Optional<CustomerSnapshot> findCustomerSnapshotByEmail(String email) {
+        return repository.findCustomerByEmail(email);
+    }
 }
 

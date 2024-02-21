@@ -1,9 +1,10 @@
 package com.example.bankbackend.customer;
 
 import lombok.ToString;
+import org.springframework.security.core.GrantedAuthority;
 
 @ToString
-class CustomerRoleSnapshot {
+class CustomerRoleSnapshot implements GrantedAuthority {
 
     private int id;
     private String role;
@@ -33,5 +34,10 @@ class CustomerRoleSnapshot {
 
     void setRole(String role) {
         this.role = role;
+    }
+
+    @Override
+    public String getAuthority() {
+        return role;
     }
 }

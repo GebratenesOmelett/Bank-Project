@@ -53,7 +53,7 @@ class Customer {
         this.transferSet = transferSet;
         this.enabled = enabled;
     }
-    CustomerSnapshot getSnapshot(){
+    public CustomerSnapshot getSnapshot(){
         return CustomerSnapshot.builder()
                 .id(id)
                 .firstName(firstName)

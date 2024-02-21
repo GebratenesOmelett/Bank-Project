@@ -1,22 +1,31 @@
 package com.example.bankbackend.customer.dto;
 
+import lombok.Builder;
+import lombok.Getter;
+
+import java.math.BigDecimal;
+
+@Getter
+@Builder
 public class CustomerLoginResponseDto {
-    final String message;
-    final boolean status;
+    final Integer id;
+    final String firstName;
+    final String lastName;
+    final String email;
+    final BigDecimal funds;
+    final String token;
+    final String expiresIn;
 
 
-    public CustomerLoginResponseDto(String message, boolean status) {
-        this.message = message;
-        this.status = status;
+
+    public CustomerLoginResponseDto(String message, boolean status, Integer id, String firstName, String lastName, String email, BigDecimal funds, String token, String expiresIn) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.funds = funds;
+        this.token = token;
+        this.expiresIn = expiresIn;
     }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public boolean isStatus() {
-        return status;
-    }
-
 
 }

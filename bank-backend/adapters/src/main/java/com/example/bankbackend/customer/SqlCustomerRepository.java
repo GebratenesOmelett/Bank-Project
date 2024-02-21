@@ -7,7 +7,7 @@ import java.util.Optional;
 
 interface SqlCustomerRepository extends JpaRepository<CustomerSnapshot, Integer> {
     Optional<CustomerSnapshot> findCustomerById(int id);
-
+    Optional<CustomerSnapshot> findCustomerByEmail(String email);
     CustomerSnapshot save(CustomerSnapshot entity);
 }
 
@@ -27,11 +27,12 @@ class CustomerRepositoryImpl implements CustomerRepository {
         return repository.findCustomerById(id)
                 .map(Customer::restore);
     }
-
     @Override
     public Customer save(Customer entity) {
         return Customer.restore(repository.save(entity.getSnapshot()));
     }
+
+
 
 
 }
