@@ -5,6 +5,7 @@ import {LoginService} from "./login.service";
 import {BehaviorSubject, exhaustMap, Observable, Subject, take, tap} from "rxjs";
 import {Transfer} from "../common/transfer";
 import {TransferCreate} from "../common/transfer-create";
+import {CustomerReceived} from "../common/customer-received";
 
 @Injectable({
   providedIn: 'root'
@@ -24,22 +25,11 @@ export class RequestService {
   register(customerCreate: CustomerCreate) {
     return this.httpClient.post(this.registerUrl, customerCreate);
   }
-
-
-
-  // getTransfersByEmail(email: string
-  // ) {
-  //   this.axiosService.request(
-  //     "GET",
-  //     `/api/transfers/email/${email}`,
-  //     null
-  //   ).then(response => {
-  //       this.transferReceived.next(response.data)
-  //     }
-  //   );
-  // }
+  logout() {
+    this.transferReceivedList = new BehaviorSubject<Transfer[]>(null!);
+  }
   getTransfersByEmail(): Observable<any> {
-    return this.loginService.customerReceived.pipe(take(1), exhaustMap(customer => {
+    return this.loginService.customerReceived.pipe(take(2), exhaustMap(customer => {
       let headers_object = new HttpHeaders().set("Authorization", "Bearer " + customer.token);
       let finalUrl = this.getTransfersUrl + customer.email;
       return this.httpClient.get<Transfer[]>(finalUrl, {headers: headers_object}).pipe(tap(transfers => {
@@ -51,7 +41,7 @@ export class RequestService {
   postTransfer(transferCreate: TransferCreate): Observable<any> {
     return this.loginService.customerReceived.pipe(take(1), exhaustMap(customer => {
       let headers_object = new HttpHeaders().set("Authorization", "Bearer " + customer.token);
-      return this.httpClient.post<Transfer>(this.postTransferUrl, {headers: headers_object});
+      return this.httpClient.post<Transfer>(this.postTransferUrl,transferCreate, {headers: headers_object});
     }));
   }
   addTransfer(transfer : Transfer){

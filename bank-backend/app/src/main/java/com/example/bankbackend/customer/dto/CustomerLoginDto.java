@@ -1,5 +1,8 @@
 package com.example.bankbackend.customer.dto;
 
+import lombok.Getter;
+
+@Getter
 public class CustomerLoginDto {
     private final String email;
     private final String password;
@@ -8,11 +11,4 @@ public class CustomerLoginDto {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
 }

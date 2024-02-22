@@ -38,7 +38,7 @@
         <property name="funds" type="java.math.BigDecimal" column="funds"></property>
         <property name="password" type="string" column="password"></property>
         <property name="email" type="string" column="email"></property>
-        <set name="roleSet" table="ROLE_USER" cascade="merge" >
+        <set name="roleSet" table="ROLE_USER" cascade="merge" lazy="false">
             <key column="user_id"></key>
             <many-to-many column="role_id" class="com.example.bankbackend.customer.CustomerRoleSnapshot"></many-to-many>
         </set>

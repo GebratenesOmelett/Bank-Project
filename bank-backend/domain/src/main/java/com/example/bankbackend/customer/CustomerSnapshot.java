@@ -33,8 +33,14 @@ class CustomerSnapshot implements UserDetails {
     public CustomerSnapshot() {
     }
 
-    public CustomerSnapshot(int id, String firstName, String lastName, BigDecimal funds, String password, String email,
-                            Set<CustomerRoleSnapshot> roleSet, Set<SimpleTransferQueryEntitySnapshot> transferSet,
+    public CustomerSnapshot(int id,
+                            String firstName,
+                            String lastName,
+                            BigDecimal funds,
+                            String password,
+                            String email,
+                            Set<CustomerRoleSnapshot> roleSet,
+                            Set<SimpleTransferQueryEntitySnapshot> transferSet,
                             boolean enabled) {
         this.id = id;
         this.firstName = firstName;
@@ -67,6 +73,10 @@ class CustomerSnapshot implements UserDetails {
 
     @Override
     public boolean isCredentialsNonExpired() {
+        return true;
+    }
+    @Override
+    public boolean isEnabled() {
         return true;
     }
 

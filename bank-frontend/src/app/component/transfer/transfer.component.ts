@@ -90,23 +90,9 @@ export class TransferComponent implements OnInit {
       return
     }
     let task = new TransferCreate(this.getTitle,this.getFunds, this.customerId, this.getReceiverId)
-    // this.axiosService.request(
-    //   "POST",
-    //   "/api/transfers",
-    //   {
-    //     title: this.getTitle,
-    //     funds: this.getFunds,
-    //     loggedCustomerId: this.customer.id,
-    //     receiverId: this.getReceiverId,
-    //   }
-    // ).then(() => {
-    //     this.router.navigateByUrl("/main")
-    //     this.fullRefresh()
-    //   }
-    // ).catch(() =>
-    //   this.customerDoesExist = true);
     this.requestService.postTransfer(task).subscribe(transfer=>{
       this.requestService.addTransfer(transfer);
+      this.router.navigateByUrl("/main")
     })
   }
 }

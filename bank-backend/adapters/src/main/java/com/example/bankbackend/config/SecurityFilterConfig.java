@@ -15,7 +15,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 class SecurityFilterConfig {
-//    private final CustomerUserDetailService customerUserDetailService;
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
@@ -32,7 +31,7 @@ class SecurityFilterConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(configurer ->
                         configurer
-                                .requestMatchers("/**").permitAll()
+                                .requestMatchers("/api/customers", "/api/customers/login").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

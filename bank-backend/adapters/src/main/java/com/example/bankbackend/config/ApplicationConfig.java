@@ -1,6 +1,7 @@
 package com.example.bankbackend.config;
 
 import com.example.bankbackend.customer.CustomerQueryRepository;
+import com.example.bankbackend.customer.exceptions.CustomerNotFoundException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,7 +23,7 @@ public class ApplicationConfig {
     @Bean
     public UserDetailsService userDetailsService(){
         return username -> customerQueryRepository.findCustomerSnapshotByEmail(username)
-                .orElseThrow(() -> new RuntimeException("sfasfa"));
+                .orElseThrow(() -> new CustomerNotFoundException(username));
     }
     @Bean
     public PasswordEncoder passwordEncoder() {

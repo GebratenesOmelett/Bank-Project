@@ -122,7 +122,6 @@ public class CustomerFacade {
 //        return new CustomerLoginResponseDto("Login Succeed", true, id, firstName, lastName, email, funds, token, expiresIn);
 //    }
 
-    @Transactional
     public CustomerAuthDto login(CustomerLoginDto customerLoginDto) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -131,9 +130,7 @@ public class CustomerFacade {
                 )
         );
         CustomerSnapshot customer = getByEmail(customerLoginDto.getEmail()).getSnapshot();
-        System.out.println(customer.getEmail());
         var jwtToken = jwtService.generateToken(customer);
-        System.out.println(jwtToken);
         return CustomerAuthDto.builder()
                 .id(customer.getId())
                 .firstName(customer.getFirstName())

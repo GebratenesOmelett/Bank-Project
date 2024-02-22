@@ -10,23 +10,16 @@ import {CustomerLogin} from "../common/customer-login";
   providedIn: 'root'
 })
 export class LoginService {
-
   defaultBaseUrl = "http://localhost:8080";
   private loginUrl = this.defaultBaseUrl + "/api/customers/login";
-  private registerUrl = this.defaultBaseUrl + "/api/customers";
-
-  logged!: boolean;
 
   customerReceived: Subject<CustomerReceived> = new BehaviorSubject<CustomerReceived>(null!);
 
-  constructor(private httpClient: HttpClient,
-              private axiosService: AxiosService) {
+  constructor(private httpClient: HttpClient) {
   }
 
   logout() {
-    this.logged = false;
     this.customerReceived = new BehaviorSubject<CustomerReceived>(null!);
-    // this.transferReceived = new BehaviorSubject<Transfer[]>([])
   }
 
 
@@ -46,9 +39,6 @@ export class LoginService {
       })
     )
   }
-
-
-
 
 }
 

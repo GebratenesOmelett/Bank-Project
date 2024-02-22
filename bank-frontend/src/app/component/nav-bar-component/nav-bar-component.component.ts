@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {LoginService} from "../../services/login.service";
+import {RequestService} from "../../services/request.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-nav-bar-component',
@@ -8,7 +10,9 @@ import {LoginService} from "../../services/login.service";
 })
 export class NavBarComponentComponent implements OnInit{
   isAuthenticated = false;
-  constructor(public loginService: LoginService) {
+  constructor(private loginService: LoginService,
+              private requestService : RequestService,
+              private route: Router) {
   }
 
   ngOnInit(): void {
@@ -19,5 +23,8 @@ export class NavBarComponentComponent implements OnInit{
 
   logout(){
     this.loginService.logout();
+    this.requestService.logout();
+    this.route.navigate(['/home']);
+    location.reload();
   }
 }
