@@ -37,14 +37,14 @@ class CustomerController {
     }
 
     @PostMapping()
-    ResponseEntity<CustomerDto> create(@RequestBody @Valid CustomerCreateDto toCreate, BindingResult errors){
+    ResponseEntity<CustomerAuthDto> create(@RequestBody @Valid CustomerCreateDto toCreate, BindingResult errors){
         if(errors.hasErrors()){
             throw new TransferValidationException(errors);
         }
         return new ResponseEntity<>(customerFacade.create(toCreate), HttpStatus.CREATED);
     }
     @PostMapping("/login")
-    ResponseEntity<CustomerLoginResponseDto> login(@RequestBody CustomerLoginDto customerloginDto){
+    ResponseEntity<CustomerAuthDto> login(@RequestBody CustomerLoginDto customerloginDto){
         return new ResponseEntity<>(customerFacade.login(customerloginDto), HttpStatus.OK);
     }
 

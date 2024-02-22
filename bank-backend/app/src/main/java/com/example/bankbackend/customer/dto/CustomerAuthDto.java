@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Builder
-public class CustomerLoginResponseDto {
+public class CustomerAuthDto {
     final Integer id;
     final String firstName;
     final String lastName;
@@ -16,9 +16,7 @@ public class CustomerLoginResponseDto {
     final String token;
     final String expiresIn;
 
-
-
-    public CustomerLoginResponseDto(String message, boolean status, Integer id, String firstName, String lastName, String email, BigDecimal funds, String token, String expiresIn) {
+    public CustomerAuthDto(Integer id, String firstName, String lastName, String email, BigDecimal funds, String token, String expiresIn) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

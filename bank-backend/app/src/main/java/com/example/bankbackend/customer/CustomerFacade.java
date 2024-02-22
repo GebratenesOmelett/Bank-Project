@@ -4,7 +4,7 @@ import com.example.bankbackend.config.JwtService;
 import com.example.bankbackend.customer.dto.CustomerCreateDto;
 import com.example.bankbackend.customer.dto.CustomerDto;
 import com.example.bankbackend.customer.dto.CustomerLoginDto;
-import com.example.bankbackend.customer.dto.CustomerLoginResponseDto;
+import com.example.bankbackend.customer.dto.CustomerAuthDto;
 import com.example.bankbackend.customer.exceptions.CustomerEmailAlreadyExistException;
 import com.example.bankbackend.customer.exceptions.CustomerNotEnoughFundsException;
 import com.example.bankbackend.customer.exceptions.CustomerNotFoundException;
@@ -65,11 +65,22 @@ public class CustomerFacade {
                 .orElseThrow(() -> new CustomerNotFoundException(email));
     }
 
-    public CustomerDto create(CustomerCreateDto customerCreateDto) {
+    public CustomerAuthDto create(CustomerCreateDto customerCreateDto) {
         if (customerExists(customerCreateDto.getEmail())) {
             throw new CustomerEmailAlreadyExistException(customerCreateDto.getEmail());
         }
-        return customerMapper.toCustomerDto(customerRepository.save(customerFactory.from(customerCreateDto)).getSnapshot());
+        Customer customer = customerFactory.from(customerCreateDto);
+        customerRepository.save(customer);
+        var jwtToken = jwtService.generateToken(customer.getSnapshot());
+        return CustomerAuthDto.builder()
+                .id(customer.getSnapshot().getId())
+                .firstName(customer.getSnapshot().getFirstName())
+                .email(customer.getSnapshot().getEmail())
+                .lastName(customer.getSnapshot().getLastName())
+                .funds(customer.getSnapshot().getFunds())
+                .token(jwtToken)
+                .expiresIn(Integer.toString(JwtService.expiration))
+                .build();
     }
 
     public void update(CustomerSnapshot customerSnapshot) {
@@ -111,7 +122,8 @@ public class CustomerFacade {
 //        return new CustomerLoginResponseDto("Login Succeed", true, id, firstName, lastName, email, funds, token, expiresIn);
 //    }
 
-    public CustomerLoginResponseDto login(CustomerLoginDto customerLoginDto) {
+    @Transactional
+    public CustomerAuthDto login(CustomerLoginDto customerLoginDto) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         customerLoginDto.getEmail(),
@@ -119,8 +131,10 @@ public class CustomerFacade {
                 )
         );
         CustomerSnapshot customer = getByEmail(customerLoginDto.getEmail()).getSnapshot();
+        System.out.println(customer.getEmail());
         var jwtToken = jwtService.generateToken(customer);
-        return CustomerLoginResponseDto.builder()
+        System.out.println(jwtToken);
+        return CustomerAuthDto.builder()
                 .id(customer.getId())
                 .firstName(customer.getFirstName())
                 .email(customer.getEmail())

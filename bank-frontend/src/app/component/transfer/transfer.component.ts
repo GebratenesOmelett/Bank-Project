@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {AxiosService} from "../../services/axios.service";
 import {LoginService} from "../../services/login.service";
-import {CustomerReceived} from "../../common/customer-received";
 import {Router} from "@angular/router";
 import {GeneralValidation} from "../../validate/general-validation";
 import {Transfer} from "../../common/transfer";
+import {RequestService} from "../../services/request.service";
+import {TransferCreate} from "../../common/transfer-create";
 
 @Component({
   selector: 'app-transfer',
@@ -15,15 +15,16 @@ import {Transfer} from "../../common/transfer";
 export class TransferComponent implements OnInit {
 
   transferFormGroup!: FormGroup;
-  customer!: CustomerReceived;
   transferSet!: Transfer[];
   addressBookHaspMap = new Set<number>;
-
+  isAuthenticated = false;
+  customerId! : number;
+  customerFunds! : number;
   customerDoesExist!: boolean;
 
   constructor(private formBuilder: FormBuilder,
-              private axiosService: AxiosService,
               private loginService: LoginService,
+              private requestService: RequestService,
               private router: Router) {
   }
 
@@ -36,9 +37,17 @@ export class TransferComponent implements OnInit {
         }
       )
     });
-    this.loginService.customerReceived.subscribe(customer => this.customer = customer);
-    this.loginService.transferReceived.subscribe(transfer => this.transferSet = transfer);
-    this.getAddressBook()
+    this.loginService.customerReceived.subscribe(customer =>{
+      this.isAuthenticated = !!customer;
+      if(this.isAuthenticated){
+        this.customerId = customer.id
+        this.customerFunds = customer.funds;
+        this.requestService.transferReceivedList.subscribe(transfer=>{
+          this.transferSet = transfer;
+          this.getAddressBook()
+        })
+      }
+    })
   }
 
   get getTitle() {
@@ -75,31 +84,29 @@ export class TransferComponent implements OnInit {
     if (this.transferFormGroup.invalid) {
       this.transferFormGroup.markAllAsTouched();
       return
-    } else if (this.customer.id == this.getReceiverId) {
+    } else if (this.customerId == this.getReceiverId) {
       return
-    } else if (this.customer.funds < this.getFunds) {
+    } else if (this.customerFunds < this.getFunds) {
       return
     }
-    this.axiosService.request(
-      "POST",
-      "/api/transfers",
-      {
-        title: this.getTitle,
-        funds: this.getFunds,
-        loggedCustomerId: this.customer.id,
-        receiverId: this.getReceiverId,
-      }
-    ).then(() => {
-        this.router.navigateByUrl("/main")
-        this.fullRefresh()
-      }
-    ).catch(() =>
-      this.customerDoesExist = true);
+    let task = new TransferCreate(this.getTitle,this.getFunds, this.customerId, this.getReceiverId)
+    // this.axiosService.request(
+    //   "POST",
+    //   "/api/transfers",
+    //   {
+    //     title: this.getTitle,
+    //     funds: this.getFunds,
+    //     loggedCustomerId: this.customer.id,
+    //     receiverId: this.getReceiverId,
+    //   }
+    // ).then(() => {
+    //     this.router.navigateByUrl("/main")
+    //     this.fullRefresh()
+    //   }
+    // ).catch(() =>
+    //   this.customerDoesExist = true);
+    this.requestService.postTransfer(task).subscribe(transfer=>{
+      this.requestService.addTransfer(transfer);
+    })
   }
-
-  fullRefresh() {
-    this.loginService.getTransfersByEmail(this.customer.email);
-    this.loginService.getCustomerByEmail(this.customer.email);
-  }
-
 }

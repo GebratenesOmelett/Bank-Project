@@ -4,6 +4,8 @@ import {AxiosService} from "../../services/axios.service";
 import {Router} from "@angular/router";
 import {GeneralValidation} from "../../validate/general-validation";
 import {PasswordValidation} from "../../validate/password-validation";
+import {CustomerCreate} from "../../common/customer-create";
+import {RequestService} from "../../services/request.service";
 
 @Component({
   selector: 'app-registration',
@@ -16,8 +18,8 @@ export class RegistrationComponent implements OnInit {
   checkoutFormGroup!: FormGroup;
 
   constructor(private formBuilder: FormBuilder,
-              private route: Router,
-              private axiosService: AxiosService) {
+              private requestService: RequestService,
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -86,20 +88,26 @@ export class RegistrationComponent implements OnInit {
       this.checkoutFormGroup.markAllAsTouched();
       return
     }
-    this.axiosService.request(
-      "POST",
-      "/api/customers",
-      {
-        firstName: this.getFirstName,
-        lastName: this.getLastName,
-        email: this.getEmail,
-        password: this.getPassword,
-        passwordRepeat: this.getPasswordRepeat
+    let customer = new CustomerCreate(this.getFirstName, this.getLastName, this.getPassword, this.getPasswordRepeat, this.getEmail)
+    // this.axiosService.request(
+    //   "POST",
+    //   "/api/customers",
+    //   {
+    //     firstName: this.getFirstName,
+    //     lastName: this.getLastName,
+    //     email: this.getEmail,
+    //     password: this.getPassword,
+    //     passwordRepeat: this.getPasswordRepeat
+    //   }
+    // ).then(data => {
+    //   this.route.navigateByUrl("/home")
+    // }).catch(err =>{
+    // this.emailDoesExist = true;
+    // });
+    this.requestService.register(customer).subscribe({
+      next: response=>{
+        this.router.navigate(['/home'])
       }
-    ).then(data => {
-      this.route.navigateByUrl("/home")
-    }).catch(err =>{
-    this.emailDoesExist = true;
-    });
+    })
   }
 }

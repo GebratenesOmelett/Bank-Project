@@ -1,6 +1,9 @@
 export class CustomerCreate {
-  constructor(public email: string,
-              public password: string
-  ){
+  constructor(public firstName: string,
+              public lastName: string,
+              public password: string,
+              public passwordRepeat: string,
+              public email: string
+  ) {
   }
 }

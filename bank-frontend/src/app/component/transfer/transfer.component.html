@@ -7,13 +7,13 @@
           <div formGroupName="transfer">
             <span>Bank account:</span>
 
-            <span>{{customer.id}}</span><br>
+            <span>{{customerId}}</span><br>
 
             <label class="form-label">Bank account to transfer</label>
             <input type="number" formControlName="receiverId" class="form-control" placeholder="#0"
                    max="999999999">
             <div
-              *ngIf="(receiverId?.invalid && (receiverId?.dirty || receiverId?.touched)) || customer.id == getReceiverId || customerDoesExist"
+              *ngIf="(receiverId?.invalid && (receiverId?.dirty || receiverId?.touched)) || customerId == getReceiverId || customerDoesExist"
               class="alert alert-danger mt-1">
               <div *ngIf="receiverId?.errors?.['required']">
                 Id required
@@ -21,7 +21,7 @@
               <div *ngIf="receiverId?.errors?.['pattern']">
                 Wrong input
               </div>
-              <div *ngIf="customer.id == getReceiverId">
+              <div *ngIf="customerId == getReceiverId">
                 Id can not be the same
               </div>
               <div *ngIf="customerDoesExist">
@@ -39,16 +39,15 @@
             </div>
             <label class="form-label">Money</label>
             <input type="number" formControlName="funds" name="money" class="form-control" step="0.01" min="0.01">
-            <div *ngIf="(funds?.invalid && (funds?.dirty || funds?.touched)) || customer.funds < getFunds"
+            <div *ngIf="(funds?.invalid && (funds?.dirty || funds?.touched)) || customerFunds < getFunds"
                  class="alert alert-danger mt-1">
               <div *ngIf="funds?.errors?.['required']">
                 Required
               </div>
-              <!--            <div *ngIf="funds?.errors?.['pattern'] || funds?.errors?.['min']">-->
               <div *ngIf="funds?.errors?.['min']">
                 Wrong input
               </div>
-              <div *ngIf="customer.funds < getFunds">
+              <div *ngIf="customerFunds < getFunds">
                 Not enough funds
               </div>
             </div>

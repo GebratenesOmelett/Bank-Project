@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {LoginService} from "../../services/login.service";
 
 @Component({
@@ -6,14 +6,17 @@ import {LoginService} from "../../services/login.service";
   templateUrl: './nav-bar-component.component.html',
   styleUrls: ['./nav-bar-component.component.css']
 })
-export class NavBarComponentComponent {
-  logged: boolean = this.loginService.logged;
+export class NavBarComponentComponent implements OnInit{
+  isAuthenticated = false;
   constructor(public loginService: LoginService) {
   }
 
-  login(){
-    this.loginService.login();
+  ngOnInit(): void {
+    this.loginService.customerReceived.subscribe(customer =>{
+      this.isAuthenticated = !!customer;
+    })
   }
+
   logout(){
     this.loginService.logout();
   }

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {LoginService} from "../../services/login.service";
 import {Router} from "@angular/router";
-import {AxiosService} from "../../services/axios.service";
+import {CustomerLogin} from "../../common/customer-login";
 
 
 @Component({
@@ -13,13 +13,11 @@ import {AxiosService} from "../../services/axios.service";
 export class LoginComponent implements OnInit {
 
   loginFailed!: boolean;
-
   loginFormGroup!: FormGroup;
 
   constructor(private formBuilder: FormBuilder,
               private loginService: LoginService,
-              private router: Router,
-              private axiosService: AxiosService) {
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -40,24 +38,33 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    this.axiosService.request(
-      "POST",
-      "/api/customers/login",
-      {
-        email: this.email,
-        password: this.password
-      }
-    ).then(data => {
-      if (data.data.status) {
-        this.loginService.getCustomerByEmail(this.email)
-        this.loginService.getTransfersByEmail(this.email)
-        this.loginService.login();
-        this.router.navigateByUrl("/main")
-      } else if (!data.data.status) {
+    let customer = new CustomerLogin(this.email, this.password);
+    // this.axiosService.request(
+    //   "POST",
+    //   "/api/customers/login",
+    //   {
+    //     email: this.email,
+    //     password: this.password
+    //   }
+    // ).then(data => {
+    //   if (data.data.status) {
+    //     this.loginService.getCustomerByEmail(this.email)
+    //     this.loginService.getTransfersByEmail(this.email)
+    //     this.loginService.login();
+    //     this.router.navigateByUrl("/main")
+    //   } else if (!data.data.status) {
+    //     console.log("failed")
+    //     this.loginFailed = true
+    //   } else {
+    //     console.log("something went wrong")
+    //   }
+    // })
+    this.loginService.login(customer).subscribe({
+      next: response=>{
+        this.router.navigate(['/main'])
+      },
+      error: err => {
         console.log("failed")
-        this.loginFailed = true
-      } else {
-        console.log("something went wrong")
       }
     })
   }

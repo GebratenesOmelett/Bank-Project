@@ -5,10 +5,10 @@ export class CustomerReceived {
   lastName: string;
   email: string;
   funds: number;
-  token: string,
-  expiresIn: string
+  token: string;
+  expiresIn: Date;
 
-  constructor(id: number, firstName: string, lastName: string, funds: number, email: string, token: string, expiresIn: string) {
+  constructor(id: number, firstName: string, lastName: string, funds: number, email: string, token: string, expiresIn: Date) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;

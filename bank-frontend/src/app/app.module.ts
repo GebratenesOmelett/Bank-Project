@@ -12,7 +12,6 @@ import { LoginComponent } from './component/login/login.component';
 import { MainComponent } from './component/main/main.component';
 import { TransferComponent } from './component/transfer/transfer.component';
 import { NavBarComponentComponent } from './component/nav-bar-component/nav-bar-component.component';
-import { CustomerCreateComponent } from './common/customer-create/customer-create.component';
 
 const routes: Routes = [
   {path: 'transfer', component: TransferComponent},
@@ -33,7 +32,6 @@ const routes: Routes = [
     MainComponent,
     TransferComponent,
     NavBarComponentComponent,
-    CustomerCreateComponent
   ],
   imports: [
     RouterModule.forRoot(routes),
