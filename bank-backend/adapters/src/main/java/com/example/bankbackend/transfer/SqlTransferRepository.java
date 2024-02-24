@@ -27,7 +27,6 @@ class TransferRepositoryImpl implements  TransferRepository{
 
     @Override
     public Transfer save(Transfer transfer) {
-        System.out.println(transfer.getSnapshot());
         return Transfer.restore(repository.save(transfer.getSnapshot()));
     }
 }

@@ -1,4 +1,4 @@
-import {AbstractControl, FormGroup, ValidationErrors, ValidatorFn} from "@angular/forms";
+import {AbstractControl, ValidatorFn} from "@angular/forms";
 
 export class PasswordValidation {
   static passwordsShouldBeTheSame(password: string, passwordRepeat: string) : ValidatorFn {

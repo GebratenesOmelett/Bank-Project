@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {AxiosService} from "../../services/axios.service";
 import {Router} from "@angular/router";
 import {GeneralValidation} from "../../validate/general-validation";
 import {PasswordValidation} from "../../validate/password-validation";
@@ -89,24 +88,14 @@ export class RegistrationComponent implements OnInit {
       return
     }
     let customer = new CustomerCreate(this.getFirstName, this.getLastName, this.getPassword, this.getPasswordRepeat, this.getEmail)
-    // this.axiosService.request(
-    //   "POST",
-    //   "/api/customers",
-    //   {
-    //     firstName: this.getFirstName,
-    //     lastName: this.getLastName,
-    //     email: this.getEmail,
-    //     password: this.getPassword,
-    //     passwordRepeat: this.getPasswordRepeat
-    //   }
-    // ).then(data => {
-    //   this.route.navigateByUrl("/home")
-    // }).catch(err =>{
-    // this.emailDoesExist = true;
-    // });
     this.requestService.register(customer).subscribe({
       next: response=>{
         this.router.navigate(['/home'])
+      },
+      error: err => {
+        if(err.status == 400){
+          this.emailDoesExist = true;
+        }
       }
     })
   }

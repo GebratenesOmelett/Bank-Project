@@ -1,33 +1,38 @@
 package com.example.bankbackend.transfer;
 
 import com.example.bankbackend.customer.CustomerFacade;
+import com.example.bankbackend.customer.CustomerMapper;
+import com.example.bankbackend.customer.dto.SimpleCustomerEntitySnapshot;
 import com.example.bankbackend.transfer.dto.TransferCreateDto;
 import com.example.bankbackend.transfer.dto.TransferDto;
 import com.example.bankbackend.transfer.exceptions.TransferNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class TransferFacade {
-    TransferQueryRepository transferQueryRepository;
-    TransferRepository transferRepository;
-    TransferFactory transferFactory;
-    CustomerFacade customerFacade;
-    TransferMapper transferMapper;
+    private final TransferQueryRepository transferQueryRepository;
+    private final TransferRepository transferRepository;
+    private final TransferFactory transferFactory;
+    private final CustomerFacade customerFacade;
+    private final CustomerMapper customerMapper;
+    private final TransferMapper transferMapper;
 
     public TransferFacade(TransferQueryRepository transferQueryRepository,
                           TransferRepository transferRepository,
                           TransferFactory transferFactory,
                           CustomerFacade customerFacade,
-                          TransferMapper transferMapper) {
+                          CustomerMapper customerMapper, TransferMapper transferMapper) {
         this.transferQueryRepository = transferQueryRepository;
         this.transferRepository = transferRepository;
         this.transferFactory = transferFactory;
         this.customerFacade = customerFacade;
+        this.customerMapper = customerMapper;
         this.transferMapper = transferMapper;
     }
+
     @Transactional
     public TransferDto getDtoById(int id) {
         return transferQueryRepository.findDtoById(id)
@@ -35,19 +40,12 @@ public class TransferFacade {
 
     }
 
-    public Set<TransferDto> getDtoByReceiverId(int id) {
-        return transferQueryRepository.findDtoByReceiverId(id)
-                .orElseThrow(() -> new TransferNotFoundException(id));
-
-    }
-
-    public List<TransferDto> getCustomerTransfers(String email) {
-         customerFacade.getByEmail(email);
-        return transferQueryRepository.findCustomerTransfers(email)
-                .orElseThrow(() -> new TransferNotFoundException(email))
-                .stream()
-                .map(transfer -> transferMapper.toTransferDto(transfer))
-                .collect(Collectors.toList());
+    public Page<TransferDto> getCustomerTransfers(String email, int page) {
+        customerFacade.getByEmail(email);
+        Pageable pageable = PageRequest.of(page, 5);
+        SimpleCustomerEntitySnapshot customer = customerMapper.toSimpleCustomerEntity(customerFacade.getByEmail(email)).getSnapshot();
+        return transferQueryRepository.findCustomerTransfers(customer, pageable)
+                .map(transferMapper::toTransferDto);
     }
 
     public TransferDto create(TransferCreateDto toCreate) {

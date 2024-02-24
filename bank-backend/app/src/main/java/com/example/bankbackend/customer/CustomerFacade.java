@@ -111,17 +111,6 @@ public class CustomerFacade {
         return loggedCustomer;
     }
 
-//    public CustomerLoginResponseDto login(CustomerLoginDto customerLoginDto) {
-//        if (!customerExists(customerLoginDto.getEmail())) {
-//            return new CustomerLoginResponseDto("Login Failed", false, id, firstName, lastName, email, funds, token, expiresIn);
-//        }
-//        if (!encoder.matches(customerLoginDto.getPassword(), getByEmail(customerLoginDto.getEmail()).getSnapshot().getPassword())) {
-//            return new CustomerLoginResponseDto("Login Failed", false, id, firstName, lastName, email, funds, token, expiresIn);
-//        }
-//
-//        return new CustomerLoginResponseDto("Login Succeed", true, id, firstName, lastName, email, funds, token, expiresIn);
-//    }
-
     public CustomerAuthDto login(CustomerLoginDto customerLoginDto) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(

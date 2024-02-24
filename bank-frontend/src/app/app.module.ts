@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {RouterModule, Routes} from "@angular/router";
 import { RegistrationComponent } from './component/registration/registration.component';
 import {HttpClientModule} from "@angular/common/http";
@@ -38,6 +39,7 @@ const routes: Routes = [
     HttpClientModule,
     BrowserModule,
     ReactiveFormsModule,
+    NgbModule,
     NgOptimizedImage
   ],
   providers: [],

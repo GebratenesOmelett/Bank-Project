@@ -1,15 +1,16 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, Subject, tap} from "rxjs";
+import {BehaviorSubject, Observable, Subject, take, tap} from "rxjs";
 import {HttpClient} from "@angular/common/http";
-import {AxiosService} from "./axios.service";
 import {CustomerReceived} from "../common/customer-received";
 import {CustomerLogin} from "../common/customer-login";
+
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
+  // axios.defaults.baseURL = "https://bank-project-production.up.railway.app"
   defaultBaseUrl = "http://localhost:8080";
   private loginUrl = this.defaultBaseUrl + "/api/customers/login";
 
@@ -19,7 +20,7 @@ export class LoginService {
   }
 
   logout() {
-    this.customerReceived = new BehaviorSubject<CustomerReceived>(null!);
+    this.customerReceived.next(null!)
   }
 
 
@@ -38,6 +39,12 @@ export class LoginService {
         this.customerReceived.next(customer);
       })
     )
+  }
+  subtractFunds(funds : number){
+    this.customerReceived.pipe(take(1)).subscribe(customer => {
+      customer.funds = customer.funds - funds;
+      this.customerReceived.next(customer);
+    });
   }
 
 }

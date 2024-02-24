@@ -22,9 +22,8 @@ export class NavBarComponentComponent implements OnInit{
   }
 
   logout(){
+    this.route.navigate(['/home']);
     this.loginService.logout();
     this.requestService.logout();
-    this.route.navigate(['/home']);
-    location.reload();
   }
 }

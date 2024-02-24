@@ -5,12 +5,12 @@ import com.example.bankbackend.transfer.dto.TransferCreateDto;
 import com.example.bankbackend.transfer.dto.TransferDto;
 import com.example.bankbackend.transfer.exceptions.TransferValidationException;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/transfers")
@@ -27,8 +27,8 @@ class TransferController {
         return new ResponseEntity<>(transferFacade.getDtoById(id), HttpStatus.OK);
     }
     @GetMapping("/email/{email}")
-    ResponseEntity<List<TransferDto>> getCustomerTransfers(@PathVariable String email){
-        return new ResponseEntity<>(transferFacade.getCustomerTransfers(email), HttpStatus.OK);
+    ResponseEntity<Page<TransferDto>> getCustomerTransfers(@PathVariable String email, @RequestParam int page){
+        return new ResponseEntity<>(transferFacade.getCustomerTransfers(email, page), HttpStatus.OK);
     }
 
     @PostMapping()

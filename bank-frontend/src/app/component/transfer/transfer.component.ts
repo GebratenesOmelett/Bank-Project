@@ -15,7 +15,7 @@ import {TransferCreate} from "../../common/transfer-create";
 export class TransferComponent implements OnInit {
 
   transferFormGroup!: FormGroup;
-  transferSet!: Transfer[];
+  transferList: Transfer[] = [];
   addressBookHaspMap = new Set<number>;
   isAuthenticated = false;
   customerId! : number;
@@ -43,7 +43,7 @@ export class TransferComponent implements OnInit {
         this.customerId = customer.id
         this.customerFunds = customer.funds;
         this.requestService.transferReceivedList.subscribe(transfer=>{
-          this.transferSet = transfer;
+          this.transferList = transfer;
           this.getAddressBook()
         })
       }
@@ -74,8 +74,11 @@ export class TransferComponent implements OnInit {
     return this.transferFormGroup.get('transfer.receiverId');
   }
   getAddressBook(){
-    for(let i = 0; i < this.transferSet.length; i++){
-      this.addressBookHaspMap.add(this.transferSet[i].receiverId);
+    if(this.transferList == null){
+      return;
+    }
+    for(let i = 0; i < this.transferList.length; i++){
+      this.addressBookHaspMap.add(this.transferList[i].receiverId);
     }
   }
 
@@ -92,7 +95,11 @@ export class TransferComponent implements OnInit {
     let task = new TransferCreate(this.getTitle,this.getFunds, this.customerId, this.getReceiverId)
     this.requestService.postTransfer(task).subscribe(transfer=>{
       this.requestService.addTransfer(transfer);
+      this.loginService.subtractFunds(transfer.funds)
       this.router.navigateByUrl("/main")
+    },
+        error => {
+          this.customerDoesExist = true;
     })
   }
 }
