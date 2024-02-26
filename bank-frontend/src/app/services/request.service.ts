@@ -19,6 +19,7 @@ export class RequestService {
   private registerUrl = this.loginService.defaultBaseUrl + "/api/customers";
   private getTransfersUrl = this.loginService.defaultBaseUrl + "/api/transfers/email/";
   private postTransferUrl = this.loginService.defaultBaseUrl + "/api/transfers";
+  private getAddressBook = this.loginService.defaultBaseUrl + "/api/transfers/addressBook/"
 
   transferReceivedList: Subject<Transfer[]> = new BehaviorSubject<Transfer[]>([])
   pageReceived: Subject<Page> = new BehaviorSubject<Page>(null!)
@@ -31,17 +32,24 @@ export class RequestService {
     this.transferReceivedList.next(null!);
   }
 
-  getTransfersByEmail(page : number): Observable<any> {
+  getTransfersByEmail(page: number): Observable<any> {
     return this.loginService.customerReceived.pipe(take(1), exhaustMap(customer => {
       let headers_object = new HttpHeaders().set("Authorization", "Bearer " + customer.token);
-      let finalUrl = this.getTransfersUrl + customer.email +"?page="+ page;
+      let finalUrl = this.getTransfersUrl + customer.email + "?page=" + page;
       return this.httpClient.get<GetResponseTransfer>(finalUrl, {headers: headers_object}).pipe(tap(transfersPage => {
-
         let page = new Page(transfersPage.totalPages + 1, transfersPage.size, transfersPage.number, transfersPage.number);
         this.pageReceived.next(page);
         let listTransfer = transfersPage.content;
         this.transferReceivedList.next(listTransfer);
       }))
+    }))
+  }
+
+  getAddressBookByEmail(): Observable<any> {
+    return this.loginService.customerReceived.pipe(take(1), exhaustMap(customer => {
+      let headers_object = new HttpHeaders().set("Authorization", "Bearer " + customer.token);
+      let finalUrl = this.getAddressBook + customer.email;
+      return this.httpClient.get<number[]>(finalUrl, {headers: headers_object})
     }))
   }
 

@@ -3,7 +3,6 @@ package com.example.bankbackend.customer;
 import com.example.bankbackend.customer.exceptions.CustomerEmailAlreadyExistException;
 import com.example.bankbackend.customer.exceptions.CustomerNotEnoughFundsException;
 import com.example.bankbackend.customer.exceptions.CustomerNotFoundException;
-import com.example.bankbackend.customer.exceptions.CustomerValidationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +20,6 @@ class CustomerControllerAdvice extends ResponseEntityExceptionHandler {
     }
     @ExceptionHandler(value = CustomerNotEnoughFundsException.class)
     ResponseEntity<Object> CustomerNotEnoughFunds(RuntimeException ex, WebRequest request){
-        String response = ex.getMessage();
-        return  handleExceptionInternal(ex, response, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-    }
-    @ExceptionHandler(value = CustomerValidationException.class)
-    ResponseEntity<Object> CustomerValidation(RuntimeException ex, WebRequest request){
         String response = ex.getMessage();
         return  handleExceptionInternal(ex, response, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }

@@ -15,11 +15,10 @@ import {TransferCreate} from "../../common/transfer-create";
 export class TransferComponent implements OnInit {
 
   transferFormGroup!: FormGroup;
-  transferList: Transfer[] = [];
-  addressBookHaspMap = new Set<number>;
   isAuthenticated = false;
-  customerId! : number;
-  customerFunds! : number;
+  transferList: number[] = [];
+  customerId!: number;
+  customerFunds!: number;
   customerDoesExist!: boolean;
 
   constructor(private formBuilder: FormBuilder,
@@ -37,18 +36,18 @@ export class TransferComponent implements OnInit {
         }
       )
     });
-    this.loginService.customerReceived.subscribe(customer =>{
+    this.loginService.customerReceived.subscribe(customer => {
       this.isAuthenticated = !!customer;
-      if(this.isAuthenticated){
+      if (this.isAuthenticated) {
         this.customerId = customer.id
         this.customerFunds = customer.funds;
-        this.requestService.transferReceivedList.subscribe(transfer=>{
+        this.requestService.getAddressBookByEmail().subscribe(transfer => {
           this.transferList = transfer;
-          this.getAddressBook()
-        })
+        });
       }
     })
   }
+
 
   get getTitle() {
     return this.transferFormGroup.get('transfer.title')?.value;
@@ -73,14 +72,6 @@ export class TransferComponent implements OnInit {
   get receiverId() {
     return this.transferFormGroup.get('transfer.receiverId');
   }
-  getAddressBook(){
-    if(this.transferList == null){
-      return;
-    }
-    for(let i = 0; i < this.transferList.length; i++){
-      this.addressBookHaspMap.add(this.transferList[i].receiverId);
-    }
-  }
 
   onSubmit() {
     this.customerDoesExist = false;
@@ -92,14 +83,17 @@ export class TransferComponent implements OnInit {
     } else if (this.customerFunds < this.getFunds) {
       return
     }
-    let task = new TransferCreate(this.getTitle,this.getFunds, this.customerId, this.getReceiverId)
-    this.requestService.postTransfer(task).subscribe(transfer=>{
-      this.requestService.addTransfer(transfer);
-      this.loginService.subtractFunds(transfer.funds)
-      this.router.navigateByUrl("/main")
-    },
-        error => {
-          this.customerDoesExist = true;
-    })
+    let task = new TransferCreate(this.getTitle, this.getFunds, this.customerId, this.getReceiverId)
+    this.requestService.postTransfer(task).subscribe(transfer => {
+        this.requestService.addTransfer(transfer);
+        this.loginService.subtractFunds(transfer.funds)
+        this.router.navigateByUrl("/main")
+      },
+      error => {
+        this.customerDoesExist = true;
+      })
+  }
+  fastChoose(id : number) {
+    this.receiverId?.setValue(id);
   }
 }

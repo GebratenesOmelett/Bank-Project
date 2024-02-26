@@ -8,7 +8,6 @@ import java.util.Optional;
 
 interface SqlCustomerQueryRepository extends JpaRepository<CustomerSnapshot, Integer> {
 
-    Optional<CustomerDto> findDtoById(int id);
     Optional<CustomerDto> findDtoByEmail(String email);
     Optional<CustomerSnapshot> findCustomerByEmail(String email);
 
@@ -20,11 +19,6 @@ class CustomerQueryRepositoryImpl implements CustomerQueryRepository{
 
     public CustomerQueryRepositoryImpl(SqlCustomerQueryRepository repository) {
         this.repository = repository;
-    }
-
-    @Override
-    public Optional<CustomerDto> findDtoById(int id) {
-        return repository.findDtoById(id);
     }
 
     @Override

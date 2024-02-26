@@ -11,6 +11,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 public class TransferFacade {
     private final TransferQueryRepository transferQueryRepository;
@@ -46,6 +49,14 @@ public class TransferFacade {
         SimpleCustomerEntitySnapshot customer = customerMapper.toSimpleCustomerEntity(customerFacade.getByEmail(email)).getSnapshot();
         return transferQueryRepository.findCustomerTransfers(customer, pageable)
                 .map(transferMapper::toTransferDto);
+    }
+    public List<Integer> getAddressBook(String email){
+        customerFacade.getByEmail(email);
+        SimpleCustomerEntitySnapshot customer = customerMapper.toSimpleCustomerEntity(customerFacade.getByEmail(email)).getSnapshot();
+        return transferQueryRepository.findAddressBookByEmail(customer).
+                stream().map(TransferDto::getReceiverId)
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     public TransferDto create(TransferCreateDto toCreate) {

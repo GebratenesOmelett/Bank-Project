@@ -66,8 +66,8 @@
   </div>
   <div class="col-3 bg-dark  min-vh-100 text-white">
     <span class="text-white h1  text-center">Address Book</span>
-    <div class="list-group  p-1" *ngFor="let id of addressBookHaspMap">
-      <span class="list-group-item list-group-item-action h4">{{id}}</span>
+    <div class="list-group  p-1" *ngFor="let id of transferList">
+      <span class="list-group-item list-group-item-action h4" (click)="fastChoose(id)">{{id}}</span>
     </div>
   </div>
 </div>

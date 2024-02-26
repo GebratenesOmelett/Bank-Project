@@ -11,6 +11,6 @@ import java.util.Set;
 
 public interface TransferQueryRepository {
     Optional<TransferDto> findDtoById(int id);
-    Optional<Set<TransferDto>> findDtoByReceiverId(int id);
     Page<TransferSnapshot> findCustomerTransfers(SimpleCustomerEntitySnapshot customer, Pageable pageable);
+    List<TransferDto> findAddressBookByEmail(SimpleCustomerEntitySnapshot customer);
 }

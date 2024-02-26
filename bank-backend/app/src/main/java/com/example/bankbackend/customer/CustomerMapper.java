@@ -1,6 +1,5 @@
 package com.example.bankbackend.customer;
 
-import com.example.bankbackend.customer.dto.CustomerDto;
 import com.example.bankbackend.customer.dto.SimpleCustomerEntity;
 import com.example.bankbackend.customer.dto.SimpleCustomerEntitySnapshot;
 import com.example.bankbackend.transfer.TransferMapper;
@@ -25,11 +24,4 @@ public class CustomerMapper {
         ));
     }
 
-    public CustomerDto toCustomerDto(CustomerSnapshot customerSnapshot) {
-        return CustomerDto.create(customerSnapshot.getId(),
-                customerSnapshot.getFirstName(),
-                customerSnapshot.getLastName(),
-                customerSnapshot.getEmail(),
-                customerSnapshot.getFunds());
-    }
 }

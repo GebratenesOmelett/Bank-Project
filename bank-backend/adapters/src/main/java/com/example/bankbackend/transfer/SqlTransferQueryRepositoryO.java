@@ -7,17 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 interface SqlTransferQueryRepository extends JpaRepository<TransferSnapshot, Integer> {
     Optional<TransferDto> findDtoById(int id);
-    Optional<Set<TransferDto>> findDtoByReceiverId(int id);
-//    @Query(value = "SELECT transfer.* FROM transfer, customer WHERE (transfer.customer_id = customer.id OR transfer.receiver_id = customer.id) AND customer.email = :email ORDER BY transfer.transfer_date DESC,transfer.transfer_time DESC", nativeQuery = true)
-//    Optional<List<TransferSnapshot>> findCustomerTransfers(@Param("email") String email);
-
     Page<TransferSnapshot> findAllByCustomerIdOrReceiverIdOrderByTransferDateDescTransferTimeDesc(SimpleCustomerEntitySnapshot customer,Integer id, Pageable pageable);
-
+    List<TransferDto> findAllByCustomerIdOrderByTransferDateDescTransferTimeDesc(SimpleCustomerEntitySnapshot customer);
 }
 @Repository
 class TransferQueryRepositoryImpl implements TransferQueryRepository{
@@ -33,13 +30,12 @@ class TransferQueryRepositoryImpl implements TransferQueryRepository{
     }
 
     @Override
-    public Optional<Set<TransferDto>> findDtoByReceiverId(int id) {
-        return repository.findDtoByReceiverId(id);
-    }
-
-    @Override
     public Page<TransferSnapshot> findCustomerTransfers(SimpleCustomerEntitySnapshot customer, Pageable pageable) {
         return repository.findAllByCustomerIdOrReceiverIdOrderByTransferDateDescTransferTimeDesc(customer,customer.getId(), pageable);
+    }
+    @Override
+    public List<TransferDto> findAddressBookByEmail(SimpleCustomerEntitySnapshot customer){
+        return repository.findAllByCustomerIdOrderByTransferDateDescTransferTimeDesc(customer);
     }
 
 }

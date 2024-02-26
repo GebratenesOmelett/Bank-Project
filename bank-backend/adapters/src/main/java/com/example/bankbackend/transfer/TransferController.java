@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/transfers")
@@ -29,6 +31,10 @@ class TransferController {
     @GetMapping("/email/{email}")
     ResponseEntity<Page<TransferDto>> getCustomerTransfers(@PathVariable String email, @RequestParam int page){
         return new ResponseEntity<>(transferFacade.getCustomerTransfers(email, page), HttpStatus.OK);
+    }
+    @GetMapping("/addressBook/{email}")
+    ResponseEntity<List<Integer>> getAddressBook(@PathVariable String email){
+        return new ResponseEntity<>(transferFacade.getAddressBook(email),HttpStatus.OK);
     }
 
     @PostMapping()

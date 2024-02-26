@@ -342,4 +342,79 @@ class TransferControllerTest {
                 .andExpect(result -> Assertions.assertEquals("There is no customer with : Test@gmail.com", result.getResolvedException().getMessage()))
                 .andExpect(status().is4xxClientError()).andReturn();
     }
+    @Test
+    @DisplayName("getByIdShouldReturnCustomerNotFoundException")
+    void getByEmailCustomerAddressBook() throws Exception {
+        CustomerLoginDto customerLoginDto = new CustomerLoginDto(
+                "Pieter@gmail.com",
+                "testPassword"
+        );
+        CustomerCreateDto customerCreateDtoReceiver = new CustomerCreateDto(
+                "Test",
+                "Test",
+                "testPassword",
+                "testPassword",
+                "Test@gmail.com"
+        );
+        CustomerCreateDto customerCreateDtoReceiver2 = new CustomerCreateDto(
+                "Test2",
+                "Test2",
+                "testPassword",
+                "testPassword",
+                "Test2@gmail.com"
+        );
+
+        customerFacade.create(customerCreateDtoReceiver);
+        customerFacade.create(customerCreateDtoReceiver2);
+
+        CustomerAuthDto customerAuthDto = customerFacade.login(customerLoginDto);
+
+        TransferCreateDto transferCreateDto = new TransferCreateDto(
+                "payment",
+                new BigDecimal(100),
+                1,
+                2);
+        TransferCreateDto transferCreateDtoSecond = new TransferCreateDto(
+                "tax",
+                new BigDecimal(200),
+                1,
+                3);
+
+        this.mockMvc.perform(post("/api/transfers")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(transferCreateDto))
+                        .header("Authorization", "Bearer " + customerAuthDto.getToken()))
+                .andExpect(status().is2xxSuccessful()).andReturn();
+
+        this.mockMvc.perform(post("/api/transfers")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(transferCreateDtoSecond))
+                        .header("Authorization", "Bearer " + customerAuthDto.getToken()))
+                .andExpect(status().is2xxSuccessful()).andReturn();
+
+
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/transfers/addressBook/{email}", "Pieter@gmail.com")
+                .header("Authorization", "Bearer " + customerAuthDto.getToken()))
+                .andExpect(jsonPath("$[0]", is(2)))
+                .andExpect(jsonPath("$[1]", is(3)))
+                .andExpect(status().is2xxSuccessful()).andReturn();
+    }
+    @Test
+    @DisplayName("getByEmailCustomerAddressBookShouldReturnCustomerNotFoundException")
+    void getByEmailCustomerAddressBookNotFoundException() throws Exception {
+        CustomerLoginDto customerLoginDto = new CustomerLoginDto(
+                "Pieter@gmail.com",
+                "testPassword"
+        );
+
+        CustomerAuthDto customerAuthDto = customerFacade.login(customerLoginDto);
+
+        Assertions.assertThrows(CustomerNotFoundException.class, () -> customerFacade.getByEmail("Test@gmail.com"));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/transfers/addressBook/{email}", "Test@gmail.com")
+                        .header("Authorization", "Bearer " + customerAuthDto.getToken()))
+                .andExpect(result -> Assertions.assertEquals("There is no customer with : Test@gmail.com", result.getResolvedException().getMessage()))
+                .andExpect(status().is4xxClientError()).andReturn();
+    }
 }
