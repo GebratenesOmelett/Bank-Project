@@ -13,17 +13,13 @@ class CustomerConfiguration {
     CustomerFacade customerFacade(CustomerRepository customerRepository,
                                   CustomerQueryRepository customerQueryRepository,
                                   CustomerRoleFacade customerRoleFacade,
-                                  CustomerMapper customerMapper,
                                   JwtService jwtService,
                                   AuthenticationManager authenticationManager) {
         return new CustomerFacade(
                 customerRepository,
                 customerQueryRepository,
-                customerRoleFacade,
                 new CustomerFactory(customerRoleFacade,
                         new BCryptPasswordEncoder()),
-                new BCryptPasswordEncoder(),
-                customerMapper,
                 jwtService,
                 authenticationManager);
     }

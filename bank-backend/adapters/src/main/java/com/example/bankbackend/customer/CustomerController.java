@@ -23,19 +23,10 @@ class CustomerController {
         this.customerRoleFacade = customerRoleFacade;
     }
 
-    @GetMapping("/id/{id}")
-    ResponseEntity<CustomerDto> getById(@PathVariable int id){
-        return new ResponseEntity<>(customerFacade.getDtoById(id), HttpStatus.OK);
-    }
-    @GetMapping("/email/{email}")
+    @GetMapping("/{email}")
     ResponseEntity<CustomerDto> getByEmail(@PathVariable String email){
         return new ResponseEntity<>(customerFacade.getDtoByEmail(email), HttpStatus.OK);
     }
-    @GetMapping("/exist/{email}")
-    ResponseEntity<Boolean> CustomerExists(@PathVariable String email){
-        return new ResponseEntity<>(customerFacade.customerExists(email), HttpStatus.OK);
-    }
-
     @PostMapping()
     ResponseEntity<CustomerAuthDto> create(@RequestBody @Valid CustomerCreateDto toCreate, BindingResult errors){
         if(errors.hasErrors()){

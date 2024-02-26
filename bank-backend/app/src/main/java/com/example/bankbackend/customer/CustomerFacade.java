@@ -1,16 +1,15 @@
 package com.example.bankbackend.customer;
 
 import com.example.bankbackend.config.JwtService;
+import com.example.bankbackend.customer.dto.CustomerAuthDto;
 import com.example.bankbackend.customer.dto.CustomerCreateDto;
 import com.example.bankbackend.customer.dto.CustomerDto;
 import com.example.bankbackend.customer.dto.CustomerLoginDto;
-import com.example.bankbackend.customer.dto.CustomerAuthDto;
 import com.example.bankbackend.customer.exceptions.CustomerEmailAlreadyExistException;
 import com.example.bankbackend.customer.exceptions.CustomerNotEnoughFundsException;
 import com.example.bankbackend.customer.exceptions.CustomerNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -18,40 +17,27 @@ import java.math.BigDecimal;
 public class CustomerFacade {
     private final CustomerRepository customerRepository;
     private final CustomerQueryRepository customerQueryRepository;
-    private final CustomerRoleFacade roleFacade;
     private final CustomerFactory customerFactory;
-    private final PasswordEncoder encoder;
-    private final CustomerMapper customerMapper;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
 
     public CustomerFacade(CustomerRepository customerRepository,
                           CustomerQueryRepository customerQueryRepository,
-                          CustomerRoleFacade roleFacade,
                           CustomerFactory customerFactory,
-                          PasswordEncoder encoder,
-                          CustomerMapper customerMapper, JwtService jwtService, AuthenticationManager authenticationManager) {
+                          JwtService jwtService,
+                          AuthenticationManager authenticationManager) {
         this.customerRepository = customerRepository;
         this.customerQueryRepository = customerQueryRepository;
-        this.roleFacade = roleFacade;
         this.customerFactory = customerFactory;
-        this.encoder = encoder;
-        this.customerMapper = customerMapper;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
-    }
-
-    public CustomerDto getDtoById(int customerId) {
-        return customerQueryRepository.findDtoById(customerId)
-                .orElseThrow(() -> new CustomerNotFoundException(customerId));
     }
 
     public CustomerDto getDtoByEmail(String email) {
         return customerQueryRepository.findDtoByEmail(email)
                 .orElseThrow(() -> new CustomerNotFoundException(email));
     }
-
 
     @Transactional
     public Customer getById(int customerId) {
@@ -66,7 +52,7 @@ public class CustomerFacade {
     }
 
     public CustomerAuthDto create(CustomerCreateDto customerCreateDto) {
-        if (customerExists(customerCreateDto.getEmail())) {
+        if (customerQueryRepository.findCustomerByEmail(customerCreateDto.getEmail()).isPresent()) {
             throw new CustomerEmailAlreadyExistException(customerCreateDto.getEmail());
         }
         Customer customer = customerFactory.from(customerCreateDto);
@@ -111,6 +97,7 @@ public class CustomerFacade {
         return loggedCustomer;
     }
 
+    @Transactional
     public CustomerAuthDto login(CustomerLoginDto customerLoginDto) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -130,10 +117,4 @@ public class CustomerFacade {
                 .expiresIn(Integer.toString(JwtService.expiration))
                 .build();
     }
-
-
-    public boolean customerExists(String email) {
-        return customerQueryRepository.findDtoByEmail(email).isPresent();
-    }
-
 }

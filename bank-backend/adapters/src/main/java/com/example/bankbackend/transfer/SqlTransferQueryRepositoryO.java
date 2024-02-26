@@ -16,7 +16,7 @@ interface SqlTransferQueryRepository extends JpaRepository<TransferSnapshot, Int
 //    @Query(value = "SELECT transfer.* FROM transfer, customer WHERE (transfer.customer_id = customer.id OR transfer.receiver_id = customer.id) AND customer.email = :email ORDER BY transfer.transfer_date DESC,transfer.transfer_time DESC", nativeQuery = true)
 //    Optional<List<TransferSnapshot>> findCustomerTransfers(@Param("email") String email);
 
-    Page<TransferSnapshot> findAllByCustomerIdOrderByTransferDateDescTransferTimeDesc(SimpleCustomerEntitySnapshot customer, Pageable pageable);
+    Page<TransferSnapshot> findAllByCustomerIdOrReceiverIdOrderByTransferDateDescTransferTimeDesc(SimpleCustomerEntitySnapshot customer,Integer id, Pageable pageable);
 
 }
 @Repository
@@ -39,7 +39,7 @@ class TransferQueryRepositoryImpl implements TransferQueryRepository{
 
     @Override
     public Page<TransferSnapshot> findCustomerTransfers(SimpleCustomerEntitySnapshot customer, Pageable pageable) {
-        return repository.findAllByCustomerIdOrderByTransferDateDescTransferTimeDesc(customer, pageable);
+        return repository.findAllByCustomerIdOrReceiverIdOrderByTransferDateDescTransferTimeDesc(customer,customer.getId(), pageable);
     }
 
 }
