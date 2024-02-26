@@ -16,7 +16,7 @@ Desktop bank app created with Angular, Spring Boot and MySql. It's main purpose 
 5. docker run -p 8080:8080 --name bankcontainer --net networkmysql -e PROD_DB_HOST=mysqlcontainerbank -e PROD_DB_PORT=3306 -e PROD_DB_NAME=bank -e PROD_DB_USERNAME=root -e PROD_DB_PASSWORD=root bankapi
 
 ## Example of use
-# The entire file is located in main folder : Bank-api.postman_collection.json
+The entire file is located in main folder : Bank-api.postman_collection.json
 * Getting token for sending requests :
 * By Registration
 ![image](https://github.com/GebratenesOmelett/Bank-Project/assets/78979897/5af07cb0-6d4f-4591-902f-230fdb04b5ef)
