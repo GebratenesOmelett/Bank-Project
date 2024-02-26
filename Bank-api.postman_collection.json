@@ -7,34 +7,12 @@
 	},
 	"item": [
 		{
-			"name": "get customer with id",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/api/customers/id/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"customers",
-						"id",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "get customer with email",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/customers/email/test@wp.pl",
+					"raw": "http://localhost:8080/api/customers/Test@gmail.com",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -43,8 +21,7 @@
 					"path": [
 						"api",
 						"customers",
-						"email",
-						"test@wp.pl"
+						"Test@gmail.com"
 					]
 				}
 			},
@@ -53,6 +30,16 @@
 		{
 			"name": "get transfer with id",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dHR0dEB3cC5wbCIsImlhdCI6MTcwODkwMDc3MSwiZXhwIjoxNzA4OTg3MTcxfQ.4-w2dnp1T3XvWHdQ_ssXOIpD2xae284U5ewXX6K4oD8",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -78,7 +65,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/transfers/email/test@wp.pl",
+					"raw": "http://localhost:8080/api/transfers/email/Test@gmail.com?page=0",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -88,19 +75,25 @@
 						"api",
 						"transfers",
 						"email",
-						"test@wp.pl"
+						"Test@gmail.com"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						}
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Check if customer exists",
+			"name": "get AddressBook By email",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/customers/exist/test@wp.pl",
+					"raw": "http://localhost:8080/api/transfers/addressBook/Test@gmail.com",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -108,9 +101,9 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"customers",
-						"exist",
-						"test@wp.pl"
+						"transfers",
+						"addressBook",
+						"Test@gmail.com"
 					]
 				}
 			},
@@ -130,11 +123,14 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"firstName\": \"test\",\r\n    \"lastName\": \"test\",\r\n    \"email\": \"test@wp.pl\",\r\n    \"password\": \"wwwwwwww\",\r\n    \"passwordRepeat\": \"wwwwwwww\"\r\n}",
+					"raw": "{\r\n    \"firstName\": \"test\",\r\n    \"lastName\": \"test\",\r\n    \"email\": \"Test@gmail.com\",\r\n    \"password\": \"testtest\",\r\n    \"passwordRepeat\": \"testtest\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -159,9 +155,6 @@
 		{
 			"name": "create transfer",
 			"request": {
-				"auth": {
-					"type": "noauth"
-				},
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -191,11 +184,14 @@
 		{
 			"name": "login customer",
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\" : \"test@wp.pl\",\r\n    \"password\" : \"wwwwwwww\"\r\n}",
+					"raw": "{\r\n    \"email\" : \"Test@gmail.com\",\r\n    \"password\" : \"testtest\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
