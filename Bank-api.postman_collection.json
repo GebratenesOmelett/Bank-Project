@@ -9,6 +9,16 @@
 		{
 			"name": "get customer with email",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -35,7 +45,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dHR0dEB3cC5wbCIsImlhdCI6MTcwODkwMDc3MSwiZXhwIjoxNzA4OTg3MTcxfQ.4-w2dnp1T3XvWHdQ_ssXOIpD2xae284U5ewXX6K4oD8",
+							"value": "",
 							"type": "string"
 						}
 					]
@@ -62,6 +72,16 @@
 		{
 			"name": "get Customer Transfers with email",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -90,6 +110,16 @@
 		{
 			"name": "get AddressBook By email",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -155,6 +185,16 @@
 		{
 			"name": "create transfer",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {

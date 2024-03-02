@@ -5,7 +5,6 @@ import com.example.bankbackend.transfer.dto.SimpleTransferQueryEntitySnapshot;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -15,7 +14,6 @@ import java.util.Collection;
 import java.util.Set;
 
 @Builder
-@ToString
 @Setter
 @Getter
 class CustomerSnapshot implements UserDetails {
