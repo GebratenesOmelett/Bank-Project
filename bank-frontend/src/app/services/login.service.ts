@@ -45,7 +45,6 @@ export class LoginService {
       this.customerReceived.next(customer);
     });
   }
-
 }
 
 
