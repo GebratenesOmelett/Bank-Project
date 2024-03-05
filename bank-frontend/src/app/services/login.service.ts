@@ -10,8 +10,7 @@ import {CustomerLogin} from "../common/customer-login";
   providedIn: 'root'
 })
 export class LoginService {
-  // axios.defaults.baseURL = "https://bank-project-production.up.railway.app"
-  defaultBaseUrl = "http://localhost:8080";
+  defaultBaseUrl = "https://bank-project-production.up.railway.app";
   private loginUrl = this.defaultBaseUrl + "/api/customers/login";
 
   customerReceived: Subject<CustomerReceived> = new BehaviorSubject<CustomerReceived>(null!);
